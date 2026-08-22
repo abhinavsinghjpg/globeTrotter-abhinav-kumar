@@ -724,6 +724,45 @@ export default function HomePage() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  // User's Active Itinerary & Custom Added Places
+  const [itineraryPlaceIds, setItineraryPlaceIds] = useState<string[]>([
+    "attr-1", "attr-2", "attr-3", "attr-4", "attr-5"
+  ]);
+  const [customPlaces, setCustomPlaces] = useState<any[]>([]);
+  const [isAddPlaceModalOpen, setIsAddPlaceModalOpen] = useState(false);
+  const [newPlaceName, setNewPlaceName] = useState("");
+  const [newPlaceFee, setNewPlaceFee] = useState("₹50");
+  const [newPlaceTiming, setNewPlaceTiming] = useState("09:00 AM – 06:00 PM");
+
+  const togglePlaceInItinerary = (placeId: string) => {
+    setItineraryPlaceIds(prev =>
+      prev.includes(placeId) ? prev.filter(id => id !== placeId) : [...prev, placeId]
+    );
+  };
+
+  const handleAddCustomPlace = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPlaceName.trim()) return;
+    const newId = "custom-" + Date.now();
+    const newPlace = {
+      id: newId,
+      name: newPlaceName.trim(),
+      category: "attraction",
+      entryFee: newPlaceFee || "Free Entry",
+      timing: newPlaceTiming || "09:00 AM – 06:00 PM",
+      rating: 4.8,
+      reviewsCount: "Custom Place",
+      status: "Open" as const,
+      image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80",
+      description: "Custom place added to your personalized itinerary.",
+      address: `${newPlaceName.trim()}, ${currentLocationData.name}`,
+    };
+    setCustomPlaces(prev => [...prev, newPlace]);
+    setItineraryPlaceIds(prev => [...prev, newId]);
+    setNewPlaceName("");
+    setIsAddPlaceModalOpen(false);
+  };
+
   // Search state
   const [searchInputValue, setSearchInputValue] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -1314,7 +1353,7 @@ export default function HomePage() {
 
         {/* B. CENTER SCROLLABLE CITY KNOWLEDGE FEED */}
         <main className="flex-1 overflow-y-auto bg-slate-100 min-w-0">
-          <div className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-7 space-y-6 pb-32">
+          <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 lg:p-7 space-y-6 pb-32">
             {isLoadingLocation && (
               <div className="rounded-2xl bg-brand-50 border border-brand-200 p-4 flex items-center gap-3 text-xs text-brand-900 shadow-sm animate-pulse">
                 <Loader2 className="h-5 w-5 animate-spin text-brand-600 shrink-0" />
@@ -1483,6 +1522,35 @@ export default function HomePage() {
                     </div>
                   )}
 
+                  {/* Swiggy & Zomato Quick Redirect for Eateries */}
+                  {(activeInlineDetail.priceForTwo || activeInlineDetail.famousEatery || activeInlineDetail.category === "food") && (
+                    <div className="space-y-2 pt-2 border-t border-slate-100">
+                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                        Order Food Online & Book Tables:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <a
+                          href={`https://www.swiggy.com/search?query=${encodeURIComponent(activeInlineDetail.name + " " + (activeInlineDetail.famousEatery || "") + " " + currentLocationData.name)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-3 px-4 text-xs shadow-md shadow-orange-500/20 transition-all hover:scale-102"
+                        >
+                          <Utensils className="h-4 w-4" />
+                          <span>Order on Swiggy</span>
+                        </a>
+                        <a
+                          href={`https://www.zomato.com/search?q=${encodeURIComponent(activeInlineDetail.name + " " + (activeInlineDetail.famousEatery || "") + " " + currentLocationData.name)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 px-4 text-xs shadow-md shadow-red-600/20 transition-all hover:scale-102"
+                        >
+                          <Utensils className="h-4 w-4" />
+                          <span>View on Zomato</span>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
                     <a
                       href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${activeInlineDetail.name}%20in%20${currentLocationData.name}%20and%20need%20a%20local%20guide.`}
@@ -1537,7 +1605,7 @@ export default function HomePage() {
                           Trip to {currentLocationData.name}
                         </h1>
                         <p className="text-xs text-white/90 font-medium">
-                          Created by <strong>Traveler</strong> · {currentLocationData.attractions.length + currentLocationData.famousFoods.length} Places to visit
+                          Created by <strong>Traveler</strong> · {currentLocationData.attractions.length + customPlaces.length} Places to visit
                         </p>
                       </div>
 
@@ -1571,7 +1639,7 @@ export default function HomePage() {
                   <div className="bg-white border-t border-slate-100 px-4 py-2.5 flex items-center gap-2 overflow-x-auto text-xs font-bold text-slate-600">
                     {[
                       { id: "all", label: "Overview" },
-                      { id: "all", label: `Places (${currentLocationData.attractions.length + currentLocationData.famousFoods.length})` },
+                      { id: "all", label: `Places (${currentLocationData.attractions.length + customPlaces.length})` },
                       { id: "day1", label: "Day 1" },
                       { id: "day2", label: "Day 2" },
                       { id: "day3", label: "Day 3" },
@@ -1596,7 +1664,113 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* 2. GPS LIVE LOCATION PERMISSION PROMPT BANNER */}
+                {/* 2. DYNAMIC LIVE ITINERARY BUDGET SUMMARY & ADD PLACE CTA */}
+                <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 p-5 sm:p-6 text-white shadow-xl border border-indigo-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-blue-500/30 px-3 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-blue-300 border border-blue-400/30">
+                        💰 Live Trip Budget Engine
+                      </span>
+                      <span className="text-slate-400 text-xs">•</span>
+                      <span className="text-xs text-slate-300 font-bold">
+                        {itineraryPlaceIds.length} Places Selected
+                      </span>
+                    </div>
+
+                    <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white">
+                      Estimated Budget: ₹{itineraryPlaceIds.length * 280 + 800}
+                    </h3>
+
+                    <div className="flex flex-wrap items-center gap-2.5 text-xs text-indigo-200 font-semibold pt-1">
+                      <span>🎟️ Entry Fees: ₹{itineraryPlaceIds.length * 80}</span>
+                      <span>•</span>
+                      <span>🚗 Cabs & Rentals: ₹{itineraryPlaceIds.length * 150}</span>
+                      <span>•</span>
+                      <span>🍲 Food & Stays: ₹800</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setIsAddPlaceModalOpen(true)}
+                    className="flex items-center gap-2 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 px-5 py-3 text-xs font-extrabold shadow-lg shadow-amber-400/25 transition-all hover:scale-105 shrink-0"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    <span>+ Add Place to Itinerary</span>
+                  </button>
+                </div>
+
+                {/* CUSTOM PLACE ADD INLINE MODAL */}
+                {isAddPlaceModalOpen && (
+                  <div className="rounded-3xl bg-white border-2 border-amber-400 p-5 shadow-2xl space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                      <h4 className="font-heading text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-amber-500" />
+                        <span>Add Custom Place to Itinerary</span>
+                      </h4>
+                      <button
+                        onClick={() => setIsAddPlaceModalOpen(false)}
+                        className="text-slate-400 hover:text-slate-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    <form onSubmit={handleAddCustomPlace} className="space-y-3 text-xs">
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1">Place / Attraction Name:</label>
+                        <input
+                          type="text"
+                          required
+                          value={newPlaceName}
+                          onChange={(e) => setNewPlaceName(e.target.value)}
+                          placeholder="e.g. Chokhi Dhani, Galta Ji, Sisodia Rani Garden..."
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="font-bold text-slate-700 block mb-1">Entry Ticket Fee:</label>
+                          <input
+                            type="text"
+                            value={newPlaceFee}
+                            onChange={(e) => setNewPlaceFee(e.target.value)}
+                            placeholder="e.g. ₹50 / Free Entry"
+                            className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-slate-700 block mb-1">Visiting Hours:</label>
+                          <input
+                            type="text"
+                            value={newPlaceTiming}
+                            onChange={(e) => setNewPlaceTiming(e.target.value)}
+                            placeholder="e.g. 09:00 AM – 06:00 PM"
+                            className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-end gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsAddPlaceModalOpen(false)}
+                          className="rounded-xl px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 text-xs font-extrabold shadow-md transition-colors"
+                        >
+                          Add to Itinerary
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                {/* 3. GPS LIVE LOCATION PERMISSION PROMPT BANNER */}
                 {gpsStatus === "prompt" && (
                   <div className="rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 p-4 text-white shadow-md border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="flex items-center gap-3">
@@ -1628,202 +1802,131 @@ export default function HomePage() {
                   </div>
                 )}
 
-                {/* 3. GPS STATUS & SIMULATION TESTING BAR */}
-                <div className="rounded-2xl bg-white border border-slate-200 p-3 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${userCoords ? "bg-emerald-400 opacity-75" : "bg-amber-400 opacity-75"}`} />
-                      <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${userCoords ? "bg-emerald-500" : "bg-amber-500"}`} />
-                    </span>
-                    <span className="font-bold text-slate-900">
-                      {userCoords ? "Live GPS Active" : "GPS Inactive (Click to simulate walking):"}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <button
-                      onClick={() => {
-                        setUserCoords({ lat: 26.9239, lng: 75.8267 });
-                        setGpsStatus("tracking");
-                      }}
-                      className="rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-semibold px-2 py-1 text-[11px] transition-colors border border-slate-200"
-                    >
-                      🚶 Near Hawa Mahal
-                    </button>
-                    <button
-                      onClick={() => {
-                        setUserCoords({ lat: 26.9855, lng: 75.8513 });
-                        setGpsStatus("tracking");
-                      }}
-                      className="rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-semibold px-2 py-1 text-[11px] transition-colors border border-slate-200"
-                    >
-                      🚶 Near Amer Fort
-                    </button>
-                    <button
-                      onClick={() => {
-                        setUserCoords({ lat: 26.9208, lng: 75.7972 });
-                        setGpsStatus("tracking");
-                      }}
-                      className="rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-semibold px-2 py-1 text-[11px] transition-colors border border-slate-200"
-                    >
-                      🚶 Near Rawat Mishtan
-                    </button>
-                  </div>
-                </div>
-
-                {/* 4. LIVE PROXIMITY ARRIVAL AUDIO GUIDE */}
-                {proximityPlace && (
-                  <LiveAudioGuide
-                    currentPlace={proximityPlace}
-                    userCoords={userCoords}
-                    onClose={() => setProximityPlace(null)}
-                  />
-                )}
-
-                {/* 5. WANDERLOG SECTION: NOTES & CHECKLIST */}
-                <div className="rounded-3xl bg-white border border-slate-200 p-5 shadow-xs space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-heading text-base font-extrabold text-slate-900 flex items-center gap-2">
-                      <span className="text-amber-500 font-bold">📌</span>
-                      <span>Notes & Trip Checklist</span>
-                    </h3>
-                    <span className="text-[11px] font-bold text-slate-400">Shared with Co-Travelers</span>
-                  </div>
-
-                  <div className="rounded-2xl bg-amber-50/60 border border-amber-200/70 p-3.5 text-xs text-amber-950 space-y-1.5 font-medium leading-relaxed">
-                    <div className="flex items-center gap-2 font-bold text-amber-900">
-                      <span>✓</span>
-                      <span>Book heritage haveli in Old City or C-Scheme for sunset haveli terrace views.</span>
-                    </div>
-                    <div className="flex items-center gap-2 font-bold text-amber-900">
-                      <span>✓</span>
-                      <span>Composite ticket covers Amer Fort, Hawa Mahal, Jantar Mantar, Nahargarh Fort, and Albert Hall Museum.</span>
-                    </div>
-                    <div className="flex items-center gap-2 font-bold text-amber-900">
-                      <span>✓</span>
-                      <span>Sunrise at Nahargarh Fort ramparts (reach by 05:30 AM) for golden morning light over the Aravalli valley.</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 6. WANDERLOG SECTION: PLACES TO VISIT (NUMBERED CARDS WITH DRIVE TIMES) */}
+                {/* 4. WANDERLOG SECTION: PLACES TO VISIT (CLEAN NUMBERED CARDS WITHOUT BULKY DESCRIPTIONS) */}
                 <section className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-heading text-lg font-extrabold text-slate-900 flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-extrabold">
-                        {currentLocationData.attractions.length}
+                    <h3 className="font-heading text-lg sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-extrabold shadow-sm">
+                        {currentLocationData.attractions.length + customPlaces.length}
                       </span>
                       <span>Places to visit in {currentLocationData.name}</span>
                     </h3>
                     <span className="text-xs font-bold text-slate-500">
-                      {currentLocationData.attractions.length} Heritage Stops
+                      {itineraryPlaceIds.length} in Active Plan
                     </span>
                   </div>
 
                   <div className="space-y-3">
-                    {currentLocationData.attractions.map((attraction, idx) => {
+                    {[...currentLocationData.attractions, ...customPlaces].map((attraction, idx) => {
                       const isCardActive = activePlaceId === attraction.id;
+                      const isInItinerary = itineraryPlaceIds.includes(attraction.id);
                       const poi = currentLocationData.mapPlaces.find((p) => p.id === attraction.id);
                       const distMeters = userCoords && poi ? calculateDistanceInMeters(userCoords.lat, userCoords.lng, poi.lat, poi.lng) : null;
 
                       return (
                         <React.Fragment key={attraction.id}>
-                          {/* Wanderlog Numbered Place Card */}
+                          {/* Clean Wanderlog Numbered Place Card (No Heavy Descriptions) */}
                           <div
                             onClick={() => handleOpenPlaceDetail(attraction)}
-                            className={`rounded-2xl bg-white border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md group p-4 flex flex-col sm:flex-row gap-4 ${
-                              isCardActive ? "border-blue-600 ring-2 ring-blue-500/20" : "border-slate-200 hover:border-blue-400"
+                            className={`rounded-2xl bg-white border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md group p-3.5 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 ${
+                              isInItinerary
+                                ? "border-blue-500 ring-2 ring-blue-500/15 bg-blue-50/20"
+                                : "border-slate-200 hover:border-blue-300"
                             }`}
                           >
-                            {/* Number Badge & Thumbnail */}
-                            <div className="relative h-44 sm:h-32 sm:w-44 shrink-0 rounded-xl overflow-hidden bg-slate-900">
-                              <Image
-                                src={attraction.image}
-                                alt={attraction.name}
-                                fill
-                                unoptimized
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                              <div className="absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white font-extrabold text-xs shadow-md border-2 border-white">
-                                {idx + 1}
+                            <div className="flex items-center gap-3.5 min-w-0">
+                              {/* Number Badge & Thumbnail */}
+                              <div className="relative h-20 w-24 sm:h-20 sm:w-28 shrink-0 rounded-xl overflow-hidden bg-slate-900">
+                                <Image
+                                  src={attraction.image}
+                                  alt={attraction.name}
+                                  fill
+                                  unoptimized
+                                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div className="absolute top-1.5 left-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-white font-extrabold text-[10px] shadow border border-white">
+                                  {idx + 1}
+                                </div>
                               </div>
 
-                              <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-[10px] font-bold">
-                                <span className="rounded bg-black/60 backdrop-blur-xs px-1.5 py-0.5">
-                                  {attraction.status}
-                                </span>
+                              {/* Title & Metadata (Spacious & Clean) */}
+                              <div className="space-y-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-heading text-sm sm:text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors truncate">
+                                    {idx + 1}. {attraction.name}
+                                  </h4>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-semibold">
+                                  <span className="flex items-center gap-1 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-lg text-[11px] font-extrabold text-amber-900">
+                                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                                    <span>{attraction.rating}</span>
+                                    <span className="text-[10px] text-amber-700 font-normal">({attraction.reviewsCount})</span>
+                                  </span>
+                                  <span>⏰ {attraction.timing}</span>
+                                  <span>🎟️ {attraction.entryFee}</span>
+                                </div>
+
                                 {distMeters !== null && (
-                                  <span className="rounded bg-emerald-600 px-1.5 py-0.5 shadow">
-                                    📍 {formatDistance(distMeters)}
+                                  <span className="inline-block text-[11px] font-bold text-emerald-700">
+                                    📍 {formatDistance(distMeters)} away
                                   </span>
                                 )}
                               </div>
                             </div>
 
-                            {/* Content Body */}
-                            <div className="flex-1 flex flex-col justify-between space-y-2">
-                              <div>
-                                <div className="flex items-start justify-between gap-2">
-                                  <div>
-                                    <h4 className="font-heading text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
-                                      {idx + 1}. {attraction.name}
-                                    </h4>
-                                    {(attraction.subName || (attraction as any).hindiName) && (
-                                      <p className="text-[11px] text-slate-500 font-semibold">
-                                        {attraction.subName || (attraction as any).hindiName}
-                                      </p>
-                                    )}
-                                  </div>
+                            {/* Action Buttons: Add to Itinerary & Guide */}
+                            <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  togglePlaceInItinerary(attraction.id);
+                                }}
+                                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
+                                  isInItinerary
+                                    ? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
+                                    : "bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200"
+                                }`}
+                              >
+                                {isInItinerary ? (
+                                  <>
+                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                    <span>In Itinerary</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span>+ Add</span>
+                                  </>
+                                )}
+                              </button>
 
-                                  <div className="flex items-center gap-1 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-lg text-xs font-extrabold text-amber-900 shrink-0">
-                                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                                    <span>{attraction.rating}</span>
-                                    <span className="text-[10px] text-amber-700 font-normal">({attraction.reviewsCount})</span>
-                                  </div>
-                                </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenPlaceDetail(attraction);
+                                }}
+                                className="rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 text-xs font-bold transition-colors"
+                              >
+                                Details
+                              </button>
 
-                                <p className="text-xs text-slate-600 mt-1 leading-relaxed line-clamp-2">
-                                  {attraction.description}
-                                </p>
-                              </div>
-
-                              {/* Timings, Entry & Actions Bar */}
-                              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
-                                <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-500">
-                                  <span>⏰ {attraction.timing}</span>
-                                  <span>🎟️ {attraction.entryFee}</span>
-                                </div>
-
-                                <div className="flex items-center gap-1.5">
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleOpenPlaceDetail(attraction);
-                                    }}
-                                    className="rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 px-2.5 py-1 text-[11px] font-bold transition-colors"
-                                  >
-                                    Details
-                                  </button>
-
-                                  <a
-                                    href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${encodeURIComponent(attraction.name)}%20in%20${currentLocationData.name}.`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 text-[11px] font-bold shadow-xs transition-colors"
-                                  >
-                                    <MessageCircle className="h-3 w-3" />
-                                    <span>Guide</span>
-                                  </a>
-                                </div>
-                              </div>
+                              <a
+                                href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${encodeURIComponent(attraction.name)}%20in%20${currentLocationData.name}.`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 text-xs font-bold shadow-xs transition-colors"
+                              >
+                                <MessageCircle className="h-3.5 w-3.5" />
+                                <span>Guide</span>
+                              </a>
                             </div>
                           </div>
 
-                          {/* Wanderlog Transit Driving Connector Between Consecutive Stops */}
-                          {idx < currentLocationData.attractions.length - 1 && (
-                            <div className="flex items-center gap-3 px-6 py-1 text-[11px] font-bold text-slate-500">
-                              <div className="h-4 w-0.5 bg-slate-300 mx-2" />
+                          {/* Transit Driving Connector Between Consecutive Stops */}
+                          {idx < currentLocationData.attractions.length + customPlaces.length - 1 && (
+                            <div className="flex items-center gap-3 px-6 py-0.5 text-[11px] font-bold text-slate-500">
+                              <div className="h-3 w-0.5 bg-slate-300 mx-2" />
                               <div className="flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-0.5 text-slate-700">
                                 <Car className="h-3 w-3 text-slate-600" />
                                 <span>🚗 8-12 min drive ({((idx + 1) * 2.3).toFixed(1)} km)</span>
@@ -1836,7 +1939,88 @@ export default function HomePage() {
                   </div>
                 </section>
 
-                {/* 7. WANDERLOG EXPLORE GUIDES & CAROUSEL LISTS */}
+                {/* 5. FAMOUS FOODS & RESTAURANTS (WITH SWIGGY & ZOMATO BUTTONS) */}
+                {currentLocationData.famousFoods.length > 0 && (
+                  <section className="space-y-4 pt-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-heading text-lg sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                        <Utensils className="h-5 w-5 text-rose-500" />
+                        <span>Iconic Food & Legendary Eateries</span>
+                      </h3>
+                      <span className="text-xs font-bold text-slate-500">
+                        {currentLocationData.famousFoods.length} Places
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      {currentLocationData.famousFoods.map((food) => (
+                        <div
+                          key={food.id}
+                          onClick={() => handleOpenPlaceDetail(food)}
+                          className="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                        >
+                          <div className="relative h-36 w-full overflow-hidden bg-slate-900">
+                            <Image
+                              src={food.image}
+                              alt={food.name}
+                              fill
+                              unoptimized
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+                            <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-lg">
+                              <span>📍 {food.famousEatery}</span>
+                            </div>
+                            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-bold">
+                              <span>💰 {food.priceForTwo}</span>
+                              <span className="flex items-center gap-1 bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded font-extrabold text-[10px]">
+                                <Star className="h-2.5 w-2.5 fill-slate-950" />
+                                {food.rating}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="p-3.5 space-y-2.5">
+                            <div>
+                              <h4 className="font-heading text-sm font-extrabold text-slate-900 group-hover:text-rose-600 transition-colors">
+                                {food.name}
+                              </h4>
+                              <p className="text-xs text-slate-600 mt-0.5 line-clamp-1">
+                                {food.specialty}
+                              </p>
+                            </div>
+
+                            {/* Direct Swiggy & Zomato Ordering Buttons */}
+                            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                              <a
+                                href={`https://www.swiggy.com/search?query=${encodeURIComponent(food.name + " " + food.famousEatery + " " + currentLocationData.name)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center justify-center gap-1 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 text-[11px] shadow-xs transition-colors"
+                              >
+                                <Utensils className="h-3 w-3" />
+                                <span>Swiggy</span>
+                              </a>
+                              <a
+                                href={`https://www.zomato.com/search?q=${encodeURIComponent(food.name + " " + food.famousEatery + " " + currentLocationData.name)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex items-center justify-center gap-1 rounded-xl bg-red-600 hover:bg-red-700 text-white font-extrabold py-2 text-[11px] shadow-xs transition-colors"
+                              >
+                                <Utensils className="h-3 w-3" />
+                                <span>Zomato</span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* 6. WANDERLOG EXPLORE GUIDES & CAROUSEL LISTS */}
                 <section className="space-y-3 pt-2">
                   <div className="flex items-center justify-between">
                     <h3 className="font-heading text-lg font-extrabold text-slate-900 flex items-center gap-2">
