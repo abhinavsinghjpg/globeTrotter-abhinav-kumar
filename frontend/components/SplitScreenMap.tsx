@@ -312,86 +312,114 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
   }, [activePlaceId, places]);
 
   // Locate User Current GPS Position and render pulsing blue marker
-  const handleLocateUserCurrentPosition = () => {
-    if (typeof window === "undefined" || !navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
-    }
+  // Render pulsing user marker on map and fly camera
+  const renderUserPositionOnMap = (latitude: number, longitude: number, accuracyText?: string) => {
+    const L = window.L;
+    const map = mapInstanceRef.current;
 
+    if (map && L) {
+      if (userMarkerRef.current) {
+        map.removeLayer(userMarkerRef.current);
+      }
+
+      const userIcon = L.divIcon({
+        className: "user-gps-location-pin",
+        html: `
+          <div style="position: relative; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;">
+            <div style="
+              position: absolute;
+              width: 38px;
+              height: 38px;
+              border-radius: 50%;
+              background: rgba(37, 99, 235, 0.28);
+              animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            "></div>
+            <div style="
+              position: relative;
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              background: #2563eb;
+              border: 3px solid #ffffff;
+              box-shadow: 0 2px 10px rgba(37, 99, 235, 0.6);
+            "></div>
+          </div>
+          <style>
+            @keyframes pulse-ring {
+              0% { transform: scale(0.6); opacity: 0.9; }
+              100% { transform: scale(2.4); opacity: 0; }
+            }
+          </style>
+        `,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+      });
+
+      const newMarker = L.marker([latitude, longitude], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+      newMarker
+        .bindPopup(
+          `
+        <div style="font-family: sans-serif; font-size: 12px; font-weight: 700; padding: 3px;">
+          📍 You are here
+          <div style="font-size: 10px; font-weight: 500; color: #64748b;">${accuracyText || "Live Location Detected"}</div>
+        </div>
+      `
+        )
+        .openPopup();
+
+      userMarkerRef.current = newMarker;
+      map.flyTo([latitude, longitude], 15, { duration: 1.2 });
+
+      if (onUserLocationFound) {
+        onUserLocationFound({ lat: latitude, lng: longitude });
+      }
+    }
+  };
+
+  // Fallback to IP-based Geolocation when browser hardware GPS is unavailable on desktop
+  const fallbackToIpGeolocation = async () => {
+    try {
+      const res = await fetch("https://ipwho.is/", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.latitude && data.longitude) {
+          renderUserPositionOnMap(data.latitude, data.longitude, `Near ${data.city || "Your City"} · IP Geolocation`);
+          return true;
+        }
+      }
+    } catch (e) {
+      console.warn("IP Geolocation fallback failed:", e);
+    }
+    return false;
+  };
+
+  // Robust Multi-Tier Location Resolver
+  const handleLocateUserCurrentPosition = () => {
     setIsLocatingUser(true);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setIsLocatingUser(false);
-        const { latitude, longitude, accuracy } = position.coords;
-        const L = window.L;
-        const map = mapInstanceRef.current;
-
-        if (map && L) {
-          // Remove old user marker if exists
-          if (userMarkerRef.current) {
-            map.removeLayer(userMarkerRef.current);
+    if (typeof window !== "undefined" && navigator.geolocation) {
+      // Tier 1: Try browser geolocation with standard accuracy (compatible with desktop WiFi triangulation)
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setIsLocatingUser(false);
+          const { latitude, longitude, accuracy } = position.coords;
+          renderUserPositionOnMap(latitude, longitude, `GPS accuracy: ±${Math.round(accuracy)}m`);
+        },
+        async (error) => {
+          console.warn("Standard geolocation failed, attempting IP-based fallback:", error.message);
+          // Tier 2: IP-based lookup
+          const ipSuccess = await fallbackToIpGeolocation();
+          setIsLocatingUser(false);
+          if (!ipSuccess) {
+            // Tier 3: City center fallback
+            renderUserPositionOnMap(cityCoords.lat, cityCoords.lng, `Centered on ${selectedCity}`);
           }
-
-          // Create Pulsing Blue GPS Marker
-          const userIcon = L.divIcon({
-            className: "user-gps-location-pin",
-            html: `
-              <div style="position: relative; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;">
-                <div style="
-                  position: absolute;
-                  width: 38px;
-                  height: 38px;
-                  border-radius: 50%;
-                  background: rgba(37, 99, 235, 0.25);
-                  animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-                "></div>
-                <div style="
-                  position: relative;
-                  width: 18px;
-                  height: 18px;
-                  border-radius: 50%;
-                  background: #2563eb;
-                  border: 3px solid #ffffff;
-                  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.6);
-                "></div>
-              </div>
-              <style>
-                @keyframes pulse-ring {
-                  0% { transform: scale(0.6); opacity: 0.9; }
-                  100% { transform: scale(2.4); opacity: 0; }
-                }
-              </style>
-            `,
-            iconSize: [26, 26],
-            iconAnchor: [13, 13],
-          });
-
-          const newMarker = L.marker([latitude, longitude], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
-          newMarker.bindPopup(`
-            <div style="font-family: sans-serif; font-size: 12px; font-weight: 700; padding: 3px;">
-              📍 You are here
-              <div style="font-size: 10px; font-weight: 500; color: #64748b;">GPS accuracy: ±${Math.round(accuracy)}m</div>
-            </div>
-          `).openPopup();
-
-          userMarkerRef.current = newMarker;
-
-          // Smoothly fly camera to exact GPS position
-          map.flyTo([latitude, longitude], 16, { duration: 1.5 });
-
-          if (onUserLocationFound) {
-            onUserLocationFound({ lat: latitude, lng: longitude });
-          }
-        }
-      },
-      (error) => {
-        setIsLocatingUser(false);
-        console.warn("Geolocation error:", error);
-        alert("Could not access your location. Please check that location permissions are allowed in your browser settings.");
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
+        },
+        { enableHighAccuracy: false, timeout: 6000, maximumAge: 300000 }
+      );
+    } else {
+      fallbackToIpGeolocation().finally(() => setIsLocatingUser(false));
+    }
   };
 
   return (

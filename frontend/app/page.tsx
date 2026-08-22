@@ -735,35 +735,34 @@ export default function HomePage() {
 
   const requestGpsPermission = () => {
     setHasPromptedLocation(true);
-    if (typeof window === "undefined" || !navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      setGpsStatus("denied");
-      return;
-    }
-
     setGpsStatus("tracking");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      },
-      (err) => {
-        console.warn("GPS Permission Error:", err);
-        setGpsStatus("denied");
-      }
-    );
 
-    // Watch position continuously as user moves
-    try {
-      const watchId = navigator.geolocation.watchPosition(
+    if (typeof window !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
         (pos) => {
           setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
         },
-        (err) => console.warn("Watch position error:", err),
-        { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+        async (err) => {
+          console.warn("Standard GPS timed out or unavailable, falling back to IP:", err.message);
+          try {
+            const res = await fetch("https://ipwho.is/", { cache: "no-store" });
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.latitude && data.longitude) {
+                setUserCoords({ lat: data.latitude, lng: data.longitude });
+                return;
+              }
+            }
+          } catch (e) {
+            console.warn("IP Geolocation fallback failed:", e);
+          }
+          // Default to city center
+          setUserCoords(currentLocationData.coords);
+        },
+        { enableHighAccuracy: false, timeout: 6000, maximumAge: 300000 }
       );
-      return () => navigator.geolocation.clearWatch(watchId);
-    } catch (e) {
-      console.warn("Geolocation watch error:", e);
+    } else {
+      setUserCoords(currentLocationData.coords);
     }
   };
 
