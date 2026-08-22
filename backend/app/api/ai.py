@@ -26,3 +26,18 @@ def extract_context(payload: Dict[str, Any] = Body(...)):
     existing_raw = payload.get("existing_context", None)
     existing_ctx = TravellerContext(**existing_raw) if existing_raw else None
     return AIOrchestrator.extract_traveller_context(text, existing_ctx)
+
+@router.post("/chat")
+def chat_ai(payload: Dict[str, Any] = Body(...)):
+    """
+    Live AI Virtual Tourist Guide conversational endpoint.
+    """
+    message = payload.get("message", payload.get("text", ""))
+    city = payload.get("city", "Jaipur")
+    existing_raw = payload.get("existing_context", None)
+    return AIOrchestrator.chat_tourist_guide(
+        message=message,
+        city=city,
+        existing_context=existing_raw
+    )
+

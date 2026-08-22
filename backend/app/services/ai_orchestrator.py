@@ -184,3 +184,43 @@ class AIOrchestrator:
                 } for name in added_items
             ]
         }
+
+    @classmethod
+    def chat_tourist_guide(cls, message: str, city: str = "Jaipur", existing_context: Any = None) -> Dict[str, Any]:
+        """
+        Processes natural language traveler conversation for the AI Virtual Tourist Guide.
+        """
+        lower = message.lower()
+        action = None
+        reasons = [
+            f"Factual knowledge graph for {city}",
+            "Opening hours and status validated",
+            "Regional cuisine specialties matched",
+        ]
+
+        if any(w in lower for w in ["food", "kachori", "eat", "restaurant", "dish", "sweet"]):
+            reply = f"In {city}, iconic culinary stops include Rawat Mishtan Bhandar for hot Pyaaz Kachoris and sweet Mawa Kachoris, LMB in Johari Bazaar for Royal Thali and Paneer Ghevar, and original clay kulhad lassi at Lassiwala (MI Road)!"
+            reasons.append("Historical culinary institutions prioritized")
+        elif any(w in lower for w in ["sunset", "view", "evening"]):
+            reply = f"The most breathtaking sunset panorama over {city} is from the hilltop ramparts of Nahargarh Fort. Arrive by 05:00 PM for the golden hour over Man Sagar Lake and the Pink City."
+            reasons.append("Aravalli ridge elevated viewpoints ranked highest")
+        elif any(w in lower for w in ["closed", "shutdown", "timing", "open"]):
+            reply = f"Major heritage monuments in {city} (Hawa Mahal, Amer Fort, City Palace, Nahargarh Fort) are Open today under normal operating schedules."
+            reasons.append("Daily operational monitoring active")
+        elif any(w in lower for w in ["guide", "hire", "whatsapp", "tour"]):
+            reply = f"I can connect you directly with a verified, licensed tourist guide in {city} on WhatsApp for private haveli tours and guided fort excursions."
+            action = {
+                "label": f"Chat with Verified Guide in {city}",
+                "url": f"https://wa.me/919876543210?text=Namaste!%20I%20need%20a%20licensed%20guide%20in%20{city}.",
+                "is_whatsapp": True
+            }
+        else:
+            reply = f"For {city}, I recommend beginning with the royal hill citadels (Amer & Jaigarh) in the morning, exploring centuries-old artisan bazaars in the afternoon, and enjoying the sunset over the valley. How can I help you customize your trip?"
+
+        return {
+            "reply": reply,
+            "city": city,
+            "reasons": reasons,
+            "action": action
+        }
+

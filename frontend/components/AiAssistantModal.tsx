@@ -33,7 +33,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
 
   if (!isOpen && !isInline) return null;
 
-  const handleSend = (userText: string) => {
+  const handleSend = async (userText: string) => {
     if (!userText.trim()) return;
 
     const newMsgs = [...messages, { sender: "user" as const, text: userText }];
@@ -41,6 +41,38 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
     setInput("");
     setLoading(true);
 
+    try {
+      // Connect to FastAPI Backend AI Tourist Guide Endpoint
+      const res = await fetch("http://localhost:8000/api/v1/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText, city: currentCity }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "ai",
+            text: data.reply,
+            suggestedAction: data.action
+              ? {
+                  label: data.action.label,
+                  url: data.action.url,
+                  isWhatsApp: data.action.is_whatsapp || true,
+                }
+              : undefined,
+          },
+        ]);
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("Backend AI chat unreachable, using client heuristic:", err);
+    }
+
+    // Client heuristic fallback
     setTimeout(() => {
       let aiReply = "";
       let action: any = null;
@@ -60,7 +92,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
           isWhatsApp: true,
         };
       } else {
-        aiReply = `For ${currentCity}, I recommend starting early with the iconic heritage monuments, having an authentic local lunch, and reserving the late afternoon for centuries-old artisan bazaars. Would you like me to customize this for you?`;
+        aiReply = `For ${currentCity}, I recommend starting early with the iconic heritage monuments, having an authentic local lunch, and reserving the late afternoon for centuries-old artisan bazaars. How can I help you customize your trip?`;
       }
 
       setMessages((prev) => [
@@ -72,7 +104,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
         },
       ]);
       setLoading(false);
-    }, 500);
+    }, 400);
   };
 
   const quickQuestions = [
