@@ -3,7 +3,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { SplitScreenMap, MapPlace } from "@/components/SplitScreenMap";
+import dynamic from "next/dynamic";
+import type { MapPlace } from "@/components/SplitScreenMap";
+
+const SplitScreenMap = dynamic(
+  () => import("@/components/SplitScreenMap").then((mod) => mod.SplitScreenMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center bg-slate-900 text-white">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+          <span className="text-xs font-bold text-slate-300">Loading Map...</span>
+        </div>
+      </div>
+    ),
+  }
+);
 import { AiAssistantModal } from "@/components/AiAssistantModal";
 import { TransportRentalModal } from "@/components/TransportRentalModal";
 import { TripMemoriesModal } from "@/components/TripMemoriesModal";
