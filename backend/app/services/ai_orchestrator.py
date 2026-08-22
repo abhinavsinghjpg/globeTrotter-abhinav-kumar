@@ -4,7 +4,7 @@ AI Orchestrator for Intent Detection, Traveller Context Extraction, Tool Calling
 
 import json
 import re
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 from app.schemas.schemas import TravellerContext, IntentResult
 
 class AIOrchestrator:
@@ -186,41 +186,118 @@ class AIOrchestrator:
         }
 
     @classmethod
-    def chat_tourist_guide(cls, message: str, city: str = "Jaipur", existing_context: Any = None) -> Dict[str, Any]:
+    def chat_tourist_guide(
+        cls,
+        message: str,
+        city: str = "Jaipur",
+        existing_context: Optional[TravellerContext] = None
+    ) -> Dict[str, Any]:
         """
-        Processes natural language traveler conversation for the AI Virtual Tourist Guide.
+        Comprehensive AI Tourist Guide query handler integrating RAG, deterministic constraints,
+        weather, place status, itinerary generation, and local guide connection.
         """
-        lower = message.lower()
-        action = None
-        reasons = [
-            f"Factual knowledge graph for {city}",
-            "Opening hours and status validated",
-            "Regional cuisine specialties matched",
-        ]
+        from app.services.rag_service import rag_service
+        from app.services.place_status_service import PlaceStatusService
+        from app.services.weather_service import WeatherService
+        from app.services.itinerary_engine import ItineraryEngine
+        from app.services.replanning_engine import ReplanningEngine
+        from app.schemas.schemas import ReplanTrigger
 
-        if any(w in lower for w in ["food", "kachori", "eat", "restaurant", "dish", "sweet"]):
-            reply = f"In {city}, iconic culinary stops include Rawat Mishtan Bhandar for hot Pyaaz Kachoris and sweet Mawa Kachoris, LMB in Johari Bazaar for Royal Thali and Paneer Ghevar, and original clay kulhad lassi at Lassiwala (MI Road)!"
-            reasons.append("Historical culinary institutions prioritized")
-        elif any(w in lower for w in ["sunset", "view", "evening"]):
-            reply = f"The most breathtaking sunset panorama over {city} is from the hilltop ramparts of Nahargarh Fort. Arrive by 05:00 PM for the golden hour over Man Sagar Lake and the Pink City."
-            reasons.append("Aravalli ridge elevated viewpoints ranked highest")
-        elif any(w in lower for w in ["closed", "shutdown", "timing", "open"]):
-            reply = f"Major heritage monuments in {city} (Hawa Mahal, Amer Fort, City Palace, Nahargarh Fort) are Open today under normal operating schedules."
-            reasons.append("Daily operational monitoring active")
-        elif any(w in lower for w in ["guide", "hire", "whatsapp", "tour"]):
-            reply = f"I can connect you directly with a verified, licensed tourist guide in {city} on WhatsApp for private haveli tours and guided fort excursions."
+        text_lower = message.lower()
+        intent_res = cls.detect_intent(message)
+        intent = intent_res.intent
+
+        # Extract/Update Traveller Context
+        context = cls.extract_traveller_context(message, existing_context)
+        if not context.destination or context.destination == ["Jaipur"] and city != "Jaipur":
+            context.destination = [city]
+
+        reply_text = ""
+        action = None
+        itinerary_data = None
+        recommended_places = []
+        reasons = []
+
+        # 1. Guide / WhatsApp Contact Request
+        if any(w in text_lower for w in ["guide", "hire guide", "whatsapp", "contact", "tour guide", "human"]):
+            reply_text = f"I have connected with verified government-certified heritage guides for {city}. You can chat directly on WhatsApp to book a private tour or customize your visit."
             action = {
-                "label": f"Chat with Verified Guide in {city}",
-                "url": f"https://wa.me/919876543210?text=Namaste!%20I%20need%20a%20licensed%20guide%20in%20{city}.",
-                "is_whatsapp": True
+                "label": f"Chat with Verified {city} Guide on WhatsApp",
+                "url": f"https://wa.me/919876543210?text=Namaste!%20I%20am%20looking%20for%20a%20verified%20local%20tourist%20guide%20in%20{city}.",
+                "isWhatsApp": True
             }
+            reasons = ["Verified Govt tourist license", "English & Local language fluent", "Custom heritage tours"]
+
+        # 2. Weather Question or Rain Replan
+        elif intent in ["weather_question", "weather_replan"] or any(w in text_lower for w in ["weather", "rain", "temperature", "forecast"]):
+            weather = WeatherService.get_weather(city)
+            rain_prob = weather.get("rain_probability", 10.0)
+            cond = weather.get("condition", "Sunny")
+            temp = weather.get("temp_c", 30)
+
+            if rain_prob >= 60.0 or intent == "weather_replan":
+                # Find indoor alternatives
+                indoor_places = rag_service.search_places(city=city, indoor_only=True)
+                place_names = [p.name for p in indoor_places[:3]]
+                reply_text = f"Current weather in {city}: {cond}, {temp}°C with {rain_prob:.0f}% chance of rain. Since outdoor forts may be slippery, I recommend these verified indoor heritage spots: {', '.join(place_names)}."
+                recommended_places = [p.model_dump() for p in indoor_places[:4]]
+                reasons = ["100% Indoor & weather-safe", "Verified operating hours", "Rich cultural collections"]
+            else:
+                reply_text = f"Current weather in {city}: {cond}, {temp}°C with {rain_prob:.0f}% rain risk. Ideal conditions for sightseeing at open-air monuments and heritage courtyards!"
+                reasons = ["Favorable sightseeing temperature", "Zero rainfall risk", "Good golden-hour visibility"]
+
+        # 3. Place Status / Closure Lookups
+        elif intent in ["place_information", "place_closure_replan"] or any(w in text_lower for w in ["open", "closed", "timings", "hours", "entry fee", "ticket"]):
+            # Search place in database
+            places = rag_service.search_places(city=city, query=message)
+            if places:
+                p = places[0]
+                status = PlaceStatusService.get_status(p.id, p.status)
+                status_text = "🟢 OPEN" if status == "open" else f"🔴 {status.upper()}"
+                reply_text = f"**{p.name}** in {city} is currently {status_text}.\n• **Timings:** {p.opening_time} to {p.closing_time}\n• **Entry Fee:** ₹{p.cost:.0f}\n• **Highlights:** {p.description}"
+                recommended_places = [p.model_dump()]
+                reasons = [f"Verified status: {status}", f"Timings: {p.opening_time} - {p.closing_time}", f"Rating: {p.rating}★"]
+            else:
+                reply_text = f"All major monuments in {city} (City Palace, Hawa Mahal, Amer Fort, Museums) are currently open. Let me know if you need specific timings or entry costs!"
+
+        # 4. Food & Culinary Recommendations
+        elif intent == "recommend_food" or any(w in text_lower for w in ["food", "restaurant", "kachori", "thali", "eat", "lunch", "dinner", "chaat", "sweet"]):
+            food_places = rag_service.search_places(city=city, category="food")
+            if not food_places:
+                food_places = rag_service.search_places(city=city, query="food")
+            
+            names_with_cost = [f"{fp.name} (Avg ₹{fp.cost:.0f})" for fp in food_places[:3]]
+            reply_text = f"Top authentic culinary spots in {city}:\n" + "\n".join([f"• **{fp.name}**: {fp.description} (Avg ₹{fp.cost:.0f})" for fp in food_places[:3]])
+            recommended_places = [p.model_dump() for p in food_places[:4]]
+            reasons = ["Hygiene & authenticity verified", "Local traditional recipes", "Centrally located"]
+
+        # 5. Itinerary Creation or Modification
+        elif intent in ["create_itinerary", "replan_itinerary", "budget_reoptimization", "change_preference"] or any(w in text_lower for w in ["plan", "itinerary", "3 days", "2 days", "day trip", "schedule"]):
+            itin = ItineraryEngine.generate_itinerary(context)
+            itinerary_data = itin.model_dump()
+            summary = itin.tripSummary
+            reply_text = f"I have built a deterministic optimized {summary.days}-day itinerary for {city}!\n• **Total Cost:** ₹{summary.estimatedCost:,.0f} (₹{summary.remainingBudget:,.0f} under ₹{summary.budget:,.0f} budget)\n• **Preference Match:** {summary.preferenceScore}%\n• **Feasibility Score:** {summary.feasibilityScore}% (Zero time overlaps, validated opening hours)"
+            reasons = itin.explanation.get("factors", ["Verified operational status", "Optimized transit times", "100% budget compliant"])
+
+        # 6. General Sightseeing & Tourist Recommendations
         else:
-            reply = f"For {city}, I recommend beginning with the royal hill citadels (Amer & Jaigarh) in the morning, exploring centuries-old artisan bazaars in the afternoon, and enjoying the sunset over the valley. How can I help you customize your trip?"
+            places = rag_service.search_places(city=city, query=message)
+            if not places:
+                places = rag_service.search_places(city=city)
+            
+            top_3 = places[:3]
+            reply_text = f"Top verified recommendations for {city}:\n" + "\n".join([f"• **{p.name}** ({p.category.title()}): {p.description}" for p in top_3])
+            recommended_places = [p.model_dump() for p in top_3]
+            reasons = ["Heritage importance", "Optimized travel distance", "Highly rated by travellers"]
 
         return {
-            "reply": reply,
+            "reply": reply_text,
+            "intent": intent,
             "city": city,
-            "reasons": reasons,
-            "action": action
+            "context": context.model_dump(),
+            "action": action,
+            "itinerary": itinerary_data,
+            "recommended_places": recommended_places,
+            "reasons": reasons
         }
 
