@@ -944,14 +944,6 @@ export default function HomePage() {
                   );
                 })}
 
-                <div className="pt-3 border-t border-slate-100 mt-3">
-                  <Link
-                    href="/admin"
-                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-50 transition-colors"
-                  >
-                    <Shield className="h-4 w-4 text-amber-600" />
-                    <span>Admin Operations</span>
-                  </Link>
                 </div>
               </div>
             </div>
