@@ -1,58 +1,92 @@
+"""
+Main FastAPI Application Entry Point for GlobeTrotter & Adaptive AI Travel Decision Engine.
+"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
-from app.database import async_engine, Base
-from app.user_auth.router import router as auth_router
-from app.discovery.router import router as discovery_router
-from app.admin.router import router as admin_router
-from app.shared.whatsapp import generate_whatsapp_link
+from app.core.config import settings
+
+# AI Decision Engine Routers
+from app.api.ai import router as ai_router
+from app.api.itinerary import router as itinerary_router
+from app.api.replan import router as replan_router
+from app.api.places import router as places_router
+from app.api.evaluation import router as evaluation_router
+from app.services.ollama_service import ollama_service
+
+# Optional Platform Routers (if available)
+try:
+    from app.user_auth.router import router as auth_router
+except ImportError:
+    auth_router = None
+
+try:
+    from app.discovery.router import router as discovery_router
+except ImportError:
+    discovery_router = None
+
+try:
+    from app.admin.router import router as admin_router
+except ImportError:
+    admin_router = None
 
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="Travel Intelligence & Experience Platform API for India (Next.js + FastAPI + PostgreSQL)",
+    description="GlobeTrotter Adaptive AI Travel Decision Engine & Experience Platform API",
     docs_url="/docs",
-    redoc_url="/redoc",
+    redoc_url="/redoc"
 )
 
-# CORS Middleware
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Mount AI Routers under both /api and /api/v1 for compatibility
+for prefix in ["/api", "/api/v1"]:
+    app.include_router(ai_router, prefix=prefix)
+    app.include_router(itinerary_router, prefix=prefix)
+    app.include_router(replan_router, prefix=prefix)
+    app.include_router(places_router, prefix=prefix)
+    app.include_router(evaluation_router, prefix=prefix)
 
-@app.on_event("startup")
-async def on_startup():
-    # In development mode, auto-create tables
-    async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+# Mount Platform Routers if present
+if auth_router:
+    app.include_router(auth_router, prefix="/api/v1")
+if discovery_router:
+    app.include_router(discovery_router, prefix="/api/v1")
+if admin_router:
+    app.include_router(admin_router, prefix="/api/v1")
 
-
-# Include domain routers under API_V1_STR
-app.include_router(auth_router, prefix=settings.API_V1_STR)
-app.include_router(discovery_router, prefix=settings.API_V1_STR)
-app.include_router(admin_router, prefix=settings.API_V1_STR)
-
+@app.get("/")
+def root():
+    return {
+        "message": "GlobeTrotter Adaptive AI Travel Decision Engine API is operational.",
+        "version": settings.APP_VERSION,
+        "docs": "/docs",
+        "health": "/api/v1/health"
+    }
 
 @app.get("/api/v1/health", tags=["Health"])
-async def health_check():
+def health_check():
     return {
         "status": "healthy",
         "app": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "environment": settings.ENVIRONMENT,
-        "whatsapp_assist_url": generate_whatsapp_link(),
+        "version": settings.APP_VERSION
     }
 
-
-@app.get("/", tags=["Root"])
-async def root():
+@app.get("/api/ollama/status")
+@app.get("/api/v1/ollama/status")
+def get_ollama_status():
+    is_available, message = ollama_service.is_available()
     return {
-        "message": "Welcome to GlobeTrotter Travel Intelligence Platform API",
-        "docs": "/docs",
-        "health": "/api/v1/health",
+        "status": "connected" if is_available else "disconnected",
+        "message": message,
+        "base_url": settings.OLLAMA_BASE_URL,
+        "model": settings.OLLAMA_MODEL
     }

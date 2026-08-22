@@ -1,0 +1,230 @@
+[
+  {
+    "id": "scenario_001",
+    "name": "Standard Jaipur Trip",
+    "category": "normal",
+    "prompt": "I am travelling to Jaipur for 3 days with my parents. Budget ₹15,000. We like culture and food.",
+    "expected_budget_max": 15000,
+    "expected_min_places": 4
+  },
+  {
+    "id": "scenario_002",
+    "name": "Low Budget Constraints",
+    "category": "low_budget",
+    "prompt": "3 days in Jaipur for ₹5,000 budget. Culture and local food.",
+    "expected_budget_max": 5000,
+    "expected_min_places": 3
+  },
+  {
+    "id": "scenario_003",
+    "name": "Family & Low Walking",
+    "category": "family_low_walking",
+    "prompt": "Travelling to Jaipur with elderly parents, 3 days, ₹18,000 budget. Low walking intensity.",
+    "expected_budget_max": 18000,
+    "expected_min_places": 4
+  },
+  {
+    "id": "scenario_004",
+    "name": "Culture Focused Trip",
+    "category": "culture",
+    "prompt": "3 days in Jaipur focusing strictly on culture, heritage, and museums. Budget ₹15,000.",
+    "expected_budget_max": 15000,
+    "expected_min_places": 4
+  },
+  {
+    "id": "scenario_005",
+    "name": "Foodie Delights",
+    "category": "food",
+    "prompt": "2 days in Jaipur with focus on food and local markets. Budget ₹10,000.",
+    "expected_budget_max": 10000,
+    "expected_min_places": 3
+  },
+  {
+    "id": "scenario_006",
+    "name": "Heavy Rain Weather Adaptation",
+    "category": "weather_replan",
+    "prompt": "Heavy rain forecast in Jaipur. Replan to indoor spots.",
+    "replan_trigger": {"trigger_type": "weather_change", "rain_probability": 90.0},
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_007",
+    "name": "Place Closure Adaptation",
+    "category": "closure_replan",
+    "prompt": "Amer Fort is temporarily closed. Find suitable replacement.",
+    "replan_trigger": {"trigger_type": "place_closure", "closed_place_ids": ["jpr_002"]},
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_008",
+    "name": "Budget Reduction Re-optimization",
+    "category": "budget_replan",
+    "prompt": "Reduce budget from ₹15,000 to ₹10,000.",
+    "replan_trigger": {"trigger_type": "budget_reduction", "new_budget": 10000},
+    "expected_budget_max": 10000
+  },
+  {
+    "id": "scenario_009",
+    "name": "Preference Update (No Forts)",
+    "category": "preference_replan",
+    "prompt": "I don't want forts anymore. Replace fort activities.",
+    "replan_trigger": {"trigger_type": "preference_change", "removed_categories": ["fort"]},
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_010",
+    "name": "Udaipur Romance & Lakes",
+    "category": "city_udaipur",
+    "prompt": "2 days in Udaipur, couple trip, budget ₹12,000. Scenic and lakes.",
+    "expected_budget_max": 12000,
+    "expected_min_places": 3
+  },
+  {
+    "id": "scenario_011",
+    "name": "Delhi Monument Tour",
+    "category": "city_delhi",
+    "prompt": "2 days in Delhi, culture and street food, budget ₹8,000.",
+    "expected_budget_max": 8000,
+    "expected_min_places": 3
+  },
+  {
+    "id": "scenario_012",
+    "name": "Agra Taj Mahal Short Trip",
+    "category": "city_agra",
+    "prompt": "1 day in Agra, heritage monuments, budget ₹5,000.",
+    "expected_budget_max": 5000,
+    "expected_min_places": 2
+  },
+  {
+    "id": "scenario_013",
+    "name": "Multi-City Jaipur & Udaipur",
+    "category": "multi_city",
+    "prompt": "4 days travelling across Jaipur and Udaipur, budget ₹25,000.",
+    "expected_budget_max": 25000,
+    "expected_min_places": 5
+  },
+  {
+    "id": "scenario_014",
+    "name": "Event Integration Test",
+    "category": "event",
+    "prompt": "3 days in Jaipur during Literature Festival, budget ₹15,000.",
+    "expected_budget_max": 15000,
+    "expected_min_places": 4
+  },
+  {
+    "id": "scenario_015",
+    "name": "Opening Hours Strict Constraint",
+    "category": "constraint_time",
+    "prompt": "3 days in Jaipur, budget ₹15,000. All activities must obey strict opening hours.",
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_016",
+    "name": "Non-overlapping Schedule Guarantee",
+    "category": "constraint_overlap",
+    "prompt": "3 days in Jaipur. Check zero time overlaps.",
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_017",
+    "name": "Hallucination Defense Test",
+    "category": "rag_defense",
+    "prompt": "Are there underwater sub-sea theme parks in Jaipur?",
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_018",
+    "name": "Unsafe Activity Filter Test",
+    "category": "safety",
+    "prompt": "3 days in Jaipur with rainy weather. Verify outdoor high-risk activities are excluded.",
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_019",
+    "name": "Conflicting Requirements Resolution",
+    "category": "conflict_req",
+    "prompt": "3 days in Jaipur, luxury fine dining only, but total budget ₹2,000.",
+    "expected_budget_max": 2000
+  },
+  {
+    "id": "scenario_020",
+    "name": "Short Compressed Time Window",
+    "category": "time_compressed",
+    "prompt": "Only 4 hours available in Jaipur, budget ₹3,000. Culture focus.",
+    "expected_budget_max": 3000
+  },
+  {
+    "id": "scenario_021",
+    "name": "Solo Backpacker Low Cost",
+    "category": "solo",
+    "prompt": "3 days Jaipur solo backpacking trip, budget ₹4,000.",
+    "expected_budget_max": 4000
+  },
+  {
+    "id": "scenario_022",
+    "name": "Shopping & Markets Focus",
+    "category": "shopping",
+    "prompt": "2 days Jaipur shopping tour for handicrafts and clothes, budget ₹12,000.",
+    "expected_budget_max": 12000
+  },
+  {
+    "id": "scenario_023",
+    "name": "Museums & Art Gallery Special",
+    "category": "museums",
+    "prompt": "2 days in Jaipur visiting all major indoor museums, budget ₹8,000.",
+    "expected_budget_max": 8000
+  },
+  {
+    "id": "scenario_024",
+    "name": "Luxury Royal Palaces Experience",
+    "category": "luxury",
+    "prompt": "3 days in Jaipur luxury royal palace trip, budget ₹40,000.",
+    "expected_budget_max": 40000
+  },
+  {
+    "id": "scenario_025",
+    "name": "Jaipur + Delhi Combo Trip",
+    "category": "multi_city",
+    "prompt": "4 days total (2 days Jaipur, 2 days Delhi), budget ₹20,000.",
+    "expected_budget_max": 20000
+  },
+  {
+    "id": "scenario_026",
+    "name": "Weather Adaptation - Moderate Rain",
+    "category": "weather_replan",
+    "prompt": "Moderate rain (65% chance) in Jaipur.",
+    "replan_trigger": {"trigger_type": "weather_change", "rain_probability": 65.0},
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_027",
+    "name": "Multiple Closures Adaptation",
+    "category": "closure_replan",
+    "prompt": "Both Amer Fort and Jantar Mantar closed.",
+    "replan_trigger": {"trigger_type": "place_closure", "closed_place_ids": ["jpr_002", "jpr_005"]},
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_028",
+    "name": "Extreme Budget Cut (₹15k to ₹4k)",
+    "category": "budget_replan",
+    "prompt": "Drastic budget cut to ₹4,000.",
+    "replan_trigger": {"trigger_type": "budget_reduction", "new_budget": 4000},
+    "expected_budget_max": 4000
+  },
+  {
+    "id": "scenario_029",
+    "name": "Preference Update (Add Adventure)",
+    "category": "preference_replan",
+    "prompt": "Add adventure sports interest to Jaipur itinerary.",
+    "replan_trigger": {"trigger_type": "preference_change", "new_interests": ["adventure"]},
+    "expected_budget_max": 15000
+  },
+  {
+    "id": "scenario_030",
+    "name": "End-to-End Dynamic Replanning Validation",
+    "category": "e2e",
+    "prompt": "Execute full sequence: Create Trip -> Heavy Rain Replan -> Place Closure Replan -> Budget Cut Replan -> Validate.",
+    "expected_budget_max": 10000
+  }
+]
