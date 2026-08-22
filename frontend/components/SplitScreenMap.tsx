@@ -427,29 +427,40 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
     return false;
   };
 
-  // Robust Multi-Tier Location Resolver
+  // Robust Direct GPS Location Resolver
   const handleLocateUserCurrentPosition = () => {
     setIsLocatingUser(true);
 
     if (typeof window !== "undefined" && navigator.geolocation) {
-      // Tier 1: Try browser geolocation with standard accuracy (compatible with desktop WiFi triangulation)
+      // 1. Try High Accuracy GPS first
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setIsLocatingUser(false);
           const { latitude, longitude, accuracy } = position.coords;
           renderUserPositionOnMap(latitude, longitude, `GPS accuracy: ±${Math.round(accuracy)}m`);
         },
-        async (error) => {
-          console.warn("Standard geolocation failed, attempting IP-based fallback:", error.message);
-          // Tier 2: IP-based lookup
-          const ipSuccess = await fallbackToIpGeolocation();
-          setIsLocatingUser(false);
-          if (!ipSuccess) {
-            // Tier 3: City center fallback
-            renderUserPositionOnMap(cityCoords.lat, cityCoords.lng, `Centered on ${selectedCity}`);
-          }
+        (highAccError) => {
+          console.warn("High accuracy GPS failed, trying standard WiFi position:", highAccError.message);
+          // 2. Fallback to standard geolocation
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              setIsLocatingUser(false);
+              const { latitude, longitude, accuracy } = pos.coords;
+              renderUserPositionOnMap(latitude, longitude, `GPS accuracy: ±${Math.round(accuracy)}m`);
+            },
+            async (stdError) => {
+              console.warn("Standard geolocation failed, attempting IP fallback:", stdError.message);
+              // 3. Fallback to IP Geolocation
+              const ipSuccess = await fallbackToIpGeolocation();
+              setIsLocatingUser(false);
+              if (!ipSuccess) {
+                renderUserPositionOnMap(cityCoords.lat, cityCoords.lng, `Centered on ${selectedCity}`);
+              }
+            },
+            { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
+          );
         },
-        { enableHighAccuracy: false, timeout: 6000, maximumAge: 300000 }
+        { enableHighAccuracy: true, timeout: 6000, maximumAge: 0 }
       );
     } else {
       fallbackToIpGeolocation().finally(() => setIsLocatingUser(false));
@@ -554,68 +565,16 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
 
       {/* 4. BOTTOM RIGHT: Google Zoom & Location Controls */}
       <div className="absolute right-4 bottom-8 z-10 flex flex-col gap-2.5 pointer-events-auto items-end">
-        {/* Pin Drop Active Banner */}
-        {isPinDropMode && (
-          <div className="rounded-2xl bg-slate-900 text-white px-3.5 py-2 text-xs font-bold shadow-2xl border border-white/20 animate-pulse flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-amber-400" />
-            <span>Click anywhere on the map to drop your location pin!</span>
-          </div>
-        )}
-
-        <div className="relative">
-          <button
-            onClick={() => setIsLocationMenuOpen(!isLocationMenuOpen)}
-            disabled={isLocatingUser}
-            className={`flex h-10 w-10 items-center justify-center rounded-full shadow-md border border-slate-200 transition-all hover:scale-105 ${
-              isLocatingUser || isLocationMenuOpen ? "bg-blue-600 text-white" : "bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-            title="Set Current Location"
-          >
-            <Crosshair className={`h-5 w-5 ${isLocatingUser ? "animate-spin text-white" : "text-slate-700"}`} />
-          </button>
-
-          {isLocationMenuOpen && (
-            <div className="absolute right-12 bottom-0 rounded-2xl bg-white p-2.5 shadow-2xl border border-slate-200 w-64 space-y-1 z-20 animate-in fade-in slide-in-from-right duration-200 text-xs">
-              <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block px-2 py-0.5">
-                Set Current Location
-              </span>
-
-              <button
-                onClick={() => {
-                  setIsLocationMenuOpen(false);
-                  handleLocateUserCurrentPosition();
-                }}
-                className="w-full text-left rounded-xl px-2.5 py-2 font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-700 flex items-center gap-2 transition-colors"
-              >
-                <Navigation className="h-4 w-4 text-blue-600" />
-                <span>Device GPS (Auto-Detect)</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setIsLocationMenuOpen(false);
-                  renderUserPositionOnMap(cityCoords.lat, cityCoords.lng, `${selectedCity} Center`);
-                }}
-                className="w-full text-left rounded-xl px-2.5 py-2 font-bold text-slate-800 hover:bg-slate-100 flex items-center gap-2 transition-colors"
-              >
-                <MapPin className="h-4 w-4 text-brand-600" />
-                <span>{selectedCity} City Center</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setIsLocationMenuOpen(false);
-                  setIsPinDropMode(true);
-                  pinDropModeRef.current = true;
-                }}
-                className="w-full text-left rounded-xl px-2.5 py-2 font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 flex items-center gap-2 transition-colors"
-              >
-                <MapPin className="h-4 w-4 text-indigo-600 animate-bounce" />
-                <span>Click Map to Drop Custom Pin</span>
-              </button>
-            </div>
-          )}
-        </div>
+        <button
+          onClick={handleLocateUserCurrentPosition}
+          disabled={isLocatingUser}
+          className={`flex h-10 w-10 items-center justify-center rounded-full shadow-md border border-slate-200 transition-all hover:scale-105 ${
+            isLocatingUser ? "bg-blue-600 text-white animate-pulse" : "bg-white text-slate-700 hover:bg-slate-50"
+          }`}
+          title="Detect My Current Location Automatically"
+        >
+          <Crosshair className={`h-5 w-5 ${isLocatingUser ? "animate-spin text-white" : "text-slate-700"}`} />
+        </button>
 
         <div className="flex flex-col rounded-lg bg-white border border-slate-200 shadow-md overflow-hidden">
           <button
