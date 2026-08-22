@@ -5,8 +5,9 @@ import { Sparkles, Send, X, Bot, User, MessageCircle, MapPin } from "lucide-reac
 
 interface AiAssistantModalProps {
   currentCity: string;
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  isInline?: boolean;
 }
 
 interface ChatMessage {
@@ -17,8 +18,9 @@ interface ChatMessage {
 
 export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
   currentCity,
-  isOpen,
+  isOpen = true,
   onClose,
+  isInline = false,
 }) => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -29,7 +31,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
   ]);
   const [loading, setLoading] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen && !isInline) return null;
 
   const handleSend = (userText: string) => {
     if (!userText.trim()) return;
@@ -45,20 +47,20 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
 
       const lower = userText.toLowerCase();
       if (lower.includes("food") || lower.includes("kachori") || lower.includes("eat")) {
-        aiReply = `In ${currentCity}, you must try the famous Pyaaz Kachori at Rawat Mishtan Bhandar (Station Rd) and authentic Royal Thali with Paneer Ghevar at LMB in Johari Bazaar!`;
+        aiReply = `In ${currentCity}, you must try the famous local specialties like Pyaaz Kachori, Kulhad Lassi, and authentic regional sweets!`;
       } else if (lower.includes("sunset") || lower.includes("view")) {
-        aiReply = `The absolute best sunset in ${currentCity} is from Nahargarh Fort ramparts overlooking the Pink City. Arrive by 05:00 PM for golden hour!`;
+        aiReply = `The absolute best sunset in ${currentCity} is from the highest fortress ramparts and hilltop viewpoints overlooking the city skyline. Arrive by 05:00 PM for golden hour!`;
       } else if (lower.includes("closed") || lower.includes("status")) {
-        aiReply = `Most monuments in ${currentCity} (Hawa Mahal, Amer Fort, City Palace) are Open today. Note: Galta Ji upper mountain path has temporary maintenance work ongoing.`;
+        aiReply = `Most monuments in ${currentCity} are Open today under normal operating hours.`;
       } else if (lower.includes("guide") || lower.includes("whatsapp")) {
-        aiReply = `I can connect you directly with a verified Rajasthan heritage tour guide on WhatsApp for live booking.`;
+        aiReply = `I can connect you directly with a verified local tourist guide on WhatsApp for live booking.`;
         action = {
           label: "Chat with Verified Guide on WhatsApp",
-          url: "https://wa.me/919876543210?text=Namaste!%20I%20need%20a%20local%20guide%20in%20Jaipur.",
+          url: `https://wa.me/919876543210?text=Namaste!%20I%20need%20a%20local%20guide%20in%20${currentCity}.`,
           isWhatsApp: true,
         };
       } else {
-        aiReply = `For ${currentCity}, I recommend starting early at Amer Fort (08:30 AM), visiting Panna Meena Stepwell, trying street chaat at Johari Bazaar, and watching the sunset from Nahargarh!`;
+        aiReply = `For ${currentCity}, I recommend starting early with the iconic heritage monuments, having an authentic local lunch, and reserving the late afternoon for centuries-old artisan bazaars. Would you like me to customize this for you?`;
       }
 
       setMessages((prev) => [
@@ -70,111 +72,141 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
         },
       ]);
       setLoading(false);
-    }, 600);
+    }, 500);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden flex flex-col h-[550px] relative">
-        {/* Header with Gradient */}
-        <div className="bg-gradient-to-r from-brand-600 via-jaipur-pink to-purple-600 p-4 text-white flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md">
-              <Sparkles className="h-5 w-5 text-amber-300" />
-            </div>
-            <div>
-              <h3 className="font-heading text-base font-bold">GlobeTrotter AI Tourist Guide</h3>
-              <p className="text-[11px] text-white/80">Real-time intelligence for {currentCity}</p>
-            </div>
-          </div>
+  const quickQuestions = [
+    `Top 3 places to visit in ${currentCity}?`,
+    `Famous street food in ${currentCity}?`,
+    `Best sunset viewpoint?`,
+    `Are monuments open today?`,
+  ];
 
-          <button
-            onClick={onClose}
-            className="rounded-full p-1.5 hover:bg-white/20 text-white transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </button>
+  const content = (
+    <div className={`relative w-full rounded-3xl bg-white shadow-2xl border border-slate-200 flex flex-col overflow-hidden text-slate-900 font-sans ${isInline ? "shadow-md" : "max-w-lg max-h-[85vh]"}`}>
+      {/* Header */}
+      <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-brand-600 via-jaipur-pink to-purple-600 text-white flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md">
+            <Sparkles className="h-5 w-5 text-amber-300 animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-heading text-base font-extrabold leading-tight">AI Virtual Tourist Guide</h3>
+              <span className="rounded-full bg-emerald-400 text-emerald-950 text-[9px] font-extrabold px-2 py-0.5">
+                LIVE
+              </span>
+            </div>
+            <span className="text-[11px] text-white/80 font-medium">
+              Verified Intel for {currentCity}
+            </span>
+          </div>
         </div>
 
-        {/* Chat History Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 text-xs">
-          {messages.map((m, idx) => (
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Messages Feed */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[420px] text-xs">
+        {messages.map((m, idx) => (
+          <div
+            key={idx}
+            className={`flex items-start gap-2.5 ${m.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
+          >
             <div
-              key={idx}
-              className={`flex gap-2.5 ${m.sender === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-white font-bold text-xs ${
+                m.sender === "user"
+                  ? "bg-slate-900"
+                  : "bg-gradient-to-tr from-brand-600 to-jaipur-pink shadow-xs"
+              }`}
             >
-              {m.sender === "ai" && (
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-500/20 text-brand-400">
-                  <Bot className="h-4 w-4" />
-                </div>
-              )}
-              <div
-                className={`max-w-[80%] rounded-2xl px-4 py-3 leading-relaxed ${
-                  m.sender === "user"
-                    ? "bg-brand-600 text-white"
-                    : "bg-slate-900 border border-slate-800 text-slate-200"
-                }`}
-              >
-                <p>{m.text}</p>
-                {m.suggestedAction && (
+              {m.sender === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+            </div>
+
+            <div
+              className={`rounded-2xl p-3.5 max-w-[82%] leading-relaxed ${
+                m.sender === "user"
+                  ? "bg-slate-900 text-white font-medium"
+                  : "bg-slate-100 text-slate-800 border border-slate-200/80"
+              }`}
+            >
+              <p>{m.text}</p>
+
+              {m.suggestedAction && (
+                <div className="mt-2.5 pt-2 border-t border-slate-200/60">
                   <a
                     href={m.suggestedAction.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2.5 inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-[11px] font-bold text-white shadow-md hover:bg-emerald-500 transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 text-[11px] shadow-xs transition-colors"
                   >
                     <MessageCircle className="h-3.5 w-3.5" />
-                    {m.suggestedAction.label}
+                    <span>{m.suggestedAction.label}</span>
                   </a>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-          ))}
+          </div>
+        ))}
 
-          {loading && (
-            <div className="flex items-center gap-2 text-slate-400 text-[11px] pl-10">
-              <span className="h-2 w-2 rounded-full bg-brand-500 animate-ping" />
-              AI Guide is thinking...
-            </div>
-          )}
-        </div>
-
-        {/* Suggested Quick Prompts */}
-        <div className="px-4 py-2 border-t border-slate-900 flex gap-1.5 overflow-x-auto text-[10px]">
-          {[
-            "Best street food near me",
-            "Sunset viewpoint in Jaipur",
-            "Are forts open today?",
-            "Hire a local guide on WhatsApp",
-          ].map((prompt, pIdx) => (
-            <button
-              key={pIdx}
-              onClick={() => handleSend(prompt)}
-              className="shrink-0 rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 text-slate-300 hover:text-white hover:border-brand-500"
-            >
-              {prompt}
-            </button>
-          ))}
-        </div>
-
-        {/* Input Bar */}
-        <div className="p-3 border-t border-slate-800 bg-slate-900/50 flex items-center gap-2">
-          <input
-            type="text"
-            placeholder={`Ask AI anything about ${currentCity}...`}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
-            className="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
-          />
-          <button
-            onClick={() => handleSend(input)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r from-brand-600 to-jaipur-pink text-white hover:opacity-90 transition-all shrink-0"
-          >
-            <Send className="h-4 w-4" />
-          </button>
-        </div>
+        {loading && (
+          <div className="flex items-center gap-2 text-xs text-slate-500 italic pl-10">
+            <Sparkles className="h-3.5 w-3.5 text-brand-600 animate-spin" />
+            <span>AI Guide is checking local intel...</span>
+          </div>
+        )}
       </div>
+
+      {/* Suggested Quick Chips */}
+      <div className="p-2 border-t border-slate-100 bg-slate-50 flex flex-wrap gap-1.5 text-[11px]">
+        {quickQuestions.map((q, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleSend(q)}
+            className="rounded-xl bg-white border border-slate-200 px-2.5 py-1 text-slate-700 hover:border-brand-500 hover:text-brand-600 transition-colors font-medium text-left"
+          >
+            {q}
+          </button>
+        ))}
+      </div>
+
+      {/* Input Form */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSend(input);
+        }}
+        className="p-3 border-t border-slate-200 bg-white flex items-center gap-2"
+      >
+        <input
+          type="text"
+          placeholder={`Ask about monuments, dishes, or hidden gems in ${currentCity}...`}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="flex-1 rounded-2xl bg-slate-100 border border-slate-200 px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+        />
+        <button
+          type="submit"
+          className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 hover:bg-slate-800 text-white transition-colors shrink-0 shadow-sm"
+        >
+          <Send className="h-4 w-4" />
+        </button>
+      </form>
+    </div>
+  );
+
+  if (isInline) return content;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+      {content}
     </div>
   );
 };

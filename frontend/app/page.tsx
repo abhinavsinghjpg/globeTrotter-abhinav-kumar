@@ -704,15 +704,9 @@ export default function HomePage() {
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops" | "events">("all");
   const [activePlaceId, setActivePlaceId] = useState<string | null>(null);
   const [activeInlineDetail, setActiveInlineDetail] = useState<any | null>(null);
-  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [activeToolView, setActiveToolView] = useState<null | "planner" | "transport" | "memories" | "groups" | "ai">(null);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
-  // PRD Feature Modals State
-  const [isTripPlannerOpen, setIsTripPlannerOpen] = useState(false);
-  const [isTransportRentalOpen, setIsTransportRentalOpen] = useState(false);
-  const [isTripMemoriesOpen, setIsTripMemoriesOpen] = useState(false);
-  const [isCoTravelerOpen, setIsCoTravelerOpen] = useState(false);
 
   // Search state
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -1069,7 +1063,10 @@ export default function HomePage() {
           <aside className="w-60 shrink-0 border-r border-slate-200 bg-white flex flex-col justify-between p-4 overflow-y-auto select-none">
             <div className="space-y-5">
               <button
-                onClick={() => setIsAiModalOpen(true)}
+                onClick={() => {
+                  setActiveToolView("ai");
+                  setActiveInlineDetail(null);
+                }}
                 className="w-full flex items-center gap-3 rounded-2xl bg-gradient-to-r from-brand-600 via-jaipur-pink to-purple-600 p-3.5 text-white font-bold text-xs shadow-lg shadow-brand-500/25 hover:opacity-95 transition-all hover:scale-102 group"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md">
@@ -1094,13 +1091,14 @@ export default function HomePage() {
                   { id: "events", label: `Festivals & Events (${currentLocationData.upcomingEvents?.length || 0})`, icon: Calendar, color: "text-blue-500" },
                 ].map((cat) => {
                   const Icon = cat.icon;
-                  const isActive = activeCategoryFilter === cat.id;
+                  const isActive = activeCategoryFilter === cat.id && !activeToolView && !activeInlineDetail;
                   return (
                     <button
                       key={cat.id}
                       onClick={() => {
                         setActiveCategoryFilter(cat.id as any);
                         setActiveInlineDetail(null);
+                        setActiveToolView(null);
                       }}
                       className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-all ${
                         isActive
@@ -1121,32 +1119,52 @@ export default function HomePage() {
                   </span>
 
                   <button
-                    onClick={() => setIsTripPlannerOpen(true)}
-                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                    onClick={() => {
+                      setActiveToolView("planner");
+                      setActiveInlineDetail(null);
+                    }}
+                    className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-colors group ${
+                      activeToolView === "planner" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
                   >
                     <Sparkles className="h-4 w-4 text-amber-500 group-hover:scale-110 transition-transform" />
                     <span>AI Trip & Budget Planner</span>
                   </button>
 
                   <button
-                    onClick={() => setIsTransportRentalOpen(true)}
-                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                    onClick={() => {
+                      setActiveToolView("transport");
+                      setActiveInlineDetail(null);
+                    }}
+                    className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-colors group ${
+                      activeToolView === "transport" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
                   >
                     <Car className="h-4 w-4 text-orange-500 group-hover:scale-110 transition-transform" />
                     <span>Cabs & Vehicle Rentals</span>
                   </button>
 
                   <button
-                    onClick={() => setIsTripMemoriesOpen(true)}
-                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                    onClick={() => {
+                      setActiveToolView("memories");
+                      setActiveInlineDetail(null);
+                    }}
+                    className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-colors group ${
+                      activeToolView === "memories" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
                   >
                     <Camera className="h-4 w-4 text-pink-500 group-hover:scale-110 transition-transform" />
                     <span>Trip Memories & Reels</span>
                   </button>
 
                   <button
-                    onClick={() => setIsCoTravelerOpen(true)}
-                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                    onClick={() => {
+                      setActiveToolView("groups");
+                      setActiveInlineDetail(null);
+                    }}
+                    className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-colors group ${
+                      activeToolView === "groups" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
                   >
                     <Users className="h-4 w-4 text-blue-500 group-hover:scale-110 transition-transform" />
                     <span>Co-Travelers & Groups</span>
@@ -1227,8 +1245,68 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* INLINE PLACE DETAIL VIEW (OPENS IN THIS WINDOW UPON CARD CLICK) */}
-            {activeInlineDetail ? (
+            {/* INLINE TOOL SUITE VIEW (OPENS DIRECTLY IN THIS WINDOW) */}
+            {activeToolView ? (
+              <div className="space-y-4 animate-in fade-in slide-in-from-top-3 duration-300">
+                <div className="p-3.5 bg-white border border-slate-200 rounded-3xl flex items-center justify-between shadow-xs">
+                  <button
+                    onClick={() => setActiveToolView(null)}
+                    className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-2xl transition-colors"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    <span>Back to {currentLocationData.name} Places</span>
+                  </button>
+
+                  <span className="rounded-full bg-brand-50 text-brand-700 text-[10px] font-extrabold px-3 py-1 uppercase tracking-wider">
+                    {activeToolView === "planner" && "AI Trip & Budget Planner"}
+                    {activeToolView === "transport" && "Cabs & Vehicle Rentals"}
+                    {activeToolView === "memories" && "Trip Memories & Reels"}
+                    {activeToolView === "groups" && "Co-Travelers & Groups"}
+                    {activeToolView === "ai" && "AI Virtual Tourist Guide"}
+                  </span>
+                </div>
+
+                {activeToolView === "planner" && (
+                  <TripPlannerModal
+                    isInline
+                    onClose={() => setActiveToolView(null)}
+                    defaultCity={currentLocationData.name}
+                  />
+                )}
+
+                {activeToolView === "transport" && (
+                  <TransportRentalModal
+                    isInline
+                    onClose={() => setActiveToolView(null)}
+                    city={currentLocationData.name}
+                  />
+                )}
+
+                {activeToolView === "memories" && (
+                  <TripMemoriesModal
+                    isInline
+                    onClose={() => setActiveToolView(null)}
+                    city={currentLocationData.name}
+                  />
+                )}
+
+                {activeToolView === "groups" && (
+                  <CoTravelerModal
+                    isInline
+                    onClose={() => setActiveToolView(null)}
+                    city={currentLocationData.name}
+                  />
+                )}
+
+                {activeToolView === "ai" && (
+                  <AiAssistantModal
+                    isInline
+                    onClose={() => setActiveToolView(null)}
+                    currentCity={currentLocationData.name}
+                  />
+                )}
+              </div>
+            ) : activeInlineDetail ? (
               <div className="rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-3 duration-300">
                 <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                   <button
@@ -1869,46 +1947,17 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Floating AI Assistant Bubble */}
+      {/* Floating AI Assistant Button (Opens AI Guide Directly In Window) */}
       <button
-        onClick={() => setIsAiModalOpen(true)}
+        onClick={() => {
+          setActiveToolView("ai");
+          setActiveInlineDetail(null);
+        }}
         className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-brand-600 via-jaipur-pink to-purple-600 text-white shadow-2xl shadow-brand-500/40 hover:scale-110 transition-transform"
         title="Open AI Virtual Tourist Guide"
       >
         <Sparkles className="h-6 w-6 text-amber-300 animate-spin-slow" />
       </button>
-
-      {/* AI Assistant Chat Modal */}
-      <AiAssistantModal
-        currentCity={currentLocationData.name}
-        isOpen={isAiModalOpen}
-        onClose={() => setIsAiModalOpen(false)}
-      />
-
-      {/* PRD Feature Modals */}
-      <TripPlannerModal
-        isOpen={isTripPlannerOpen}
-        onClose={() => setIsTripPlannerOpen(false)}
-        defaultCity={currentLocationData.name}
-      />
-
-      <TransportRentalModal
-        isOpen={isTransportRentalOpen}
-        onClose={() => setIsTransportRentalOpen(false)}
-        city={currentLocationData.name}
-      />
-
-      <TripMemoriesModal
-        isOpen={isTripMemoriesOpen}
-        onClose={() => setIsTripMemoriesOpen(false)}
-        city={currentLocationData.name}
-      />
-
-      <CoTravelerModal
-        isOpen={isCoTravelerOpen}
-        onClose={() => setIsCoTravelerOpen(false)}
-        city={currentLocationData.name}
-      />
     </div>
   );
 }

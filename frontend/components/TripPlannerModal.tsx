@@ -25,15 +25,17 @@ import {
 } from "lucide-react";
 
 interface TripPlannerModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
   defaultCity?: string;
+  isInline?: boolean;
 }
 
 export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
-  isOpen,
+  isOpen = true,
   onClose,
   defaultCity = "Jaipur",
+  isInline = false,
 }) => {
   // Wizard State
   const [startingCity, setStartingCity] = useState("Delhi");
@@ -53,7 +55,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   const [isGenerated, setIsGenerated] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen && !isInline) return null;
 
   const toggleInterest = (item: string) => {
     if (interests.includes(item)) {
@@ -100,11 +102,10 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     }, 600);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl max-h-[90vh] rounded-3xl bg-white shadow-2xl border border-slate-200 flex flex-col overflow-hidden text-slate-900 font-sans">
-        {/* Modal Header */}
-        <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-brand-600 via-jaipur-pink to-purple-600 text-white flex items-center justify-between shrink-0">
+  const plannerContent = (
+    <div className={`relative w-full rounded-3xl bg-white shadow-2xl border border-slate-200 flex flex-col overflow-hidden text-slate-900 font-sans ${isInline ? "shadow-md" : "max-w-3xl max-h-[90vh]"}`}>
+      {/* Modal Header */}
+      <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-brand-600 via-jaipur-pink to-purple-600 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md">
               <Sparkles className="h-5 w-5 text-amber-300 animate-pulse" />
@@ -480,6 +481,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
           )}
         </div>
       </div>
+  );
+
+  if (isInline) return plannerContent;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+      {plannerContent}
     </div>
   );
 };
