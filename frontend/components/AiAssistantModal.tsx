@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { api } from "@/lib/api";
 import {
   Sparkles,
   Send,
@@ -150,19 +151,17 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
     setLoading(true);
 
     try {
-      // Connect to FastAPI Backend AI Tourist Guide & Planner Endpoint
-      const res = await fetch("http://localhost:8000/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: userText,
-          city: currentCity,
-          existing_profile: tripProfile
-        }),
+      // Connect to FastAPI Backend AI Tourist Guide & Planner Endpoint.
+      // Routed through the shared api client so the host comes from
+      // NEXT_PUBLIC_API_URL and the chatbot keeps working once deployed.
+      const res = await api.post("/ai/chat", {
+        message: userText,
+        city: currentCity,
+        existing_profile: tripProfile,
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      if (res.data) {
+        const data = res.data;
         if (data.profile) {
           setTripProfile((prev) => ({ ...prev, ...data.profile }));
         }

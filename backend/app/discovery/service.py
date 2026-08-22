@@ -37,8 +37,11 @@ async def get_destination_by_name_or_id(db: AsyncSession, identifier: str) -> Op
             (Destination.name.ilike(f"%{identifier}%")),
             Destination.is_deleted == False,
         )
+        .limit(1)
     )
-    return result.scalar_one_or_none()
+    # A partial name match can hit several rows ("Jaipur" also matches "Jaipur
+    # Rural"), so take the first rather than raising MultipleResultsFound.
+    return result.scalars().first()
 
 
 async def get_places_by_destination(

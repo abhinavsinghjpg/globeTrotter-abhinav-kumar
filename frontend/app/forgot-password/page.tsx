@@ -57,12 +57,12 @@ export default function ForgotPasswordPage() {
 
         <div className="text-center space-y-2">
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-500 to-brand-600 shadow-lg shadow-brand-500/20 mb-2">
-            <KeyRound className="h-6 w-6 text-white" />
+            <KeyRound className="h-6 w-6 text-jaipur-royal" />
           </div>
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-white">
+          <h2 className="font-heading text-3xl font-bold tracking-tight text-jaipur-royal">
             {step === "success" ? "Password Reset" : "Reset Password"}
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-sand-600">
             {step === "request" && "Enter your email address to receive reset instructions"}
             {step === "reset" && "Enter the verification token and choose your new password"}
             {step === "success" && "Your password has been successfully updated"}
@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-xl bg-rose-500/10 border border-rose-500/30 p-3.5 text-xs text-rose-400">
+          <div className="flex items-center gap-2 rounded-xl bg-danger-50 border border-danger-500/30 p-3.5 text-xs text-danger-700">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -79,14 +79,14 @@ export default function ForgotPasswordPage() {
         {step === "request" && (
           <form onSubmit={handleRequestReset} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-slate-300">Email Address</label>
+              <label className="block text-sm font-medium text-sand-600">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 placeholder-slate-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-jaipur-royal placeholder-sand-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
               />
             </div>
 
@@ -110,14 +110,14 @@ export default function ForgotPasswordPage() {
             )}
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-slate-300">Reset Token</label>
+              <label className="block text-sm font-medium text-sand-600">Reset Token</label>
               <input
                 type="text"
                 required
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
                 placeholder="Paste token here"
-                className="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 placeholder-slate-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2"
+                className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-jaipur-royal placeholder-sand-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2"
               />
             </div>
 
@@ -145,7 +145,7 @@ export default function ForgotPasswordPage() {
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
               <CheckCircle2 className="h-8 w-8" />
             </div>
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-sand-600">
               You can now sign in with your new password.
             </p>
             <Link
@@ -160,7 +160,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center pt-2">
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-sand-600 hover:text-jaipur-royal transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back to Sign In

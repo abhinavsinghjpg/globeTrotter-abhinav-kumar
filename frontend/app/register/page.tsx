@@ -9,7 +9,7 @@ import { Compass, Sparkles, AlertCircle, ArrowRight, CheckCircle2 } from "lucide
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { signUp } = useAuth();
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
@@ -28,13 +28,11 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      login({
-        id: "usr-" + Date.now(),
+      await signUp({
         name: name || email.split("@")[0] || "Traveler",
-        email: email,
-        phone: phone,
-        role: "traveler",
-        badge: "Explorer",
+        email,
+        password,
+        phone,
       });
       router.push("/");
     } catch (err: any) {
@@ -55,27 +53,27 @@ export default function RegisterPage() {
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-jaipur-pink shadow-lg shadow-brand-500/20 mb-2">
             <Compass className="h-6 w-6 text-white" />
           </div>
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-white">
+          <h2 className="font-heading text-3xl font-bold tracking-tight text-jaipur-royal">
             Join GlobeTrotter
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-sand-600">
             Personalised travel planning tailored to your exact travel style
           </p>
         </div>
 
         {/* Step indicator */}
         <div className="flex items-center justify-center gap-3">
-          <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ${step === 1 ? 'bg-brand-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+          <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ${step === 1 ? 'bg-brand-500 text-white' : 'bg-sand-200 text-sand-600'}`}>
             1
           </div>
-          <div className="h-0.5 w-12 bg-slate-800" />
-          <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ${step === 2 ? 'bg-brand-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+          <div className="h-0.5 w-12 bg-sand-200" />
+          <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ${step === 2 ? 'bg-brand-500 text-white' : 'bg-sand-200 text-sand-600'}`}>
             2
           </div>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-xl bg-rose-500/10 border border-rose-500/30 p-3.5 text-xs text-rose-400">
+          <div className="flex items-center gap-2 rounded-xl bg-danger-50 border border-danger-500/30 p-3.5 text-xs text-danger-700">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -85,37 +83,37 @@ export default function RegisterPage() {
           {step === 1 ? (
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Full Name</label>
+                <label className="block text-sm font-medium text-sand-600">Full Name</label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Abhinav Kumar"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 placeholder-slate-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-jaipur-royal placeholder-sand-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Email Address</label>
+                <label className="block text-sm font-medium text-sand-600">Email Address</label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 placeholder-slate-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-jaipur-royal placeholder-sand-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">WhatsApp / Mobile (Optional)</label>
+                <label className="block text-sm font-medium text-sand-600">WhatsApp / Mobile (Optional)</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+91 98765 43210"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 placeholder-slate-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-jaipur-royal placeholder-sand-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
 
@@ -146,14 +144,14 @@ export default function RegisterPage() {
           ) : (
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Your Age Group</label>
+                <label className="block text-sm font-medium text-sand-600">Your Age Group</label>
                 <div className="grid grid-cols-3 gap-2">
                   {["16-26", "26-45", "45-old age"].map((grp) => (
                     <button
                       type="button"
                       key={grp}
                       onClick={() => setAgeGroup(grp)}
-                      className={`rounded-xl border p-3 text-xs font-semibold transition-all ${ageGroup === grp ? 'border-brand-500 bg-brand-500/20 text-brand-300' : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'}`}
+                      className={`rounded-xl border p-3 text-xs font-semibold transition-all ${ageGroup === grp ? 'border-brand-500 bg-brand-500/20 text-brand-700' : 'border-sand-200 bg-sand-50 text-sand-600 hover:border-sand-300'}`}
                     >
                       {grp} yrs
                     </button>
@@ -162,14 +160,14 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Preferred Travel Style</label>
+                <label className="block text-sm font-medium text-sand-600">Preferred Travel Style</label>
                 <div className="grid grid-cols-3 gap-2">
                   {["solo", "couple", "family", "group", "business", "adventure"].map((style) => (
                     <button
                       type="button"
                       key={style}
                       onClick={() => setTravelStyle(style)}
-                      className={`rounded-xl border p-2.5 text-xs font-semibold capitalize transition-all ${travelStyle === style ? 'border-jaipur-pink bg-jaipur-pink/20 text-jaipur-pink' : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'}`}
+                      className={`rounded-xl border p-2.5 text-xs font-semibold capitalize transition-all ${travelStyle === style ? 'border-jaipur-pink bg-jaipur-pink/20 text-jaipur-pink' : 'border-sand-200 bg-sand-50 text-sand-600 hover:border-sand-300'}`}
                     >
                       {style}
                     </button>
@@ -178,14 +176,14 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Budget Preference</label>
+                <label className="block text-sm font-medium text-sand-600">Budget Preference</label>
                 <div className="grid grid-cols-3 gap-2">
                   {["budget", "standard", "luxury"].map((lvl) => (
                     <button
                       type="button"
                       key={lvl}
                       onClick={() => setBudgetLevel(lvl)}
-                      className={`rounded-xl border p-2.5 text-xs font-semibold capitalize transition-all ${budgetLevel === lvl ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'}`}
+                      className={`rounded-xl border p-2.5 text-xs font-semibold capitalize transition-all ${budgetLevel === lvl ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-sand-200 bg-sand-50 text-sand-600 hover:border-sand-300'}`}
                     >
                       {lvl}
                     </button>
@@ -197,7 +195,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 rounded-xl border border-slate-700 py-3.5 text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors"
+                  className="flex-1 rounded-xl border border-sand-300 py-3.5 text-sm font-medium text-sand-600 hover:bg-sand-200 transition-colors"
                 >
                   Back
                 </button>
@@ -213,9 +211,9 @@ export default function RegisterPage() {
           )}
         </form>
 
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-sand-600">
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-brand-400 hover:text-brand-300">
+          <Link href="/login" className="font-semibold text-brand-700 hover:text-brand-600">
             Sign in
           </Link>
         </p>

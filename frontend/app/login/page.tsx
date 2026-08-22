@@ -9,7 +9,7 @@ import { Compass, Sparkles, AlertCircle, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,13 +21,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      login({
-        id: "usr-" + Date.now(),
-        name: email.split("@")[0] || "Traveler",
-        email: email,
-        role: "traveler",
-        badge: "Explorer",
-      });
+      await signIn(email, password);
       router.push("/");
     } catch (err: any) {
       setError(err?.response?.data?.detail || "Failed to sign in. Please check your credentials.");
@@ -47,16 +41,16 @@ export default function LoginPage() {
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-jaipur-pink shadow-lg shadow-brand-500/20 mb-2">
             <Compass className="h-6 w-6 text-white" />
           </div>
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-white">
+          <h2 className="font-heading text-3xl font-bold tracking-tight text-jaipur-royal">
             Welcome back
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-sand-600">
             Sign in to continue your travel intelligence experience
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-xl bg-rose-500/10 border border-rose-500/30 p-3.5 text-xs text-rose-400">
+          <div className="flex items-center gap-2 rounded-xl bg-danger-50 border border-danger-500/30 p-3.5 text-xs text-danger-700">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -64,7 +58,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-slate-300">
+            <label className="block text-sm font-medium text-sand-600">
               Email Address
             </label>
             <input
@@ -73,16 +67,16 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 placeholder-slate-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+              className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-jaipur-royal placeholder-sand-500 transition-all focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
             />
           </div>
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-300">Password</span>
+              <span className="text-sm font-medium text-sand-600">Password</span>
               <Link
                 href="/forgot-password"
-                className="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors"
+                className="text-xs font-semibold text-brand-700 hover:text-brand-600 transition-colors"
               >
                 Forgot password?
               </Link>
@@ -117,9 +111,9 @@ export default function LoginPage() {
 
         <div className="relative my-6 text-center">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-800" />
+            <div className="w-full border-t border-sand-200" />
           </div>
-          <span className="relative bg-slate-900/90 px-3 text-xs text-slate-400 uppercase tracking-wider">
+          <span className="relative bg-white px-3 text-xs text-sand-600 uppercase tracking-wider">
             Or sign in with
           </span>
         </div>
@@ -128,7 +122,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => alert("Google OAuth is configured with FastAPI backend.")}
-          className="w-full flex items-center justify-center gap-3 rounded-xl border border-slate-700 bg-slate-900/60 py-3 text-sm font-medium text-slate-200 hover:bg-slate-800 transition-colors"
+          className="w-full flex items-center justify-center gap-3 rounded-xl border border-sand-300 bg-white py-3 text-sm font-medium text-jaipur-royal hover:bg-sand-200 transition-colors"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24">
             <path
@@ -151,9 +145,9 @@ export default function LoginPage() {
           Continue with Google
         </button>
 
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-sand-600">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-brand-400 hover:text-brand-300">
+          <Link href="/register" className="font-semibold text-brand-700 hover:text-brand-600">
             Sign up now
           </Link>
         </p>

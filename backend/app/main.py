@@ -18,21 +18,12 @@ from app.api.memories import router as memories_router
 from app.api.events import router as events_router
 from app.services.ollama_service import ollama_service
 
-# Optional Platform Routers (if available)
-try:
-    from app.user_auth.router import router as auth_router
-except ImportError:
-    auth_router = None
-
-try:
-    from app.discovery.router import router as discovery_router
-except ImportError:
-    discovery_router = None
-
-try:
-    from app.admin.router import router as admin_router
-except ImportError:
-    admin_router = None
+# Platform Routers. These are required, not optional: importing them eagerly
+# means a missing dependency fails at startup instead of silently serving an
+# API with authentication and admin control quietly absent.
+from app.user_auth.router import router as auth_router
+from app.discovery.router import router as discovery_router
+from app.admin.router import router as admin_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -42,10 +33,14 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS Configuration
+# CORS Configuration.
+# A wildcard origin combined with allow_credentials is rejected by browsers and
+# would expose authenticated endpoints to any site, so use the explicit allowlist.
+from app.config import settings as platform_settings
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=platform_settings.BACKEND_CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

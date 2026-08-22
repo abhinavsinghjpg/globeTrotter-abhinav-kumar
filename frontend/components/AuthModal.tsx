@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, closeAuthModal, login } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, signIn, signUp } = useAuth();
   const [selectedRole, setSelectedRole] = useState<UserRole>("traveler");
   const [isSignUp, setIsSignUp] = useState(false);
 
@@ -31,71 +31,53 @@ export const AuthModal: React.FC = () => {
   const [city, setCity] = useState("Jaipur");
   const [showPassword, setShowPassword] = useState(false);
   const [guideLicense, setGuideLicense] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   if (!isAuthModalOpen) return null;
 
-  // Preset demo accounts for seamless 1-click verification
+  // Prefills the demo account's email so it can be signed in against the real
+  // backend. It deliberately does NOT grant a session: privilege comes from the
+  // server's response to real credentials, never from the button that was clicked.
   const handleQuickDemoLogin = (roleToLogin: UserRole) => {
-    let demoUser: UserProfile;
+    const demoEmail =
+      roleToLogin === "admin"
+        ? "admin@globetrotter.in"
+        : roleToLogin === "guide"
+        ? "vikram.guide@globetrotter.in"
+        : "priya.travels@gmail.com";
 
-    if (roleToLogin === "admin") {
-      demoUser = {
-        id: "usr-admin-01",
-        name: "Rajesh Sharma (Admin)",
-        email: "admin@globetrotter.in",
-        role: "admin",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-        badge: "Superadmin · Operations Control",
-        city: "Jaipur / Delhi",
-      };
-    } else if (roleToLogin === "guide") {
-      demoUser = {
-        id: "usr-guide-01",
-        name: "Vikram Rathore",
-        email: "vikram.guide@globetrotter.in",
-        role: "guide",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-        badge: "Govt. Licensed Rajasthan Tourism Guide (#RJ-9421)",
-        city: "Jaipur",
-        phone: "+91 98765 43210",
-      };
-    } else {
-      demoUser = {
-        id: "usr-trav-01",
-        name: "Priya Verma",
-        email: "priya.travels@gmail.com",
-        role: "traveler",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
-        badge: "Verified Explorer",
-        city: "Mumbai",
-      };
-    }
-
-    login(demoUser);
+    setEmail(demoEmail);
+    setPassword("");
+    setError("Demo email filled in — enter the account password to sign in.");
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
     if (!email || !password) {
-      alert("Please fill in your email and password.");
+      setError("Please fill in your email and password.");
       return;
     }
 
-    const newUser: UserProfile = {
-      id: `usr-${Date.now()}`,
-      name: name || (selectedRole === "admin" ? "Admin User" : selectedRole === "guide" ? "Local Guide" : "Traveler"),
-      email: email.trim(),
-      role: selectedRole,
-      badge:
-        selectedRole === "admin"
-          ? "Platform Administrator"
-          : selectedRole === "guide"
-          ? `Licensed Guide (${city})`
-          : "Verified Traveler",
-      city: city || "Jaipur",
-    };
-
-    login(newUser);
+    setSubmitting(true);
+    try {
+      if (isSignUp) {
+        // The account's role is assigned by the server. `selectedRole` only
+        // steers which sign-up form is shown, and is not sent as a privilege claim.
+        await signUp({ name, email: email.trim(), password });
+      } else {
+        await signIn(email.trim(), password);
+      }
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.detail ||
+          "Could not sign you in. Please check your credentials and try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

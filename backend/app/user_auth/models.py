@@ -19,7 +19,15 @@ class User(BaseModel):
     avatar_url = Column(String(500), nullable=True)
     auth_provider = Column(String(50), default="local")  # local, google
 
-    profile = relationship("UserProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    # Eager-loaded: response models read `user.profile`, and a lazy load there
+    # happens outside the async session and raises MissingGreenlet.
+    profile = relationship(
+        "UserProfile",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
     password_resets = relationship("PasswordResetToken", back_populates="user", cascade="all, delete-orphan")
 
 
