@@ -117,7 +117,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
     mapPlaces: [
       {
         id: "attr-1",
-        name: "Hawa Mahal (Palace of Winds)",
+        name: "Hawa Mahal",
+        hindiName: "हवा महल (Palace of Winds)",
         category: "attraction",
         lat: 26.9239,
         lng: 75.8267,
@@ -128,7 +129,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "attr-2",
-        name: "Amer Fort & Sheesh Mahal",
+        name: "Amer Fort",
+        hindiName: "आमेर का किला (Sheesh Mahal)",
         category: "attraction",
         lat: 26.9855,
         lng: 75.8513,
@@ -139,7 +141,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "attr-3",
-        name: "Nahargarh Fort Sunset Point",
+        name: "Nahargarh Fort",
+        hindiName: "नाहरगढ़ फोर्ट (Sunset Point)",
         category: "attraction",
         lat: 26.9378,
         lng: 75.8156,
@@ -150,7 +153,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "attr-4",
-        name: "Panna Meena Ka Kund",
+        name: "Panna Meena Kund",
+        hindiName: "पन्ना मीना का कुंड (Stepwell)",
         category: "attraction",
         lat: 26.9897,
         lng: 75.8569,
@@ -161,7 +165,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "food-1",
-        name: "Rawat Mishtan Bhandar",
+        name: "Rawat Mishtan",
+        hindiName: "रावत मिष्ठान भंडार (Pyaaz Kachori)",
         category: "food",
         lat: 26.9208,
         lng: 75.7972,
@@ -172,7 +177,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "food-2",
-        name: "Laxmi Mishtan Bhandar (LMB)",
+        name: "Laxmi Mishtan (LMB)",
+        hindiName: "एल.एम.बी. जोहरी बाजार (Ghevar)",
         category: "food",
         lat: 26.9205,
         lng: 75.8252,
@@ -183,7 +189,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "food-3",
-        name: "Chokhi Dhani Cultural Village",
+        name: "Chokhi Dhani",
+        hindiName: "चोखी ढाणी विलेज (Rajasthani Thali)",
         category: "food",
         lat: 26.7673,
         lng: 75.8285,
@@ -194,7 +201,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "shop-1",
-        name: "Johari Bazaar Jewelry Quarter",
+        name: "Johari Bazaar",
+        hindiName: "जौहरी बाज़ार (Kundan Jewelry)",
         category: "shopping",
         lat: 26.9212,
         lng: 75.8256,
@@ -204,7 +212,8 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       },
       {
         id: "shop-2",
-        name: "Bapu Bazaar Textiles",
+        name: "Bapu Bazaar",
+        hindiName: "बापू बाज़ार (Bandhej Sarees)",
         category: "shopping",
         lat: 26.9189,
         lng: 75.8214,
