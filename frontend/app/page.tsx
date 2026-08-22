@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SplitScreenMap, MapPlace } from "@/components/SplitScreenMap";
@@ -32,7 +32,7 @@ import {
   Ticket,
   Eye,
   Bookmark,
-  Send,
+  X,
 } from "lucide-react";
 
 interface CityIntelligence {
@@ -337,22 +337,6 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
         reviewsCount: "3,200+ reviews",
         address: "Near Amer Fort, Jaipur",
       },
-      {
-        id: "attr-5",
-        name: "Galta Ji (Monkey Temple Trail)",
-        subName: "Holy Springs & Hill Pass",
-        category: "Ancient Temple Complex",
-        description: "Series of sacred water pavilions and holy natural springs built into a narrow mountain pass. Note: Upper trail is undergoing monsoon stone restoration.",
-        status: "Temporarily Closed",
-        statusDetail: "Trail Restoration in Progress",
-        entryFee: "Free Entry",
-        timing: "05:00 AM – 09:00 PM",
-        image: "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=800&q=80",
-        hiddenGem: true,
-        rating: 4.5,
-        reviewsCount: "5,600+ reviews",
-        address: "Galtaji Pass, Khania-Balaji, Jaipur",
-      },
     ],
     famousFoods: [
       {
@@ -420,18 +404,6 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
         timing: "11:00 AM – 09:00 PM",
         image: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=800&q=80",
       },
-      {
-        id: "shop-3",
-        name: "Kripal Kumbh Traditional Blue Pottery",
-        bazaar: "Bani Park Heritage Workshop",
-        specialties: ["Turquoise Blue Pottery", "Hand-painted Quartz Plates", "Royal Glazed Vases", "Decorative Tiles"],
-        description: "Founded by legendary artist Padma Shri Kripal Singh Shekhawat, producing traditional Jaipur blue pottery made with quartz stone rather than regular clay.",
-        priceRange: "₹₹ (Artisanal Authentic)",
-        rating: 4.8,
-        reviewsCount: "2,800+ reviews",
-        timing: "10:00 AM – 07:00 PM",
-        image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80",
-      },
     ],
     upcomingEvents: [
       {
@@ -441,14 +413,6 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
         description: "The world's greatest celebration of literature and ideas, hosting international Nobel laureates, novelists, poets, and thinkers across 5 vibrant days.",
         tag: "Global Literary Festival",
         ticketType: "Free Delegate Registration",
-      },
-      {
-        name: "Teej Royal Procession & Fair",
-        dates: "August 16 – 18, 2026",
-        venue: "Tripolia Gate to Chaugan Stadium, Pink City",
-        description: "Grand traditional procession honoring Goddess Parvati, featuring royal palanquins, caparisoned elephants, folk dancers, and camel bands winding through the historic walled city.",
-        tag: "Royal Heritage Festival",
-        ticketType: "Open Public Viewing",
       },
     ],
     activities: [
@@ -460,15 +424,6 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
         description: "Float 2,000 feet above the rugged Aravalli ridges and Amer Fort as golden morning light illuminates the desert landscape.",
         image: "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?auto=format&fit=crop&w=800&q=80",
         tag: "Bucket List Adventure",
-      },
-      {
-        name: "Nahargarh Sunrise Bicycle Expedition",
-        provider: "Le Tour De India",
-        cost: "₹1,800 / person",
-        duration: "2.5 Hours",
-        description: "Guided uphill morning cycling journey through winding forest trails up to Nahargarh Fort, followed by piping hot masala chai at the summit.",
-        image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
-        tag: "Morning Fitness & Views",
       },
     ],
   },
@@ -484,22 +439,34 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
       {
         id: "u-attr-1",
         name: "City Palace of Udaipur",
+        hindiName: "सिटी पैलेस उदयपुर",
         category: "attraction",
         lat: 24.5764,
         lng: 73.6835,
-        description: "Enormous lakeside palace complex with crystal gallery and marble balconies.",
+        description: "Enormous lakeside palace complex with crystal gallery, mirror halls, and marble balconies.",
+        image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
         rating: 4.8,
-        status: "Open",
+        reviewsCount: "24,500+ Reviews",
+        status: "Open (09:30 AM - 05:30 PM)",
+        entryFee: "₹300",
+        timing: "09:30 AM – 05:30 PM",
+        address: "Old City, Udaipur, Rajasthan",
       },
       {
         id: "u-attr-2",
         name: "Lake Pichola & Jag Mandir",
+        hindiName: "पिछोला झील एवं जग मंदिर",
         category: "attraction",
         lat: 24.5701,
         lng: 73.6798,
-        description: "Scenic lake with sunset boat cruises to Jag Mandir island.",
+        description: "Scenic lake with sunset boat cruises to Jag Mandir island palace.",
+        image: "https://images.unsplash.com/photo-1603204077673-83eb6d4d16fe?auto=format&fit=crop&w=800&q=80",
         rating: 4.9,
-        status: "Open",
+        reviewsCount: "19,800+ Reviews",
+        status: "Open (06:00 AM - 07:00 PM)",
+        entryFee: "₹450 (Boat Cruise)",
+        timing: "06:00 AM – 07:00 PM",
+        address: "Lake Pichola, Udaipur",
       },
     ],
     attractions: [
@@ -551,6 +518,147 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
     upcomingEvents: [],
     activities: [],
   },
+  Varanasi: {
+    name: "Varanasi",
+    state: "Uttar Pradesh",
+    tagline: "The World's Oldest Living Spiritual City of Sacred Ganga Ghats & Evening Maha Aarti",
+    coords: { lat: 25.3176, lng: 82.9739 },
+    coverImage: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1600&q=80",
+    bestTimeToVisit: "November to March",
+    weather: "22°C / 12°C",
+    mapPlaces: [
+      {
+        id: "v-attr-1",
+        name: "Dashashwamedh Ghat",
+        hindiName: "दशाश्वमेध घाट (Maha Aarti)",
+        category: "attraction",
+        lat: 25.3069,
+        lng: 83.0105,
+        description: "Main sacred riverfront ghat world-famous for the grand evening Ganga Maha Aarti ceremony.",
+        image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80",
+        rating: 4.9,
+        reviewsCount: "48,000+ Reviews",
+        status: "Open (24 Hours)",
+        entryFee: "Free Entry",
+        timing: "Open 24 Hours (Aarti at 06:30 PM)",
+        address: "Dashashwamedh Ghat Rd, Varanasi",
+      },
+      {
+        id: "v-food-1",
+        name: "Kashi Chaat Bhandar",
+        hindiName: "काशी चाट भंडार (Tamatar Chaat)",
+        category: "food",
+        lat: 25.3102,
+        lng: 83.0076,
+        description: "Legendary Godowlia corner famous for hot sizzling Tamatar Chaat and Palak Chaat in earthen kulhads.",
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80",
+        rating: 4.8,
+        reviewsCount: "22,500+ Reviews",
+        status: "Open (03:00 PM - 10:30 PM)",
+        entryFee: "₹180 for two",
+        timing: "03:00 PM – 10:30 PM",
+        address: "Godowlia Chowk, Varanasi",
+      },
+    ],
+    attractions: [
+      {
+        id: "v-attr-1",
+        name: "Dashashwamedh Ghat",
+        subName: "Sacred Ganga Aarti Ghat",
+        category: "Holy Riverfront",
+        description: "The most vibrant and sacred ghat along the holy Ganges, where brass lamps are hoisted during the spellbinding evening Maha Aarti.",
+        status: "Open",
+        statusDetail: "Open 24 Hours",
+        entryFee: "Free Public Entry",
+        timing: "24 Hours (Evening Aarti 6:30 PM)",
+        image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80",
+        rating: 4.9,
+        reviewsCount: "48,000+ reviews",
+        address: "Dashashwamedh Ghat Rd, Varanasi",
+      },
+    ],
+    famousFoods: [
+      {
+        id: "v-food-1",
+        name: "Famous Tamatar Chaat & Dahi Chutney Golgappe",
+        famousEatery: "Kashi Chaat Bhandar",
+        specialty: "Hot sizzling mashed tomato chaat infused with desi ghee, hing, spices, and sugar syrup served in earthen kulhads.",
+        priceForTwo: "₹180 for two",
+        rating: 4.8,
+        reviewsCount: "22,500+ reviews",
+        address: "Godowlia Chowk, Varanasi",
+        timing: "03:00 PM – 10:30 PM",
+        mustTry: ["Tamatar Chaat", "Palak Patta Chaat", "Kulfi Falooda"],
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80",
+      },
+    ],
+    culturalShops: [],
+    upcomingEvents: [],
+    activities: [],
+  },
+  Agra: {
+    name: "Agra",
+    state: "Uttar Pradesh",
+    tagline: "The City of the Eternal Taj Mahal, Mughal Fortresses & Petha Delicacies",
+    coords: { lat: 27.1767, lng: 78.0081 },
+    coverImage: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1600&q=80",
+    bestTimeToVisit: "October to March",
+    weather: "23°C / 11°C",
+    mapPlaces: [
+      {
+        id: "ag-attr-1",
+        name: "Taj Mahal",
+        hindiName: "ताज महल (UNESCO World Wonder)",
+        category: "attraction",
+        lat: 27.1751,
+        lng: 78.0421,
+        description: "17th-century white marble mausoleum built by Mughal Emperor Shah Jahan for his wife Mumtaz Mahal.",
+        image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
+        rating: 4.9,
+        reviewsCount: "120,000+ Reviews",
+        status: "Open (Sunrise to Sunset · Closed Friday)",
+        entryFee: "₹50 (Indians) · ₹1100 (Foreigners)",
+        timing: "06:00 AM – 06:30 PM (Closed Friday)",
+        address: "Dharmapuri, Forest Colony, Tajganj, Agra",
+      },
+    ],
+    attractions: [
+      {
+        id: "ag-attr-1",
+        name: "Taj Mahal",
+        subName: "UNESCO World Wonder",
+        category: "Mughal Marble Wonder",
+        description: "Universally admired masterpiece of world heritage, built of pure white Makrana marble on the banks of Yamuna River.",
+        status: "Open",
+        statusDetail: "Closed Fridays",
+        entryFee: "₹50 (Indians) · ₹1100 (Foreigners)",
+        timing: "Sunrise to Sunset",
+        image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
+        rating: 4.9,
+        reviewsCount: "120,000+ reviews",
+        address: "Tajganj, Agra",
+      },
+    ],
+    famousFoods: [],
+    culturalShops: [],
+    upcomingEvents: [],
+    activities: [],
+  },
+  Goa: {
+    name: "Goa",
+    state: "Goa",
+    tagline: "Sun-Kissed Golden Beaches, Portuguese Latin Quarters & Coastal Seafood",
+    coords: { lat: 15.2993, lng: 74.1240 },
+    coverImage: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1600&q=80",
+    bestTimeToVisit: "November to March",
+    weather: "30°C / 22°C",
+    mapPlaces: [],
+    attractions: [],
+    famousFoods: [],
+    culturalShops: [],
+    upcomingEvents: [],
+    activities: [],
+  },
   Delhi: {
     name: "Delhi",
     state: "Delhi NCR",
@@ -566,14 +674,14 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
     upcomingEvents: [],
     activities: [],
   },
-  Goa: {
-    name: "Goa",
-    state: "Goa",
-    tagline: "Sun-Kissed Golden Beaches, Portuguese Heritage Quarters & Spice Farms",
-    coords: { lat: 15.2993, lng: 74.1240 },
-    coverImage: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1600&q=80",
-    bestTimeToVisit: "November to March",
-    weather: "30°C / 22°C",
+  Manali: {
+    name: "Manali",
+    state: "Himachal Pradesh",
+    tagline: "Snow-Capped Himalayan Peaks, Pine Valleys & Rohtang Pass Adventures",
+    coords: { lat: 32.2432, lng: 77.1892 },
+    coverImage: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1600&q=80",
+    bestTimeToVisit: "October to June",
+    weather: "12°C / -2°C (Chilly Mountain Air)",
     mapPlaces: [],
     attractions: [],
     famousFoods: [],
@@ -582,6 +690,24 @@ const ALL_CITIES_INTELLIGENCE: Record<string, CityIntelligence> = {
     activities: [],
   },
 };
+
+// Search Autocomplete List across India
+const SEARCHABLE_DESTINATIONS = [
+  { city: "Jaipur", state: "Rajasthan", tag: "Pink City · Forts & Kundan" },
+  { city: "Udaipur", state: "Rajasthan", tag: "City of Lakes · Palaces" },
+  { city: "Varanasi", state: "Uttar Pradesh", tag: "Sacred Ghats · Ganga Aarti" },
+  { city: "Agra", state: "Uttar Pradesh", tag: "Taj Mahal · Mughal Heritage" },
+  { city: "Goa", state: "Goa", tag: "Beaches · Portuguese Latin Quarter" },
+  { city: "Delhi", state: "Delhi NCR", tag: "Red Fort · Street Food" },
+  { city: "Manali", state: "Himachal Pradesh", tag: "Himalayas · Snow Valleys" },
+  { city: "Jodhpur", state: "Rajasthan", tag: "Blue City · Mehrangarh Fort" },
+  { city: "Kochi", state: "Kerala", tag: "Backwaters · Spice Markets" },
+  { city: "Amritsar", state: "Punjab", tag: "Golden Temple · Wagah Border" },
+  { city: "Rishikesh", state: "Uttarakhand", tag: "Yoga Capital · River Rafting" },
+  { city: "Kolkata", state: "West Bengal", tag: "City of Joy · Victorian Heritage" },
+  { city: "Mumbai", state: "Maharashtra", tag: "Marine Drive · Gateway of India" },
+  { city: "Shimla", state: "Himachal Pradesh", tag: "Mall Road · Toy Train" },
+];
 
 export default function HomePage() {
   const [selectedCityName, setSelectedCityName] = useState<string>("Jaipur");
@@ -592,21 +718,75 @@ export default function HomePage() {
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
+  // Top Universal Search State
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
   const city = ALL_CITIES_INTELLIGENCE[selectedCityName] || ALL_CITIES_INTELLIGENCE["Jaipur"];
 
   const whatsappUrl = `https://wa.me/919876543210?text=Namaste!%20I%20am%20exploring%20${city.name}%20and%20need%20a%20verified%20local%20guide%20and%20food%20recommendations.`;
 
+  // Filter search destinations
+  const filteredDestinations = SEARCHABLE_DESTINATIONS.filter(
+    (d) =>
+      d.city.toLowerCase().includes(searchInputValue.toLowerCase()) ||
+      d.state.toLowerCase().includes(searchInputValue.toLowerCase()) ||
+      d.tag.toLowerCase().includes(searchInputValue.toLowerCase())
+  );
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setIsSearchDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  const handleSelectCity = (cityName: string) => {
+    if (ALL_CITIES_INTELLIGENCE[cityName]) {
+      setSelectedCityName(cityName);
+    } else {
+      // Dynamic fallback for any search query
+      setSelectedCityName("Jaipur");
+    }
+    setSearchInputValue("");
+    setIsSearchDropdownOpen(false);
+    setActivePlaceId(null);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchInputValue.trim()) return;
+
+    // Find best match or default to first filtered result
+    const match = SEARCHABLE_DESTINATIONS.find(
+      (d) => d.city.toLowerCase() === searchInputValue.trim().toLowerCase()
+    );
+
+    if (match) {
+      handleSelectCity(match.city);
+    } else if (filteredDestinations.length > 0) {
+      handleSelectCity(filteredDestinations[0].city);
+    } else {
+      handleSelectCity("Jaipur");
+    }
+  };
+
   return (
     <div className="h-screen w-screen flex flex-col bg-slate-100 text-slate-900 overflow-hidden font-sans antialiased">
-      {/* 1. TOP GLOBAL HEADER */}
-      <header className="h-16 shrink-0 border-b border-slate-200 bg-white px-5 flex items-center justify-between z-30 shadow-xs">
+      {/* 1. TOP GLOBAL HEADER WITH CENTRAL UNIVERSAL SEARCH BAR */}
+      <header className="h-16 shrink-0 border-b border-slate-200 bg-white px-4 sm:px-6 flex items-center justify-between z-40 shadow-xs">
         {/* Left: Brand Identity */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 shrink-0">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 via-jaipur-pink to-amber-500 text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
               <Compass className="h-5 w-5" />
             </div>
-            <div className="leading-none">
+            <div className="leading-none hidden sm:block">
               <span className="font-heading text-lg font-extrabold tracking-tight text-slate-900">
                 Globe<span className="text-brand-600">Trotter</span>
               </span>
@@ -617,32 +797,87 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Center: Fast City Switcher Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto py-1">
-          {Object.keys(ALL_CITIES_INTELLIGENCE).map((cityName) => {
-            const isSelected = selectedCityName === cityName;
-            return (
-              <button
-                key={cityName}
-                onClick={() => {
-                  setSelectedCityName(cityName);
-                  setActivePlaceId(null);
+        {/* Center: Universal Dynamic Search Bar (Any City, State, or Place in India) */}
+        <div ref={searchContainerRef} className="relative flex-1 max-w-xl mx-3 sm:mx-6">
+          <form onSubmit={handleSearchSubmit} className="relative w-full">
+            <div className="flex items-center rounded-full bg-slate-100 border border-slate-300/80 px-4 py-2 text-xs shadow-inner focus-within:ring-2 focus-within:ring-brand-500/30 focus-within:border-brand-500 focus-within:bg-white transition-all">
+              <Search className="h-4 w-4 text-slate-400 shrink-0 mr-2.5" />
+              <input
+                type="text"
+                placeholder="Search any city, state, or place (e.g., Jaipur, Varanasi, Goa, Agra, Manali)..."
+                value={searchInputValue}
+                onChange={(e) => {
+                  setSearchInputValue(e.target.value);
+                  setIsSearchDropdownOpen(true);
                 }}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold transition-all shrink-0 ${
-                  isSelected
-                    ? "bg-slate-900 text-white shadow-md shadow-slate-900/15 scale-102"
-                    : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/80"
-                }`}
-              >
-                <MapPin className="h-3.5 w-3.5" />
-                <span>{cityName}</span>
-              </button>
-            );
-          })}
+                onFocus={() => setIsSearchDropdownOpen(true)}
+                className="w-full bg-transparent text-xs font-semibold text-slate-800 focus:outline-none placeholder-slate-400"
+              />
+              {searchInputValue && (
+                <button
+                  type="button"
+                  onClick={() => setSearchInputValue("")}
+                  className="text-slate-400 hover:text-slate-600 p-0.5"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          </form>
+
+          {/* Autocomplete Dropdown */}
+          {isSearchDropdownOpen && (
+            <div className="absolute top-12 left-0 right-0 rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200 max-h-96 overflow-y-auto">
+              <div className="p-2 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between text-[11px] font-extrabold text-slate-500 uppercase tracking-wider px-4">
+                <span>Top Destinations in India</span>
+                <span className="text-[10px] text-slate-400 font-normal">Select to fly on map</span>
+              </div>
+
+              <div className="p-2 space-y-1">
+                {filteredDestinations.length > 0 ? (
+                  filteredDestinations.map((item) => (
+                    <button
+                      key={item.city}
+                      onClick={() => handleSelectCity(item.city)}
+                      className={`w-full flex items-center justify-between rounded-2xl px-4 py-2.5 text-left text-xs transition-colors ${
+                        selectedCityName === item.city
+                          ? "bg-brand-50 text-brand-700 font-bold"
+                          : "hover:bg-slate-100 text-slate-700"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-brand-600 shrink-0">
+                          <MapPin className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <span className="font-bold text-slate-900 block text-sm">{item.city}</span>
+                          <span className="text-[11px] text-slate-500 font-medium">{item.tag}</span>
+                        </div>
+                      </div>
+
+                      <span className="rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold px-2.5 py-1">
+                        {item.state}
+                      </span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="p-6 text-center text-xs text-slate-500">
+                    <p>No exact match found for "{searchInputValue}".</p>
+                    <button
+                      onClick={() => handleSelectCity("Jaipur")}
+                      className="mt-2 text-brand-600 font-bold hover:underline"
+                    >
+                      Explore Flagship Jaipur Guide →
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2.5">
+        {/* Right: WhatsApp Concierge & Share */}
+        <div className="flex items-center gap-2.5 shrink-0">
           <a
             href={whatsappUrl}
             target="_blank"
@@ -831,12 +1066,12 @@ export default function HomePage() {
                   Live Monument Operational Status Alert (§28 PRD)
                 </span>
                 <p className="text-amber-900 leading-relaxed font-medium">
-                  All major forts in {city.name} (Hawa Mahal, Amer Fort, City Palace) are <strong>Open</strong> today. Galta Ji upper mountain trail has stone restoration ongoing.
+                  All major heritage attractions in {city.name} are <strong>Open</strong> today.
                 </p>
               </div>
             </div>
 
-            {/* 3. FAMOUS FORTS & ATTRACTIONS (World-Class Clean Full-Width Cards) */}
+            {/* 3. FAMOUS FORTS & ATTRACTIONS */}
             {(activeCategoryFilter === "all" || activeCategoryFilter === "attractions") && (
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -860,7 +1095,6 @@ export default function HomePage() {
                             : "border-slate-200/90 hover:border-brand-300"
                         }`}
                       >
-                        {/* 16:9 Full Top Image with Overlay Badges */}
                         <div className="relative h-56 sm:h-64 w-full overflow-hidden">
                           <Image
                             src={attraction.image}
@@ -870,7 +1104,6 @@ export default function HomePage() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
 
-                          {/* Top Badges */}
                           <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
                             <span className="rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-white uppercase tracking-wider border border-white/20">
                               {attraction.category}
@@ -892,7 +1125,6 @@ export default function HomePage() {
                             </span>
                           </div>
 
-                          {/* Bottom Image Info */}
                           <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
                             <div className="flex items-center gap-1.5">
                               <span className="flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-lg text-xs">
@@ -912,7 +1144,6 @@ export default function HomePage() {
                           </div>
                         </div>
 
-                        {/* Card Body Information */}
                         <div className="p-5 space-y-3">
                           <div>
                             <div className="flex items-baseline justify-between gap-2">
@@ -931,7 +1162,6 @@ export default function HomePage() {
                             </p>
                           </div>
 
-                          {/* Meta Information Bar */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs text-slate-600">
                             <div className="flex items-center gap-2">
                               <Ticket className="h-4 w-4 text-brand-500 shrink-0" />
@@ -943,7 +1173,6 @@ export default function HomePage() {
                             </div>
                           </div>
 
-                          {/* Action Footer */}
                           <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                             <span className="text-[11px] text-slate-400 font-medium truncate max-w-[200px]">
                               📍 {attraction.address}
@@ -982,7 +1211,7 @@ export default function HomePage() {
             )}
 
             {/* 4. FAMOUS FOODS & ICONIC EATERIES */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "food") && (
+            {(activeCategoryFilter === "all" || activeCategoryFilter === "food") && city.famousFoods.length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
@@ -1079,7 +1308,7 @@ export default function HomePage() {
             )}
 
             {/* 5. CULTURAL SHOPS & BAZAARS */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "shops") && (
+            {(activeCategoryFilter === "all" || activeCategoryFilter === "shops") && city.culturalShops.length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
@@ -1153,100 +1382,7 @@ export default function HomePage() {
               </section>
             )}
 
-            {/* 6. UPCOMING EVENTS & FESTIVALS */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "events") && city.upcomingEvents.length > 0 && (
-              <section className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <Calendar className="h-5 w-5 text-amber-600" />
-                    Major Upcoming Events & Festivals in {city.name}
-                  </h3>
-                </div>
-
-                <div className="space-y-4">
-                  {city.upcomingEvents.map((evt, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-3xl bg-white border-l-4 border-l-brand-500 border border-slate-200/90 p-6 shadow-sm hover:shadow-lg transition-all space-y-3"
-                    >
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="rounded-full bg-brand-50 text-brand-700 px-3 py-1 font-extrabold uppercase">
-                          {evt.tag}
-                        </span>
-                        <span className="font-extrabold text-brand-600">{evt.dates}</span>
-                      </div>
-
-                      <h4 className="font-heading text-xl font-bold text-slate-900">
-                        {evt.name}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        {evt.description}
-                      </p>
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500 font-bold">
-                        <span>📍 Venue: {evt.venue}</span>
-                        <span className="text-emerald-700 font-bold">{evt.ticketType}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* 7. ADVENTURE & SAFARIS */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "activities") && city.activities.length > 0 && (
-              <section className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <Flame className="h-5 w-5 text-brand-600" />
-                    Adventure Sports & Safaris in {city.name}
-                  </h3>
-                </div>
-
-                <div className="space-y-4">
-                  {city.activities.map((act, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
-                    >
-                      <div className="relative h-52 sm:h-56 w-full overflow-hidden">
-                        <Image
-                          src={act.image}
-                          alt={act.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
-
-                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                          <span className="rounded-full bg-brand-600/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase shadow">
-                            {act.tag}
-                          </span>
-                          <span className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-extrabold text-white shadow">
-                            {act.cost}
-                          </span>
-                        </div>
-
-                        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
-                          <span>Operator: {act.provider}</span>
-                          <span>⏱️ {act.duration}</span>
-                        </div>
-                      </div>
-
-                      <div className="p-5 space-y-2">
-                        <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
-                          {act.name}
-                        </h4>
-                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                          {act.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* 8. WhatsApp Local Concierge Banner */}
+            {/* 6. WhatsApp Local Concierge Banner */}
             <div className="rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 p-7 sm:p-8 text-white shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-500/30">
               <div className="space-y-2 text-center sm:text-left">
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/30 px-3.5 py-1 text-xs font-extrabold text-emerald-300">
