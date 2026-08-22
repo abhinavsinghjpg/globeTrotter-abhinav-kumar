@@ -5,6 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { SplitScreenMap, MapPlace } from "@/components/SplitScreenMap";
 import { AiAssistantModal } from "@/components/AiAssistantModal";
+import { TripPlannerModal } from "@/components/TripPlannerModal";
+import { TransportRentalModal } from "@/components/TransportRentalModal";
+import { TripMemoriesModal } from "@/components/TripMemoriesModal";
+import { CoTravelerModal } from "@/components/CoTravelerModal";
 import { useAuth } from "@/context/AuthContext";
 import {
   searchIndianLocations,
@@ -653,6 +657,12 @@ export default function HomePage() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  // PRD Feature Modals State
+  const [isTripPlannerOpen, setIsTripPlannerOpen] = useState(false);
+  const [isTransportRentalOpen, setIsTransportRentalOpen] = useState(false);
+  const [isTripMemoriesOpen, setIsTripMemoriesOpen] = useState(false);
+  const [isCoTravelerOpen, setIsCoTravelerOpen] = useState(false);
+
   // Search state
   const [searchInputValue, setSearchInputValue] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -1039,6 +1049,45 @@ export default function HomePage() {
                     </button>
                   );
                 })}
+
+                {/* PRD ESSENTIAL TRAVEL SUITE TOOLS */}
+                <div className="pt-3 border-t border-slate-100 mt-2 space-y-1">
+                  <span className="px-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
+                    Travel Planning Suite
+                  </span>
+
+                  <button
+                    onClick={() => setIsTripPlannerOpen(true)}
+                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                  >
+                    <Sparkles className="h-4 w-4 text-amber-500 group-hover:scale-110 transition-transform" />
+                    <span>AI Trip & Budget Planner</span>
+                  </button>
+
+                  <button
+                    onClick={() => setIsTransportRentalOpen(true)}
+                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                  >
+                    <Car className="h-4 w-4 text-orange-500 group-hover:scale-110 transition-transform" />
+                    <span>Cabs & Vehicle Rentals</span>
+                  </button>
+
+                  <button
+                    onClick={() => setIsTripMemoriesOpen(true)}
+                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                  >
+                    <Camera className="h-4 w-4 text-pink-500 group-hover:scale-110 transition-transform" />
+                    <span>Trip Memories & Reels</span>
+                  </button>
+
+                  <button
+                    onClick={() => setIsCoTravelerOpen(true)}
+                    className="w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors group"
+                  >
+                    <Users className="h-4 w-4 text-blue-500 group-hover:scale-110 transition-transform" />
+                    <span>Co-Travelers & Groups</span>
+                  </button>
+                </div>
 
                 {/* ROLE-RESTRICTED SIDEBAR LINKS (ONLY VISIBLE TO ADMIN OR GUIDE) */}
                 {role === "admin" && (
@@ -1552,6 +1601,31 @@ export default function HomePage() {
         currentCity={currentLocationData.name}
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
+      />
+
+      {/* PRD Feature Modals */}
+      <TripPlannerModal
+        isOpen={isTripPlannerOpen}
+        onClose={() => setIsTripPlannerOpen(false)}
+        defaultCity={currentLocationData.name}
+      />
+
+      <TransportRentalModal
+        isOpen={isTransportRentalOpen}
+        onClose={() => setIsTransportRentalOpen(false)}
+        city={currentLocationData.name}
+      />
+
+      <TripMemoriesModal
+        isOpen={isTripMemoriesOpen}
+        onClose={() => setIsTripMemoriesOpen(false)}
+        city={currentLocationData.name}
+      />
+
+      <CoTravelerModal
+        isOpen={isCoTravelerOpen}
+        onClose={() => setIsCoTravelerOpen(false)}
+        city={currentLocationData.name}
       />
     </div>
   );
