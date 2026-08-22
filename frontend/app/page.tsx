@@ -21,6 +21,7 @@ import {
   Calendar,
   Sparkles,
   ArrowRight,
+  ArrowLeft,
   MessageCircle,
   CheckCircle2,
   AlertTriangle,
@@ -47,6 +48,7 @@ import {
   Layers,
   Car,
   Users,
+  Info,
 } from "lucide-react";
 
 // Exhaustive, Deeply Researched Jaipur Dataset (Every Iconic Place, Fort, Food Stall, and Bazaar)
@@ -325,11 +327,11 @@ const EXHAUSTIVE_JAIPUR_DATA: DynamicLocationData = {
       category: "food",
       lat: 26.9178,
       lng: 75.8118,
-      description: "Original clay kulhad lassi shop since 1944, serving thick churned yogurt lassi crowned with a rich layer of clotted malai cream.",
+      description: "Original clay kulhad lassi shop since 1944, serving thick churned yogurt lassi crowned with a rich layer of clotted cream (malai) on top.",
       image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
       rating: 4.8,
       reviewsCount: "24,800+ Reviews",
-      status: "Open (07:00 AM - 04:00 PM or until stock lasts)",
+      status: "Open (07:00 AM - 04:00 PM)",
       entryFee: "₹160 for two",
       timing: "07:00 AM – 04:00 PM",
       address: "Shop 312, MI Road, Jaipur",
@@ -368,6 +370,23 @@ const EXHAUSTIVE_JAIPUR_DATA: DynamicLocationData = {
       timing: "11:00 AM – 09:00 PM",
       address: "Bapu Bazaar, Pink City, Jaipur",
       specialties: ["Bandhej Silk Sarees", "Camel Leather Mojaris", "Jaipuri Quilts"],
+    },
+    {
+      id: "shop-3",
+      name: "Tripolia Bazaar & Maniharon Ka Rasta",
+      hindiName: "त्रिपोलिया बाज़ार (Lac Bangles)",
+      category: "shopping",
+      lat: 26.9230,
+      lng: 75.8220,
+      description: "World-famous lane where Muslim artisans handcraft traditional lac bangles encrusted with mirrors and crystals.",
+      image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80",
+      rating: 4.7,
+      reviewsCount: "8,500+ Reviews",
+      status: "Open (10:00 AM - 08:00 PM)",
+      entryFee: "Free Entry",
+      timing: "10:00 AM – 08:00 PM",
+      address: "Tripolia Bazaar, Jaipur",
+      specialties: ["Traditional Lac Bangles", "Brass Utensils", "Carpets"],
     },
   ],
   attractions: [
@@ -684,6 +703,7 @@ export default function HomePage() {
   const [currentLocationData, setCurrentLocationData] = useState<DynamicLocationData>(EXHAUSTIVE_JAIPUR_DATA);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops" | "events">("all");
   const [activePlaceId, setActivePlaceId] = useState<string | null>(null);
+  const [activeInlineDetail, setActiveInlineDetail] = useState<any | null>(null);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -735,6 +755,7 @@ export default function HomePage() {
     setIsDropdownOpen(false);
     setIsLoadingLocation(true);
     setSearchInputValue(item.name || item.displayName);
+    setActiveInlineDetail(null);
 
     try {
       if (item.name.toLowerCase() === "jaipur") {
@@ -782,6 +803,12 @@ export default function HomePage() {
     }
   };
 
+  // Open detail inside this window
+  const handleOpenPlaceDetail = (place: any) => {
+    setActiveInlineDetail(place);
+    setActivePlaceId(place.id);
+  };
+
   const whatsappUrl = `https://wa.me/919876543210?text=Namaste!%20I%20am%20exploring%20${currentLocationData.name}%2C%20${currentLocationData.state}%20and%20need%20a%20verified%20local%20guide%20and%20cabs.`;
 
   return (
@@ -815,7 +842,7 @@ export default function HomePage() {
               )}
               <input
                 type="text"
-                placeholder="Search ANY city, district, or village in India (e.g. Jaipur, Ajmer, Hampi, Leh)..."
+                placeholder="Search ANY city, district, or village in India (e.g. Mathura, Jaipur, Ajmer, Leh)..."
                 value={searchInputValue}
                 onChange={(e) => {
                   setSearchInputValue(e.target.value);
@@ -889,6 +916,8 @@ export default function HomePage() {
                     </span>
                     {[
                       { name: "Jaipur", state: "Rajasthan", lat: 26.9124, lng: 75.7873 },
+                      { name: "Mathura", state: "Uttar Pradesh", lat: 27.4924, lng: 77.6737 },
+                      { name: "Vrindavan", state: "Uttar Pradesh", lat: 27.5806, lng: 77.7006 },
                       { name: "Ajmer", state: "Rajasthan", lat: 26.4499, lng: 74.6399 },
                       { name: "Pushkar", state: "Rajasthan", lat: 26.4897, lng: 74.5511 },
                       { name: "Udaipur", state: "Rajasthan", lat: 24.5854, lng: 73.7125 },
@@ -925,7 +954,7 @@ export default function HomePage() {
             <span>WhatsApp Concierge</span>
           </a>
 
-          {/* Role-Protected Auth Button / Profile Dropdown */}
+          {/* Auth Button / Profile Dropdown */}
           {!isLoggedIn ? (
             <button
               onClick={() => openAuthModal("traveler")}
@@ -1069,7 +1098,10 @@ export default function HomePage() {
                   return (
                     <button
                       key={cat.id}
-                      onClick={() => setActiveCategoryFilter(cat.id as any)}
+                      onClick={() => {
+                        setActiveCategoryFilter(cat.id as any);
+                        setActiveInlineDetail(null);
+                      }}
                       className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-all ${
                         isActive
                           ? "bg-slate-900 text-white shadow-md shadow-slate-900/10"
@@ -1195,416 +1227,473 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* 1. Hero Destination Cover Banner */}
-            <div className="relative h-64 sm:h-72 w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 group">
-              <Image
-                src={currentLocationData.coverImage}
-                alt={currentLocationData.name}
-                fill
-                priority
-                unoptimized
-                className="object-cover object-center group-hover:scale-102 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-              <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5 rounded-2xl bg-white/95 backdrop-blur-xl p-5 shadow-xl border border-white/60 space-y-2.5 text-slate-900">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-jaipur-pink/15 text-jaipur-pink px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider">
-                        {currentLocationData.state}, India
-                      </span>
-                      <span className="text-slate-400 text-xs">•</span>
-                      <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                        <Sun className="h-3 w-3 text-amber-500" />
-                        {currentLocationData.weather}
-                      </span>
-                    </div>
-
-                    <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
-                      {currentLocationData.name}
-                    </h1>
-                  </div>
-
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 text-xs font-bold shadow-md shadow-emerald-600/25 transition-all hover:scale-102 shrink-0"
+            {/* INLINE PLACE DETAIL VIEW (OPENS IN THIS WINDOW UPON CARD CLICK) */}
+            {activeInlineDetail ? (
+              <div className="rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-3 duration-300">
+                <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                  <button
+                    onClick={() => setActiveInlineDetail(null)}
+                    className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors"
                   >
-                    <MessageCircle className="h-3.5 w-3.5" />
-                    <span>Hire Guide</span>
-                  </a>
-                </div>
+                    <ArrowLeft className="h-4 w-4" />
+                    <span>Back to {currentLocationData.name} Feed</span>
+                  </button>
 
-                <p className="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
-                  {currentLocationData.description || currentLocationData.tagline}
-                </p>
-
-                <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-slate-600 pt-2 border-t border-slate-100">
-                  <span>🗓️ Best Season: <strong className="text-slate-900">{currentLocationData.bestTimeToVisit}</strong></span>
-                  <span>📍 <strong className="text-slate-900">{currentLocationData.attractions.length} Heritage Sights & Palaces</strong></span>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Live Operational Alert (§28 PRD) */}
-            <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex items-start gap-3 text-xs text-amber-900 shadow-xs">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
-                <AlertTriangle className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <span className="font-bold block text-xs text-amber-950">
-                  Live Monument Operational Status Alert (§28 PRD)
-                </span>
-                <p className="text-amber-900 leading-relaxed font-medium">
-                  Major monuments in {currentLocationData.name} (Hawa Mahal, Amer Fort, City Palace, Nahargarh) are <strong>Open</strong> today.
-                </p>
-              </div>
-            </div>
-
-            {/* 3. ATTRACTIONS & FORTS (All 12+ Places in Jaipur) */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "attractions") && (
-              <section className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <Compass className="h-5 w-5 text-brand-500" />
-                    Famous Forts, Palaces & Sights in {currentLocationData.name}
-                  </h3>
-                  <span className="text-xs font-bold text-slate-500">
-                    {currentLocationData.attractions.length} Places
+                  <span className="rounded-full bg-brand-50 text-brand-700 text-[10px] font-extrabold px-3 py-1 uppercase tracking-wider">
+                    Full Place Details
                   </span>
                 </div>
 
-                <div className="space-y-4">
-                  {currentLocationData.attractions.map((attraction) => {
-                    const isCardActive = activePlaceId === attraction.id;
-                    return (
-                      <div
-                        key={attraction.id}
-                        onClick={() => setActivePlaceId(attraction.id)}
-                        className={`rounded-3xl bg-white border overflow-hidden transition-all duration-300 cursor-pointer shadow-sm hover:shadow-xl group ${
-                          isCardActive
-                            ? "border-brand-500 ring-2 ring-brand-500/25"
-                            : "border-slate-200/90 hover:border-brand-300"
-                        }`}
-                      >
-                        <div className="relative h-56 sm:h-64 w-full overflow-hidden">
-                          <Image
-                            src={attraction.image}
-                            alt={attraction.name}
-                            fill
-                            unoptimized
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
+                <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-900">
+                  <Image
+                    src={activeInlineDetail.image || currentLocationData.coverImage}
+                    alt={activeInlineDetail.name}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-                          <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                            <span className="rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-white uppercase tracking-wider border border-white/20">
-                              {attraction.category}
-                            </span>
-
-                            <span
-                              className={`flex items-center gap-1.5 rounded-full backdrop-blur-md px-3 py-1 text-xs font-bold border shadow-sm ${
-                                attraction.status === "Open"
-                                  ? "bg-emerald-950/80 text-emerald-300 border-emerald-500/40"
-                                  : "bg-amber-950/80 text-amber-300 border-amber-500/40"
-                              }`}
-                            >
-                              <span
-                                className={`h-2 w-2 rounded-full ${
-                                  attraction.status === "Open" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
-                                }`}
-                              />
-                              {attraction.status}
-                            </span>
-                          </div>
-
-                          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
-                            <div className="flex items-center gap-1.5">
-                              <span className="flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-lg text-xs">
-                                <Star className="h-3.5 w-3.5 fill-slate-950" />
-                                {attraction.rating}
-                              </span>
-                              <span className="text-white/90 text-[11px] font-medium">
-                                ({attraction.reviewsCount})
-                              </span>
-                            </div>
-
-                            {attraction.reelsCount && (
-                              <span className="rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-bold text-pink-300 border border-pink-500/30">
-                                📸 {attraction.reelsCount}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="p-5 space-y-3">
-                          <div>
-                            <div className="flex items-baseline justify-between gap-2">
-                              <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
-                                {attraction.name}
-                              </h4>
-                              {attraction.subName && (
-                                <span className="text-xs font-semibold text-slate-400 shrink-0">
-                                  {attraction.subName}
-                                </span>
-                              )}
-                            </div>
-
-                            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                              {attraction.description}
-                            </p>
-                          </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs text-slate-600">
-                            <div className="flex items-center gap-2">
-                              <Ticket className="h-4 w-4 text-brand-500 shrink-0" />
-                              <span>Entry: <strong className="text-slate-900">{attraction.entryFee}</strong></span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-brand-500 shrink-0" />
-                              <span>Timing: <strong className="text-slate-900">{attraction.timing}</strong></span>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                            <span className="text-[11px] text-slate-400 font-medium truncate max-w-[200px]">
-                              📍 {attraction.address}
-                            </span>
-
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setActivePlaceId(attraction.id);
-                                }}
-                                className="flex items-center gap-1 text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 px-3 py-1.5 rounded-xl transition-colors"
-                              >
-                                <Navigation className="h-3.5 w-3.5" />
-                                <span>Show on Map</span>
-                              </button>
-
-                              <a
-                                href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${attraction.name}%20in%20${currentLocationData.name}.`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className="flex items-center gap-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-xl shadow-xs transition-colors"
-                              >
-                                <MessageCircle className="h-3.5 w-3.5" />
-                                <span>Guide</span>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* 4. FAMOUS FOODS & EATERIES */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "food") && currentLocationData.famousFoods.length > 0 && (
-              <section className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <Utensils className="h-5 w-5 text-jaipur-pink" />
-                    Famous Foods & Iconic Eateries in {currentLocationData.name}
-                  </h3>
-                  <span className="text-xs font-bold text-slate-500">Legendary Flavors</span>
-                </div>
-
-                <div className="space-y-4">
-                  {currentLocationData.famousFoods.map((food) => {
-                    const isCardActive = activePlaceId === food.id;
-                    return (
-                      <div
-                        key={food.id}
-                        onClick={() => setActivePlaceId(food.id)}
-                        className={`rounded-3xl bg-white border overflow-hidden transition-all duration-300 cursor-pointer shadow-sm hover:shadow-xl group ${
-                          isCardActive
-                            ? "border-jaipur-pink ring-2 ring-jaipur-pink/25"
-                            : "border-slate-200/90 hover:border-jaipur-pink/40"
-                        }`}
-                      >
-                        <div className="relative h-52 sm:h-56 w-full overflow-hidden">
-                          <Image
-                            src={food.image}
-                            alt={food.name}
-                            fill
-                            unoptimized
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
-
-                          <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                            <span className="rounded-full bg-jaipur-pink/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
-                              {food.famousEatery}
-                            </span>
-
-                            <span className="flex items-center gap-1 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-extrabold text-slate-900 shadow">
-                              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                              {food.rating}
-                            </span>
-                          </div>
-
-                          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
-                            <span>💰 {food.priceForTwo}</span>
-                            <span>⏰ {food.timing}</span>
-                          </div>
-                        </div>
-
-                        <div className="p-5 space-y-3">
-                          <div>
-                            <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-jaipur-pink transition-colors">
-                              {food.name}
-                            </h4>
-                            <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                              {food.specialty}
-                            </p>
-                          </div>
-
-                          <div className="space-y-2 pt-2 border-t border-slate-100">
-                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                              Must-Try Specialties:
-                            </span>
-                            <div className="flex flex-wrap gap-1.5">
-                              {food.mustTry.map((dish, dIdx) => (
-                                <span
-                                  key={dIdx}
-                                  className="rounded-xl bg-slate-100 text-slate-800 px-3 py-1 text-xs font-bold border border-slate-200/70"
-                                >
-                                  {dish}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                            <span className="text-slate-500 font-medium">📍 {food.address}</span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActivePlaceId(food.id);
-                              }}
-                              className="flex items-center gap-1 font-bold text-jaipur-pink hover:text-rose-700 bg-rose-50 px-3 py-1.5 rounded-xl transition-colors"
-                            >
-                              <Navigation className="h-3.5 w-3.5" />
-                              <span>Locate Stall</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* 5. CULTURAL SHOPS & BAZAARS */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "shops") && currentLocationData.culturalShops.length > 0 && (
-              <section className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <ShoppingBag className="h-5 w-5 text-purple-600" />
-                    Centuries-Old Cultural Shops & Bazaars
-                  </h3>
-                  <span className="text-xs font-bold text-slate-500">Heritage Crafts</span>
-                </div>
-
-                <div className="space-y-4">
-                  {currentLocationData.culturalShops.map((shop) => (
-                    <div
-                      key={shop.id}
-                      onClick={() => setActivePlaceId(shop.id)}
-                      className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                    >
-                      <div className="relative h-48 sm:h-52 w-full overflow-hidden">
-                        <Image
-                          src={shop.image}
-                          alt={shop.name}
-                          fill
-                          unoptimized
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
-
-                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                          <span className="rounded-full bg-purple-700/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
-                            {shop.bazaar}
-                          </span>
-                          <span className="flex items-center gap-1 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-extrabold text-slate-900 shadow">
-                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                            {shop.rating}
-                          </span>
-                        </div>
-
-                        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
-                          <span>💎 {shop.priceRange}</span>
-                          <span>⏰ {shop.timing}</span>
-                        </div>
-                      </div>
-
-                      <div className="p-5 space-y-3">
-                        <div>
-                          <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-                            {shop.name}
-                          </h4>
-                          <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                            {shop.description}
-                          </p>
-                        </div>
-
-                        <div className="space-y-2 pt-2 border-t border-slate-100">
-                          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                            Famous Specialties:
-                          </span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {shop.specialties.map((spec, sIdx) => (
-                              <span
-                                key={sIdx}
-                                className="rounded-xl bg-purple-50 text-purple-900 px-3 py-1 text-xs font-bold border border-purple-200/60"
-                              >
-                                {spec}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                  <div className="absolute bottom-4 left-5 right-5 text-white space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-white/25 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-extrabold uppercase">
+                        {activeInlineDetail.category || "Heritage Attraction"}
+                      </span>
+                      <span className="rounded-full bg-emerald-900/80 text-emerald-300 text-[10px] font-bold px-2.5 py-0.5 border border-emerald-500/30">
+                        {activeInlineDetail.status || "Open Today"}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              </section>
-            )}
 
-            {/* 6. UPCOMING FESTIVALS, MAJOR EVENTS & SAFARIS (§10 PRD, Req 1 & 15) */}
-            {(activeCategoryFilter === "all" || activeCategoryFilter === "events") &&
-              currentLocationData.upcomingEvents &&
-              currentLocationData.upcomingEvents.length > 0 && (
-                <section className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-blue-600" />
-                      Upcoming Festivals, Events & Safaris in {currentLocationData.name}
-                    </h3>
-                    <span className="text-xs font-bold text-slate-500">
-                      {currentLocationData.upcomingEvents.length} Major Happenings
+                    <h2 className="font-heading text-2xl sm:text-3xl font-extrabold leading-tight">
+                      {activeInlineDetail.name}
+                    </h2>
+                    {activeInlineDetail.subName && (
+                      <p className="text-xs text-amber-300 font-semibold">{activeInlineDetail.subName}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-6 space-y-5 text-xs">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-1.5">
+                      <span className="flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-lg text-xs">
+                        <Star className="h-3.5 w-3.5 fill-slate-950" />
+                        {activeInlineDetail.rating || 4.7}
+                      </span>
+                      <span className="text-slate-500 font-medium">
+                        ({activeInlineDetail.reviewsCount || "14,000+ Reviews"})
+                      </span>
+                    </div>
+
+                    <span className="text-slate-500 font-bold">
+                      📍 {currentLocationData.name}, {currentLocationData.state}
                     </span>
                   </div>
 
-                  <div className="space-y-4">
-                    {currentLocationData.upcomingEvents.map((event, eIdx) => (
-                      <div
-                        key={eIdx}
-                        className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                      History & Significance
+                    </span>
+                    <p className="text-slate-700 leading-relaxed text-sm">
+                      {activeInlineDetail.description || activeInlineDetail.specialty}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-2xl bg-slate-50 p-4 border border-slate-200">
+                    <div className="flex items-center gap-2.5">
+                      <Clock className="h-4 w-4 text-brand-600 shrink-0" />
+                      <div>
+                        <span className="font-bold text-slate-900 block">Timings</span>
+                        <span className="text-slate-600">{activeInlineDetail.timing || "08:00 AM – 06:00 PM"}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2.5">
+                      <Ticket className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <div>
+                        <span className="font-bold text-slate-900 block">Entry / Cost</span>
+                        <span className="text-slate-600">{activeInlineDetail.entryFee || activeInlineDetail.priceForTwo || "Free Entry / Nominal Fee"}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {activeInlineDetail.mustTry && (
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                        Must-Try Highlights:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {activeInlineDetail.mustTry.map((item: string, idx: number) => (
+                          <span key={idx} className="rounded-xl bg-slate-100 text-slate-900 px-3 py-1 font-bold border border-slate-200">
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+                    <a
+                      href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${activeInlineDetail.name}%20in%20${currentLocationData.name}%20and%20need%20a%20local%20guide.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-102"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      <span>Hire Guide for this Place</span>
+                    </a>
+
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeInlineDetail.name + " " + currentLocationData.name)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 px-4 py-3.5 font-bold transition-colors"
+                    >
+                      <Navigation className="h-4 w-4 text-brand-600" />
+                      <span>Directions</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* REGULAR KNOWLEDGE FEED */
+              <>
+                {/* 1. Hero Destination Cover Banner */}
+                <div className="relative h-64 sm:h-72 w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 group">
+                  <Image
+                    src={currentLocationData.coverImage}
+                    alt={currentLocationData.name}
+                    fill
+                    priority
+                    unoptimized
+                    className="object-cover object-center group-hover:scale-102 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                  <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5 rounded-2xl bg-white/95 backdrop-blur-xl p-5 shadow-xl border border-white/60 space-y-2.5 text-slate-900">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-full bg-jaipur-pink/15 text-jaipur-pink px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider">
+                            {currentLocationData.state}, India
+                          </span>
+                          <span className="text-slate-400 text-xs">•</span>
+                          <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+                            <Sun className="h-3 w-3 text-amber-500" />
+                            {currentLocationData.weather}
+                          </span>
+                        </div>
+
+                        <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+                          {currentLocationData.name}
+                        </h1>
+                      </div>
+
+                      <a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 text-xs font-bold shadow-md shadow-emerald-600/25 transition-all hover:scale-102 shrink-0"
                       >
-                        {event.image && (
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        <span>Hire Guide</span>
+                      </a>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
+                      {currentLocationData.description || currentLocationData.tagline}
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-slate-600 pt-2 border-t border-slate-100">
+                      <span>🗓️ Best Season: <strong className="text-slate-900">{currentLocationData.bestTimeToVisit}</strong></span>
+                      <span>📍 <strong className="text-slate-900">{currentLocationData.attractions.length} Heritage Sights & Palaces</strong></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Live Operational Alert (§28 PRD) */}
+                <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex items-start gap-3 text-xs text-amber-900 shadow-xs">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
+                    <AlertTriangle className="h-4 w-4" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <span className="font-bold block text-xs text-amber-950">
+                      Live Monument Operational Status Alert (§28 PRD)
+                    </span>
+                    <p className="text-amber-900 leading-relaxed font-medium">
+                      Major attractions in {currentLocationData.name}{" "}
+                      {currentLocationData.attractions.length > 0 && (
+                        <span>
+                          ({currentLocationData.attractions.slice(0, 3).map((a) => a.name).join(", ")})
+                        </span>
+                      )}{" "}
+                      are <strong>Open</strong> today.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 3. ATTRACTIONS & FORTS */}
+                {(activeCategoryFilter === "all" || activeCategoryFilter === "attractions") && (
+                  <section className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                        <Compass className="h-5 w-5 text-brand-500" />
+                        Famous Forts, Palaces & Sights in {currentLocationData.name}
+                      </h3>
+                      <span className="text-xs font-bold text-slate-500">
+                        {currentLocationData.attractions.length} Places
+                      </span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {currentLocationData.attractions.map((attraction) => {
+                        const isCardActive = activePlaceId === attraction.id;
+                        return (
+                          <div
+                            key={attraction.id}
+                            onClick={() => handleOpenPlaceDetail(attraction)}
+                            className={`rounded-3xl bg-white border overflow-hidden transition-all duration-300 cursor-pointer shadow-sm hover:shadow-xl group ${
+                              isCardActive
+                                ? "border-brand-500 ring-2 ring-brand-500/25"
+                                : "border-slate-200/90 hover:border-brand-300"
+                            }`}
+                          >
+                            <div className="relative h-56 sm:h-64 w-full overflow-hidden">
+                              <Image
+                                src={attraction.image}
+                                alt={attraction.name}
+                                fill
+                                unoptimized
+                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
+
+                              <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                                <span className="rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-white uppercase tracking-wider border border-white/20">
+                                  {attraction.category}
+                                </span>
+
+                                <span
+                                  className={`flex items-center gap-1.5 rounded-full backdrop-blur-md px-3 py-1 text-xs font-bold border shadow-sm ${
+                                    attraction.status === "Open"
+                                      ? "bg-emerald-950/80 text-emerald-300 border-emerald-500/40"
+                                      : "bg-amber-950/80 text-amber-300 border-amber-500/40"
+                                  }`}
+                                >
+                                  <span
+                                    className={`h-2 w-2 rounded-full ${
+                                      attraction.status === "Open" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+                                    }`}
+                                  />
+                                  {attraction.status}
+                                </span>
+                              </div>
+
+                              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-lg text-xs">
+                                    <Star className="h-3.5 w-3.5 fill-slate-950" />
+                                    {attraction.rating}
+                                  </span>
+                                  <span className="text-white/90 text-[11px] font-medium">
+                                    ({attraction.reviewsCount})
+                                  </span>
+                                </div>
+
+                                {attraction.reelsCount && (
+                                  <span className="rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-bold text-pink-300 border border-pink-500/30">
+                                    📸 {attraction.reelsCount}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="p-5 space-y-3">
+                              <div>
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                                    {attraction.name}
+                                  </h4>
+                                  {attraction.subName && (
+                                    <span className="text-xs font-semibold text-slate-400 shrink-0">
+                                      {attraction.subName}
+                                    </span>
+                                  )}
+                                </div>
+
+                                <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                                  {attraction.description}
+                                </p>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                                <div className="flex items-center gap-2">
+                                  <Ticket className="h-4 w-4 text-brand-500 shrink-0" />
+                                  <span>Entry: <strong className="text-slate-900">{attraction.entryFee}</strong></span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Clock className="h-4 w-4 text-brand-500 shrink-0" />
+                                  <span>Timing: <strong className="text-slate-900">{attraction.timing}</strong></span>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                                <span className="text-[11px] text-slate-400 font-medium truncate max-w-[200px]">
+                                  📍 {attraction.address}
+                                </span>
+
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleOpenPlaceDetail(attraction);
+                                    }}
+                                    className="flex items-center gap-1 text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 px-3 py-1.5 rounded-xl transition-colors"
+                                  >
+                                    <Info className="h-3.5 w-3.5" />
+                                    <span>View Details</span>
+                                  </button>
+
+                                  <a
+                                    href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${attraction.name}%20in%20${currentLocationData.name}.`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="flex items-center gap-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1.5 rounded-xl shadow-xs transition-colors"
+                                  >
+                                    <MessageCircle className="h-3.5 w-3.5" />
+                                    <span>Guide</span>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                )}
+
+                {/* 4. FAMOUS FOODS & EATERIES */}
+                {(activeCategoryFilter === "all" || activeCategoryFilter === "food") && currentLocationData.famousFoods.length > 0 && (
+                  <section className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                        <Utensils className="h-5 w-5 text-jaipur-pink" />
+                        Famous Foods & Iconic Eateries in {currentLocationData.name}
+                      </h3>
+                      <span className="text-xs font-bold text-slate-500">Legendary Flavors</span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {currentLocationData.famousFoods.map((food) => {
+                        const isCardActive = activePlaceId === food.id;
+                        return (
+                          <div
+                            key={food.id}
+                            onClick={() => handleOpenPlaceDetail(food)}
+                            className={`rounded-3xl bg-white border overflow-hidden transition-all duration-300 cursor-pointer shadow-sm hover:shadow-xl group ${
+                              isCardActive
+                                ? "border-jaipur-pink ring-2 ring-jaipur-pink/25"
+                                : "border-slate-200/90 hover:border-jaipur-pink/40"
+                            }`}
+                          >
+                            <div className="relative h-52 sm:h-56 w-full overflow-hidden">
+                              <Image
+                                src={food.image}
+                                alt={food.name}
+                                fill
+                                unoptimized
+                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
+
+                              <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                                <span className="rounded-full bg-jaipur-pink/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
+                                  {food.famousEatery}
+                                </span>
+
+                                <span className="flex items-center gap-1 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-extrabold text-slate-900 shadow">
+                                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                                  {food.rating}
+                                </span>
+                              </div>
+
+                              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
+                                <span>💰 {food.priceForTwo}</span>
+                                <span>⏰ {food.timing}</span>
+                              </div>
+                            </div>
+
+                            <div className="p-5 space-y-3">
+                              <div>
+                                <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-jaipur-pink transition-colors">
+                                  {food.name}
+                                </h4>
+                                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                                  {food.specialty}
+                                </p>
+                              </div>
+
+                              <div className="space-y-2 pt-2 border-t border-slate-100">
+                                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                                  Must-Try Specialties:
+                                </span>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {food.mustTry.map((dish, dIdx) => (
+                                    <span
+                                      key={dIdx}
+                                      className="rounded-xl bg-slate-100 text-slate-800 px-3 py-1 text-xs font-bold border border-slate-200/70"
+                                    >
+                                      {dish}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                                <span className="text-slate-500 font-medium">📍 {food.address}</span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenPlaceDetail(food);
+                                  }}
+                                  className="flex items-center gap-1 font-bold text-jaipur-pink hover:text-rose-700 bg-rose-50 px-3 py-1.5 rounded-xl transition-colors"
+                                >
+                                  <Info className="h-3.5 w-3.5" />
+                                  <span>View Details</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                )}
+
+                {/* 5. CULTURAL SHOPS & BAZAARS */}
+                {(activeCategoryFilter === "all" || activeCategoryFilter === "shops") && currentLocationData.culturalShops.length > 0 && (
+                  <section className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                        <ShoppingBag className="h-5 w-5 text-purple-600" />
+                        Centuries-Old Cultural Shops & Bazaars
+                      </h3>
+                      <span className="text-xs font-bold text-slate-500">Heritage Crafts</span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {currentLocationData.culturalShops.map((shop) => (
+                        <div
+                          key={shop.id}
+                          onClick={() => handleOpenPlaceDetail(shop)}
+                          className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                        >
                           <div className="relative h-48 sm:h-52 w-full overflow-hidden">
                             <Image
-                              src={event.image}
-                              alt={event.name}
+                              src={shop.image}
+                              alt={shop.name}
                               fill
                               unoptimized
                               className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -1612,77 +1701,159 @@ export default function HomePage() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
 
                             <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                              <span className="rounded-full bg-blue-600/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
-                                {event.tag}
+                              <span className="rounded-full bg-purple-700/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
+                                {shop.bazaar}
                               </span>
-                              <span className="rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-extrabold text-slate-900 shadow">
-                                🎟️ {event.ticketType}
+                              <span className="flex items-center gap-1 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-extrabold text-slate-900 shadow">
+                                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                                {shop.rating}
                               </span>
                             </div>
 
-                            <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-bold">
-                              <span>🗓️ {event.dates}</span>
+                            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
+                              <span>💎 {shop.priceRange}</span>
+                              <span>⏰ {shop.timing}</span>
                             </div>
                           </div>
-                        )}
 
-                        <div className="p-5 space-y-3">
-                          <div>
-                            <div className="flex items-baseline justify-between gap-2">
-                              <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                                {event.name}
+                          <div className="p-5 space-y-3">
+                            <div>
+                              <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
+                                {shop.name}
                               </h4>
+                              <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                                {shop.description}
+                              </p>
                             </div>
 
-                            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                              {event.description}
-                            </p>
-                          </div>
-
-                          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                            <span className="text-slate-500 font-medium">📍 Venue: {event.venue}</span>
-                            <a
-                              href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20information%20and%20passes%20for%20${event.name}%20in%20${currentLocationData.name}.`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1 font-bold text-white bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors"
-                            >
-                              <Calendar className="h-3.5 w-3.5" />
-                              <span>Event Passes & Info</span>
-                            </a>
+                            <div className="space-y-2 pt-2 border-t border-slate-100">
+                              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                                Famous Specialties:
+                              </span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {shop.specialties.map((spec, sIdx) => (
+                                  <span
+                                    key={sIdx}
+                                    className="rounded-xl bg-purple-50 text-purple-900 px-3 py-1 text-xs font-bold border border-purple-200/60"
+                                  >
+                                    {spec}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
                           </div>
                         </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* 6. UPCOMING FESTIVALS, MAJOR EVENTS & SAFARIS (§10 PRD, Req 1 & 15) */}
+                {(activeCategoryFilter === "all" || activeCategoryFilter === "events") &&
+                  currentLocationData.upcomingEvents &&
+                  currentLocationData.upcomingEvents.length > 0 && (
+                    <section className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                          <Calendar className="h-5 w-5 text-blue-600" />
+                          Upcoming Festivals, Events & Safaris in {currentLocationData.name}
+                        </h3>
+                        <span className="text-xs font-bold text-slate-500">
+                          {currentLocationData.upcomingEvents.length} Major Happenings
+                        </span>
                       </div>
-                    ))}
+
+                      <div className="space-y-4">
+                        {currentLocationData.upcomingEvents.map((event, eIdx) => (
+                          <div
+                            key={eIdx}
+                            className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+                          >
+                            {event.image && (
+                              <div className="relative h-48 sm:h-52 w-full overflow-hidden">
+                                <Image
+                                  src={event.image}
+                                  alt={event.name}
+                                  fill
+                                  unoptimized
+                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
+
+                                <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                                  <span className="rounded-full bg-blue-600/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
+                                    {event.tag}
+                                  </span>
+                                  <span className="rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-extrabold text-slate-900 shadow">
+                                    🎟️ {event.ticketType}
+                                  </span>
+                                </div>
+
+                                <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-bold">
+                                  <span>🗓️ {event.dates}</span>
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="p-5 space-y-3">
+                              <div>
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                    {event.name}
+                                  </h4>
+                                </div>
+
+                                <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                                  {event.description}
+                                </p>
+                              </div>
+
+                              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                                <span className="text-slate-500 font-medium">📍 Venue: {event.venue}</span>
+                                <a
+                                  href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20information%20and%20passes%20for%20${event.name}%20in%20${currentLocationData.name}.`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1 font-bold text-white bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors"
+                                >
+                                  <Calendar className="h-3.5 w-3.5" />
+                                  <span>Event Passes & Info</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                {/* 7. WhatsApp Local Concierge Banner */}
+                <div className="rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 p-7 sm:p-8 text-white shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-500/30">
+                  <div className="space-y-2 text-center sm:text-left">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/30 px-3.5 py-1 text-xs font-extrabold text-emerald-300">
+                      <MessageCircle className="h-4 w-4" />
+                      Live Local Concierge Desk
+                    </div>
+                    <h4 className="font-heading text-2xl sm:text-3xl font-extrabold text-white">
+                      Want to hire a verified local guide in {currentLocationData.name}?
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed">
+                      Connect with verified coordinators on WhatsApp for private driver cabs, haveli bookings, and heritage walk schedules.
+                    </p>
                   </div>
-                </section>
-              )}
 
-            {/* 7. WhatsApp Local Concierge Banner */}
-            <div className="rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 p-7 sm:p-8 text-white shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-500/30">
-              <div className="space-y-2 text-center sm:text-left">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/30 px-3.5 py-1 text-xs font-extrabold text-emerald-300">
-                  <MessageCircle className="h-4 w-4" />
-                  Live Local Concierge Desk
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 flex items-center gap-2 rounded-2xl bg-white text-emerald-950 hover:bg-slate-100 px-6 py-4 text-sm font-extrabold shadow-xl transition-all hover:scale-105"
+                  >
+                    <MessageCircle className="h-5 w-5 text-emerald-600" />
+                    Chat on WhatsApp
+                  </a>
                 </div>
-                <h4 className="font-heading text-2xl sm:text-3xl font-extrabold text-white">
-                  Want to hire a verified local guide in {currentLocationData.name}?
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed">
-                  Connect with verified coordinators on WhatsApp for private driver cabs, haveli bookings, and heritage walk schedules.
-                </p>
-              </div>
-
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 flex items-center gap-2 rounded-2xl bg-white text-emerald-950 hover:bg-slate-100 px-6 py-4 text-sm font-extrabold shadow-xl transition-all hover:scale-105"
-              >
-                <MessageCircle className="h-5 w-5 text-emerald-600" />
-                Chat on WhatsApp
-              </a>
-            </div>
+              </>
+            )}
           </div>
         </main>
 
@@ -1693,7 +1864,7 @@ export default function HomePage() {
             cityCoords={currentLocationData.coords}
             places={currentLocationData.mapPlaces}
             activePlaceId={activePlaceId}
-            onSelectPlace={(p) => setActivePlaceId(p.id)}
+            onSelectPlace={(p) => handleOpenPlaceDetail(p)}
           />
         </div>
       </div>
