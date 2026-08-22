@@ -17,9 +17,9 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "GlobeTrotter — India Travel Intelligence & Experience Platform",
+  title: "Ghumo Bharat 🇮🇳 — India Travel Intelligence & Experience Platform",
   description:
-    "Full-screen travel intelligence workspace with interactive Google Map, multi-city itineraries, budget tracking, food discovery, and live place status alerts.",
+    "Ghumo Bharat — Your full-screen Bharat travel intelligence workspace. Explore interactive maps, plan multi-city itineraries, track budgets, discover street food, and get live monument status alerts.",
 };
 
 export default function RootLayout({

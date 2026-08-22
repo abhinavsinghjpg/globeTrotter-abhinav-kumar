@@ -733,12 +733,13 @@ const EXHAUSTIVE_JAIPUR_DATA: DynamicLocationData = {
 export default function HomePage() {
   const { user, role, isLoggedIn, openAuthModal, logout } = useAuth();
   const [currentLocationData, setCurrentLocationData] = useState<DynamicLocationData>(EXHAUSTIVE_JAIPUR_DATA);
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops" | "events">("all");
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops" | "events" | "day1" | "day2" | "day3">("all");
   const [activePlaceId, setActivePlaceId] = useState<string | null>(null);
   const [activeInlineDetail, setActiveInlineDetail] = useState<any | null>(null);
   const [activeToolView, setActiveToolView] = useState<null | "planner" | "transport" | "memories" | "groups" | "ai">(null);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [shareToast, setShareToast] = useState(false);
 
   // User's Active Itinerary & Custom Added Places
   const [itineraryPlaceIds, setItineraryPlaceIds] = useState<string[]>([
@@ -948,6 +949,21 @@ export default function HomePage() {
 
   const whatsappUrl = `https://wa.me/919876543210?text=Namaste!%20I%20am%20exploring%20${currentLocationData.name}%2C%20${currentLocationData.state}%20and%20need%20a%20verified%20local%20guide%20and%20cabs.`;
 
+  // Derived filter variables — recomputed on every render based on activeCategoryFilter
+  const allAttractions = [...currentLocationData.attractions, ...customPlaces];
+  const filteredAttractions =
+    activeCategoryFilter === "day1" ? allAttractions.slice(0, 4) :
+    activeCategoryFilter === "day2" ? [] :
+    activeCategoryFilter === "day3" ? allAttractions.slice(4) :
+    allAttractions;
+  const showAttractionsSection = activeCategoryFilter !== "food" && activeCategoryFilter !== "events";
+  const showFoodSection =
+    activeCategoryFilter !== "attractions" &&
+    activeCategoryFilter !== "day1" &&
+    activeCategoryFilter !== "day3" &&
+    activeCategoryFilter !== "events";
+  const showEventsSection = activeCategoryFilter === "all" || activeCategoryFilter === "events";
+
   return (
     <div className="h-screen w-screen flex flex-col bg-sand-100 text-jaipur-royal overflow-hidden font-sans antialiased">
       {/* 1. TOP GLOBAL HEADER (WANDERLOG STYLE) */}
@@ -969,7 +985,7 @@ export default function HomePage() {
               </div>
               <div className="hidden sm:block leading-tight">
                 <span className="font-heading text-sm font-bold text-jaipur-royal block">
-                  Trip to {currentLocationData.name}
+                  Ghumo Bharat 🇮🇳 — {currentLocationData.name}
                 </span>
                 <span className="text-2xs text-sand-600 font-medium">
                   {currentLocationData.state}, India · Trip plan
@@ -1424,6 +1440,15 @@ export default function HomePage() {
                     currentCity={currentLocationData.name}
                   />
                 )}
+
+                {/* "planner" view — triggered by Explore Guide cards */}
+                {activeToolView === "planner" && (
+                  <AiAssistantModal
+                    isInline
+                    onClose={() => setActiveToolView(null)}
+                    currentCity={currentLocationData.name}
+                  />
+                )}
               </div>
             ) : activeInlineDetail ? (
               <div className="rounded-panel bg-white border border-sand-200 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-3 duration-300">
@@ -1609,10 +1634,10 @@ export default function HomePage() {
                           </span>
                         </div>
                         <h1 className="font-heading text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                          Trip to {currentLocationData.name}
+                          Ghumo Bharat 🇮🇳 — {currentLocationData.name}
                         </h1>
                         <p className="text-xs text-white/90 font-medium">
-                          Created by <strong>Traveler</strong> · {currentLocationData.attractions.length + customPlaces.length} Places to visit
+                          Created by <strong>Traveler</strong> · {allAttractions.length} Places to visit
                         </p>
                       </div>
 
@@ -1621,7 +1646,8 @@ export default function HomePage() {
                           onClick={() => {
                             if (navigator.clipboard) {
                               navigator.clipboard.writeText(window.location.href);
-                              alert("Plan link copied to clipboard!");
+                              setShareToast(true);
+                              setTimeout(() => setShareToast(false), 2500);
                             }
                           }}
                           className="flex items-center gap-1.5 rounded-control bg-white/20 hover:bg-white/30 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-white transition-colors"
@@ -1809,14 +1835,19 @@ export default function HomePage() {
                   </div>
                 )}
 
-                {/* 4. WANDERLOG SECTION: PLACES TO VISIT (CLEAN NUMBERED CARDS WITHOUT BULKY DESCRIPTIONS) */}
+                {/* 4. PLACES TO VISIT — filtered by active tab */}
+                {showAttractionsSection && filteredAttractions.length > 0 && (
                 <section className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="font-heading text-lg sm:text-xl font-bold text-jaipur-royal flex items-center gap-2">
                       <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold shadow-sm">
-                        {currentLocationData.attractions.length + customPlaces.length}
+                        {filteredAttractions.length}
                       </span>
-                      <span>Places to visit in {currentLocationData.name}</span>
+                      <span>
+                        {activeCategoryFilter === "day1" ? "Day 1 — Forts & Palaces" :
+                         activeCategoryFilter === "day3" ? "Day 3 — Gems & Viewpoints" :
+                         `Places to visit in ${currentLocationData.name}`}
+                      </span>
                     </h3>
                     <span className="text-xs font-bold text-sand-600">
                       {itineraryPlaceIds.length} in Active Plan
@@ -1824,7 +1855,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="space-y-3">
-                    {[...currentLocationData.attractions, ...customPlaces].map((attraction, idx) => {
+                    {filteredAttractions.map((attraction, idx) => {
                       const isCardActive = activePlaceId === attraction.id;
                       const isInItinerary = itineraryPlaceIds.includes(attraction.id);
                       const poi = currentLocationData.mapPlaces.find((p) => p.id === attraction.id);
@@ -1945,9 +1976,10 @@ export default function HomePage() {
                     })}
                   </div>
                 </section>
+                )}
 
                 {/* 5. FAMOUS FOODS & RESTAURANTS (WITH SWIGGY & ZOMATO BUTTONS) */}
-                {currentLocationData.famousFoods.length > 0 && (
+                {showFoodSection && currentLocationData.famousFoods.length > 0 && (
                   <section className="space-y-4 pt-2">
                     <div className="flex items-center justify-between">
                       <h3 className="font-heading text-lg sm:text-xl font-bold text-jaipur-royal flex items-center gap-2">
@@ -2020,6 +2052,73 @@ export default function HomePage() {
                                 <span>Zomato</span>
                               </a>
                             </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* 5b. UPCOMING FESTIVALS & EVENTS */}
+                {showEventsSection && currentLocationData.upcomingEvents && currentLocationData.upcomingEvents.length > 0 && (
+                  <section className="space-y-4 pt-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-heading text-lg sm:text-xl font-bold text-jaipur-royal flex items-center gap-2">
+                        <Calendar className="h-5 w-5 text-jaipur-gold" />
+                        <span>Festivals &amp; Events in {currentLocationData.name}</span>
+                      </h3>
+                      <span className="text-xs font-bold text-sand-600">
+                        {currentLocationData.upcomingEvents.length} Events
+                      </span>
+                    </div>
+                    <div className="space-y-4">
+                      {currentLocationData.upcomingEvents.map((event, idx) => (
+                        <div
+                          key={idx}
+                          className="rounded-card bg-white border border-sand-200 overflow-hidden shadow-hairline hover:shadow-md transition-all group"
+                        >
+                          <div className="relative h-40 w-full overflow-hidden bg-jaipur-royal">
+                            <Image
+                              src={event.image}
+                              alt={event.name}
+                              fill
+                              unoptimized
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                            <div className="absolute top-2 left-2">
+                              <span className="rounded-full bg-jaipur-gold text-jaipur-royal text-2xs font-extrabold px-2.5 py-0.5">
+                                {event.tag}
+                              </span>
+                            </div>
+                            <div className="absolute bottom-3 left-4 right-4 text-white">
+                              <h4 className="font-heading text-sm font-bold leading-tight">{event.name}</h4>
+                              <p className="text-2xs text-white/80 font-semibold mt-0.5 flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {event.dates}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="p-4 space-y-3">
+                            <p className="text-xs text-sand-600 leading-relaxed">{event.description}</p>
+                            <div className="flex items-center justify-between pt-2 border-t border-sand-100">
+                              <div className="flex items-center gap-1.5 text-2xs font-bold text-sand-600">
+                                <MapPin className="h-3 w-3 text-brand-500 shrink-0" />
+                                <span className="truncate max-w-[200px]">{event.venue}</span>
+                              </div>
+                              <span className="rounded-control bg-brand-50 text-brand-700 border border-brand-200 px-2 py-0.5 text-2xs font-bold whitespace-nowrap">
+                                {event.ticketType}
+                              </span>
+                            </div>
+                            <a
+                              href={whatsappUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full flex items-center justify-center gap-2 rounded-control bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 text-xs font-bold shadow-sm transition-colors"
+                            >
+                              <MessageCircle className="h-3.5 w-3.5" />
+                              <span>Book via WhatsApp Guide</span>
+                            </a>
                           </div>
                         </div>
                       ))}
@@ -2151,6 +2250,42 @@ export default function HomePage() {
           />
         </div>
       </div>
+
+      {/* Share Toast Notification */}
+      {shareToast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 rounded-2xl bg-slate-900 text-white px-5 py-3 text-xs font-bold shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200 pointer-events-none">
+          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+          <span>Ghumo Bharat trip link copied!</span>
+        </div>
+      )}
+
+      {/* GPS Proximity Toast — appears when user is within 400m of a monument */}
+      {proximityPlace && gpsStatus === "tracking" && (
+        <div className="fixed bottom-24 left-6 z-50 max-w-xs rounded-2xl bg-gradient-to-r from-jaipur-royal to-sand-800 text-white p-4 shadow-2xl border border-brand-500/30 animate-in fade-in slide-in-from-left-3 duration-300">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-jaipur-gold/20">
+              <Navigation className="h-5 w-5 text-jaipur-gold animate-pulse" />
+            </div>
+            <div className="space-y-0.5 min-w-0 flex-1">
+              <span className="text-2xs font-extrabold text-jaipur-gold uppercase tracking-wider block">📍 You are here</span>
+              <p className="text-xs font-bold text-white leading-snug">{proximityPlace.name}</p>
+              <p className="text-2xs text-sand-300 font-medium">Within 400m of this monument</p>
+            </div>
+            <button
+              onClick={() => setProximityPlace(null)}
+              className="text-white/50 hover:text-white shrink-0 p-1 transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <button
+            onClick={() => handleOpenPlaceDetail(proximityPlace)}
+            className="mt-2.5 w-full rounded-control bg-jaipur-gold text-jaipur-royal text-2xs font-extrabold py-2 transition-all hover:scale-102"
+          >
+            View {proximityPlace.name} Details →
+          </button>
+        </div>
+      )}
 
       {/* Floating AI Assistant Button (Opens AI Guide Directly In Window) */}
       <button
