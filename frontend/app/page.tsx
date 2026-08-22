@@ -639,6 +639,7 @@ export default function HomePage() {
                 alt={currentLocationData.name}
                 fill
                 priority
+                unoptimized
                 className="object-cover object-center group-hover:scale-102 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -730,6 +731,7 @@ export default function HomePage() {
                             src={attraction.image}
                             alt={attraction.name}
                             fill
+                            unoptimized
                             className="object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
@@ -855,6 +857,7 @@ export default function HomePage() {
                             src={food.image}
                             alt={food.name}
                             fill
+                            unoptimized
                             className="object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
@@ -946,6 +949,7 @@ export default function HomePage() {
                           src={shop.image}
                           alt={shop.name}
                           fill
+                          unoptimized
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />

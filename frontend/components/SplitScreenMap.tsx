@@ -457,6 +457,7 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
                 }
                 alt={selectedPlaceInfo.name}
                 fill
+                unoptimized
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
