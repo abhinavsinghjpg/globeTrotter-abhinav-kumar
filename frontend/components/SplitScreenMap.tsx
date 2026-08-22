@@ -90,9 +90,11 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const tileLayerRef = useRef<any>(null);
-  const markersRef = useRef<Map<string, any>>(new Map());
   const userMarkerRef = useRef<any>(null);
+  const pinDropModeRef = useRef(false);
   const [isLocatingUser, setIsLocatingUser] = useState(false);
+  const [isLocationMenuOpen, setIsLocationMenuOpen] = useState(false);
+  const [isPinDropMode, setIsPinDropMode] = useState(false);
 
   const [mapReady, setMapReady] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | "attraction" | "food" | "hotel" | "shopping">("all");
@@ -144,6 +146,15 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         maxZoom: 20,
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
       }).addTo(map);
+
+      // Map click handler for dropping custom location pin
+      map.on("click", (e: any) => {
+        if (pinDropModeRef.current) {
+          renderUserPositionOnMap(e.latlng.lat, e.latlng.lng, "📍 Custom Location (Drag to move)");
+          setIsPinDropMode(false);
+          pinDropModeRef.current = false;
+        }
+      });
 
       tileLayerRef.current = initialLayer;
       mapInstanceRef.current = map;
@@ -355,13 +366,35 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         iconAnchor: [13, 13],
       });
 
-      const newMarker = L.marker([latitude, longitude], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+      const newMarker = L.marker([latitude, longitude], {
+        icon: userIcon,
+        zIndexOffset: 1000,
+        draggable: true,
+      }).addTo(map);
+
+      newMarker.on("dragend", (e: any) => {
+        const p = e.target.getLatLng();
+        newMarker
+          .bindPopup(
+            `
+          <div style="font-family: sans-serif; font-size: 12px; font-weight: 700; padding: 3px;">
+            📍 Custom Pin Location
+            <div style="font-size: 10px; font-weight: 500; color: #64748b;">${p.lat.toFixed(4)}, ${p.lng.toFixed(4)} (Drag to move)</div>
+          </div>
+        `
+          )
+          .openPopup();
+        if (onUserLocationFound) {
+          onUserLocationFound({ lat: p.lat, lng: p.lng });
+        }
+      });
+
       newMarker
         .bindPopup(
           `
         <div style="font-family: sans-serif; font-size: 12px; font-weight: 700; padding: 3px;">
           📍 You are here
-          <div style="font-size: 10px; font-weight: 500; color: #64748b;">${accuracyText || "Live Location Detected"}</div>
+          <div style="font-size: 10px; font-weight: 500; color: #64748b;">${accuracyText || "Live Location Detected"} (Drag to move)</div>
         </div>
       `
         )
@@ -520,16 +553,68 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
 
       {/* 4. BOTTOM RIGHT: Google Zoom & Location Controls */}
       <div className="absolute right-4 bottom-8 z-10 flex flex-col gap-2.5 pointer-events-auto items-end">
-        <button
-          onClick={handleLocateUserCurrentPosition}
-          disabled={isLocatingUser}
-          className={`flex h-10 w-10 items-center justify-center rounded-full shadow-md border border-slate-200 transition-all hover:scale-105 ${
-            isLocatingUser ? "bg-blue-600 text-white animate-pulse" : "bg-white text-slate-700 hover:bg-slate-50"
-          }`}
-          title="Show My Current Location (GPS)"
-        >
-          <Crosshair className={`h-5 w-5 ${isLocatingUser ? "animate-spin text-white" : "text-slate-700"}`} />
-        </button>
+        {/* Pin Drop Active Banner */}
+        {isPinDropMode && (
+          <div className="rounded-2xl bg-slate-900 text-white px-3.5 py-2 text-xs font-bold shadow-2xl border border-white/20 animate-pulse flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-amber-400" />
+            <span>Click anywhere on the map to drop your location pin!</span>
+          </div>
+        )}
+
+        <div className="relative">
+          <button
+            onClick={() => setIsLocationMenuOpen(!isLocationMenuOpen)}
+            disabled={isLocatingUser}
+            className={`flex h-10 w-10 items-center justify-center rounded-full shadow-md border border-slate-200 transition-all hover:scale-105 ${
+              isLocatingUser || isLocationMenuOpen ? "bg-blue-600 text-white" : "bg-white text-slate-700 hover:bg-slate-50"
+            }`}
+            title="Set Current Location"
+          >
+            <Crosshair className={`h-5 w-5 ${isLocatingUser ? "animate-spin text-white" : "text-slate-700"}`} />
+          </button>
+
+          {isLocationMenuOpen && (
+            <div className="absolute right-12 bottom-0 rounded-2xl bg-white p-2.5 shadow-2xl border border-slate-200 w-64 space-y-1 z-20 animate-in fade-in slide-in-from-right duration-200 text-xs">
+              <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block px-2 py-0.5">
+                Set Current Location
+              </span>
+
+              <button
+                onClick={() => {
+                  setIsLocationMenuOpen(false);
+                  handleLocateUserCurrentPosition();
+                }}
+                className="w-full text-left rounded-xl px-2.5 py-2 font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-700 flex items-center gap-2 transition-colors"
+              >
+                <Navigation className="h-4 w-4 text-blue-600" />
+                <span>Device GPS (Auto-Detect)</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsLocationMenuOpen(false);
+                  renderUserPositionOnMap(cityCoords.lat, cityCoords.lng, `${selectedCity} Center`);
+                }}
+                className="w-full text-left rounded-xl px-2.5 py-2 font-bold text-slate-800 hover:bg-slate-100 flex items-center gap-2 transition-colors"
+              >
+                <MapPin className="h-4 w-4 text-brand-600" />
+                <span>{selectedCity} City Center</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsLocationMenuOpen(false);
+                  setIsPinDropMode(true);
+                  pinDropModeRef.current = true;
+                }}
+                className="w-full text-left rounded-xl px-2.5 py-2 font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 flex items-center gap-2 transition-colors"
+              >
+                <MapPin className="h-4 w-4 text-indigo-600 animate-bounce" />
+                <span>Click Map to Drop Custom Pin</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className="flex flex-col rounded-lg bg-white border border-slate-200 shadow-md overflow-hidden">
           <button
