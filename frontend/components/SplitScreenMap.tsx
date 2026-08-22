@@ -55,6 +55,7 @@ interface SplitScreenMapProps {
   places: MapPlace[];
   activePlaceId?: string | null;
   onSelectPlace?: (place: MapPlace) => void;
+  onUserLocationFound?: (coords: { lat: number; lng: number }) => void;
 }
 
 declare global {
@@ -84,11 +85,14 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
   places,
   activePlaceId,
   onSelectPlace,
+  onUserLocationFound,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const tileLayerRef = useRef<any>(null);
   const markersRef = useRef<Map<string, any>>(new Map());
+  const userMarkerRef = useRef<any>(null);
+  const [isLocatingUser, setIsLocatingUser] = useState(false);
 
   const [mapReady, setMapReady] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | "attraction" | "food" | "hotel" | "shopping">("all");
@@ -307,6 +311,89 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
     }
   }, [activePlaceId, places]);
 
+  // Locate User Current GPS Position and render pulsing blue marker
+  const handleLocateUserCurrentPosition = () => {
+    if (typeof window === "undefined" || !navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    setIsLocatingUser(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setIsLocatingUser(false);
+        const { latitude, longitude, accuracy } = position.coords;
+        const L = window.L;
+        const map = mapInstanceRef.current;
+
+        if (map && L) {
+          // Remove old user marker if exists
+          if (userMarkerRef.current) {
+            map.removeLayer(userMarkerRef.current);
+          }
+
+          // Create Pulsing Blue GPS Marker
+          const userIcon = L.divIcon({
+            className: "user-gps-location-pin",
+            html: `
+              <div style="position: relative; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;">
+                <div style="
+                  position: absolute;
+                  width: 38px;
+                  height: 38px;
+                  border-radius: 50%;
+                  background: rgba(37, 99, 235, 0.25);
+                  animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+                "></div>
+                <div style="
+                  position: relative;
+                  width: 18px;
+                  height: 18px;
+                  border-radius: 50%;
+                  background: #2563eb;
+                  border: 3px solid #ffffff;
+                  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.6);
+                "></div>
+              </div>
+              <style>
+                @keyframes pulse-ring {
+                  0% { transform: scale(0.6); opacity: 0.9; }
+                  100% { transform: scale(2.4); opacity: 0; }
+                }
+              </style>
+            `,
+            iconSize: [26, 26],
+            iconAnchor: [13, 13],
+          });
+
+          const newMarker = L.marker([latitude, longitude], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+          newMarker.bindPopup(`
+            <div style="font-family: sans-serif; font-size: 12px; font-weight: 700; padding: 3px;">
+              📍 You are here
+              <div style="font-size: 10px; font-weight: 500; color: #64748b;">GPS accuracy: ±${Math.round(accuracy)}m</div>
+            </div>
+          `).openPopup();
+
+          userMarkerRef.current = newMarker;
+
+          // Smoothly fly camera to exact GPS position
+          map.flyTo([latitude, longitude], 16, { duration: 1.5 });
+
+          if (onUserLocationFound) {
+            onUserLocationFound({ lat: latitude, lng: longitude });
+          }
+        }
+      },
+      (error) => {
+        setIsLocatingUser(false);
+        console.warn("Geolocation error:", error);
+        alert("Could not access your location. Please check that location permissions are allowed in your browser settings.");
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
+
   return (
     <div className="relative h-full w-full bg-[#e5e3df] overflow-hidden select-none font-sans">
       {/* 1. Leaflet Canvas Container */}
@@ -406,15 +493,14 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
       {/* 4. BOTTOM RIGHT: Google Zoom & Location Controls */}
       <div className="absolute right-4 bottom-8 z-10 flex flex-col gap-2.5 pointer-events-auto items-end">
         <button
-          onClick={() => {
-            if (mapInstanceRef.current) {
-              mapInstanceRef.current.flyTo([cityCoords.lat, cityCoords.lng], 13, { duration: 1 });
-            }
-          }}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-700 hover:bg-slate-50 shadow-md border border-slate-200 transition-all hover:scale-105"
-          title="Recenter Map"
+          onClick={handleLocateUserCurrentPosition}
+          disabled={isLocatingUser}
+          className={`flex h-10 w-10 items-center justify-center rounded-full shadow-md border border-slate-200 transition-all hover:scale-105 ${
+            isLocatingUser ? "bg-blue-600 text-white animate-pulse" : "bg-white text-slate-700 hover:bg-slate-50"
+          }`}
+          title="Show My Current Location (GPS)"
         >
-          <Crosshair className="h-5 w-5 text-slate-700" />
+          <Crosshair className={`h-5 w-5 ${isLocatingUser ? "animate-spin text-white" : "text-slate-700"}`} />
         </button>
 
         <div className="flex flex-col rounded-lg bg-white border border-slate-200 shadow-md overflow-hidden">

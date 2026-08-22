@@ -2139,6 +2139,10 @@ export default function HomePage() {
             places={currentLocationData.mapPlaces}
             activePlaceId={activePlaceId}
             onSelectPlace={(p) => handleOpenPlaceDetail(p)}
+            onUserLocationFound={(coords) => {
+              setUserCoords(coords);
+              setGpsStatus("tracking");
+            }}
           />
         </div>
       </div>
