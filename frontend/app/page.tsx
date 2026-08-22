@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SplitScreenMap, MapPlace } from "@/components/SplitScreenMap";
 import { AiAssistantModal } from "@/components/AiAssistantModal";
+import { useAuth } from "@/context/AuthContext";
 import {
   searchIndianLocations,
   getDynamicIntelligenceForLocation,
@@ -644,11 +645,13 @@ const EXHAUSTIVE_JAIPUR_DATA: DynamicLocationData = {
 };
 
 export default function HomePage() {
+  const { user, role, isLoggedIn, openAuthModal, logout } = useAuth();
   const [currentLocationData, setCurrentLocationData] = useState<DynamicLocationData>(EXHAUSTIVE_JAIPUR_DATA);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops">("all");
   const [activePlaceId, setActivePlaceId] = useState<string | null>(null);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   // Search state
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -869,17 +872,110 @@ export default function HomePage() {
           )}
         </div>
 
-        {/* Right Actions */}
+        {/* Right Actions & Auth */}
         <div className="flex items-center gap-2.5 shrink-0">
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-102"
+            className="hidden sm:flex items-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-102"
           >
             <MessageCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">WhatsApp Concierge</span>
+            <span>WhatsApp Concierge</span>
           </a>
+
+          {/* Role-Protected Auth Button / Profile Dropdown */}
+          {!isLoggedIn ? (
+            <button
+              onClick={() => openAuthModal("traveler")}
+              className="flex items-center gap-1.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 text-xs font-bold shadow-sm transition-all hover:scale-102"
+            >
+              <Compass className="h-3.5 w-3.5" />
+              <span>Sign In / Join</span>
+            </button>
+          ) : (
+            <div className="relative">
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-2 rounded-2xl bg-slate-100 hover:bg-slate-200 p-1.5 pr-3 transition-colors border border-slate-200"
+              >
+                <div className="relative h-7 w-7 rounded-xl overflow-hidden bg-brand-600 text-white flex items-center justify-center font-bold text-xs">
+                  {user?.avatar ? (
+                    <Image src={user.avatar} alt={user.name} fill unoptimized className="object-cover" />
+                  ) : (
+                    user?.name?.charAt(0) || "U"
+                  )}
+                </div>
+                <div className="text-left hidden md:block leading-none">
+                  <span className="font-bold text-xs text-slate-900 block truncate max-w-[100px]">{user?.name}</span>
+                  <span className="text-[9px] font-extrabold uppercase tracking-wider text-brand-600">
+                    {role === "admin" ? "🛡️ Admin" : role === "guide" ? "🧭 Guide" : "🧳 Traveler"}
+                  </span>
+                </div>
+                <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+              </button>
+
+              {/* User Profile Dropdown */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 top-12 w-64 rounded-3xl bg-white shadow-2xl border border-slate-200 p-2 z-50 text-xs text-slate-700 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="p-3 border-b border-slate-100 bg-slate-50/80 rounded-2xl mb-1">
+                    <span className="font-bold text-slate-900 block text-sm">{user?.name}</span>
+                    <span className="text-[11px] text-slate-500 block truncate">{user?.email}</span>
+                    <span className="inline-block mt-1.5 rounded-full bg-slate-200 text-slate-800 text-[10px] font-extrabold px-2.5 py-0.5">
+                      {user?.badge || (role === "admin" ? "Superadmin" : role === "guide" ? "Licensed Guide" : "Traveler")}
+                    </span>
+                  </div>
+
+                  {/* Role-Specific Unlocked Dashboards */}
+                  {role === "admin" && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-purple-50 text-purple-900 font-bold transition-colors"
+                    >
+                      <Shield className="h-4 w-4 text-purple-600" />
+                      <span>Admin Operations Dashboard</span>
+                    </Link>
+                  )}
+
+                  {role === "guide" && (
+                    <Link
+                      href="/guide"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold transition-colors"
+                    >
+                      <MapPin className="h-4 w-4 text-emerald-600" />
+                      <span>Guide Operations Desk</span>
+                    </Link>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      openAuthModal(role === "admin" ? "guide" : "admin");
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-700 font-semibold transition-colors"
+                  >
+                    <Compass className="h-4 w-4 text-slate-400" />
+                    <span>Switch Role / Portal</span>
+                  </button>
+
+                  <div className="border-t border-slate-100 my-1" />
+
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      logout();
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-red-50 text-red-600 font-bold transition-colors"
+                  >
+                    <X className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           <button
             onClick={() => {
@@ -943,6 +1039,31 @@ export default function HomePage() {
                     </button>
                   );
                 })}
+
+                {/* ROLE-RESTRICTED SIDEBAR LINKS (ONLY VISIBLE TO ADMIN OR GUIDE) */}
+                {role === "admin" && (
+                  <div className="pt-2 border-t border-slate-100 mt-2">
+                    <Link
+                      href="/admin"
+                      className="w-full flex items-center gap-2.5 rounded-2xl px-3 py-2 text-xs font-bold text-purple-900 bg-purple-50 hover:bg-purple-100 transition-colors"
+                    >
+                      <Shield className="h-4 w-4 text-purple-600" />
+                      <span>Admin Operations</span>
+                    </Link>
+                  </div>
+                )}
+
+                {role === "guide" && (
+                  <div className="pt-2 border-t border-slate-100 mt-2">
+                    <Link
+                      href="/guide"
+                      className="w-full flex items-center gap-2.5 rounded-2xl px-3 py-2 text-xs font-bold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 transition-colors"
+                    >
+                      <MapPin className="h-4 w-4 text-emerald-600" />
+                      <span>Guide Desk</span>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 

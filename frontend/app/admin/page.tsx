@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "@/lib/auth-context";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import {
   Shield,
   Users,
@@ -16,11 +17,47 @@ import {
   UserX,
   MessageCircle,
   Sparkles,
+  Lock,
+  ArrowLeft,
 } from "lucide-react";
 
 export default function AdminPage() {
-  const { user } = useAuth();
+  const { user, role, openAuthModal } = useAuth();
   const [activeSection, setActiveSection] = useState<"overview" | "places" | "users">("overview");
+
+  // Admin Role Protection Guard
+  if (role !== "admin") {
+    return (
+      <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-6 text-slate-900 font-sans">
+        <div className="max-w-md w-full rounded-3xl bg-white p-8 shadow-xl border border-slate-200 text-center space-y-4">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-50 text-purple-600">
+            <Lock className="h-8 w-8" />
+          </div>
+          <h2 className="font-heading text-2xl font-extrabold text-slate-900">
+            Restricted Admin Area
+          </h2>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            This portal is strictly confidential and reserved for GlobeTrotter operations superadministrators and platform moderators.
+          </p>
+
+          <div className="pt-2 space-y-2">
+            <button
+              onClick={() => openAuthModal("admin")}
+              className="w-full rounded-2xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs py-3.5 shadow-md shadow-purple-600/20 transition-all hover:scale-102"
+            >
+              Sign In as Administrator
+            </button>
+            <Link
+              href="/"
+              className="block w-full rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 transition-colors"
+            >
+              Return to Travel Feed
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Sample real-time places data for Admin monitoring
   const [places, setPlaces] = useState([

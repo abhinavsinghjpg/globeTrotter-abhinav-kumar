@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/auth-context";
+import { AuthProvider } from "@/context/AuthContext";
+import { AuthModal } from "@/components/AuthModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,7 +19,7 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "GlobeTrotter — India Travel Intelligence & Experience Platform",
   description:
-    "Full-screen travel intelligence workspace with interactive India map, multi-city itineraries, budget tracking, food discovery, and live place status alerts.",
+    "Full-screen travel intelligence workspace with interactive Google Map, multi-city itineraries, budget tracking, food discovery, and live place status alerts.",
 };
 
 export default function RootLayout({
@@ -29,7 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body className="bg-white text-slate-900 antialiased min-h-screen">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <AuthModal />
+        </AuthProvider>
       </body>
     </html>
   );
