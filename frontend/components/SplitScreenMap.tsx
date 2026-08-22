@@ -90,6 +90,7 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const tileLayerRef = useRef<any>(null);
+  const markersRef = useRef<Map<string, any>>(new Map());
   const userMarkerRef = useRef<any>(null);
   const pinDropModeRef = useRef(false);
   const [isLocatingUser, setIsLocatingUser] = useState(false);
