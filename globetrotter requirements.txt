@@ -1,0 +1,29 @@
+Aim is to build a website for travelling with all the provided itineary and budget selection with discovering current activities and destination
+
+1. In which we going to provide important dates for local events and popular events occuring across the travel destination   with covering all the multiple cities of the india .
+2. Providing famous shops stores for cultural things like dresses, cutlaries, artifacts and local designs or objects 
+3. The adventurous sports or any orther local activity with the giving list of cost and expence  of the activities 
+4. Transportation cost booking system of flights, busses, trains and local transportation such as(local busses, e-rickshaw,etc) if needed can be redirected to rapido uber and ola
+5. Also show local car and bike rental apps if needed
+6. Make a field for age groups for deciding better plans which is dividing into four subgroups as 16-26, 26-45, 45-old age
+7. If needed show hidden spots of the local areas 
+8. provided the multiple tourist guide details for the local trips and add ai as a virtual tourist guide includedin plan 
+9. Show the popular food stalls and restraunts/cafe as per the where the person is standing 
+10. Stay-->  provide hotels and dormetories as per the user budget and hygiene and ratings 
+11. Add weather conditions detail of the planned dates in the itenary of travelling
+12. Trip gallery and memory notes also is there any experience user wants to share with us publicly as well as personali stored for them 
+13. If extra time left suggest some fun activities todo or is there any nearby places or spots they can visit 
+14. If multiple people going at a same place as user for joining a group or if they have any as people to join 
+15. In events if any big event of that place user want to go suggest them the dates and make the itenary according to it or any person visit the place for some business or company trip and want to visit suggest if there is any event
+16. IF use come for business trip or company trip suggest them the better places to visit at that time and location on which user is standing as per the user need 
+17. local guide or traveller or local person can update anything about the place  for better experince and also can add some hidden spots to visit and also can add their insta related reels on that page fortravelling.
+18. provide the updates of the places before so if the place is closed or something .
+
+technologise going to used ---->
+for database --> postgrase sql 
+map intigration 
+next js
+python 
+ai chatbot 
+
+
