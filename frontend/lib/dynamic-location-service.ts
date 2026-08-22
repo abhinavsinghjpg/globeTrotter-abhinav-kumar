@@ -71,6 +71,15 @@ export interface DynamicLocationData {
     timing: string;
     image: string;
   }[];
+  upcomingEvents?: {
+    name: string;
+    dates: string;
+    venue: string;
+    description: string;
+    tag: string;
+    ticketType: string;
+    image?: string;
+  }[];
 }
 
 // 1. Comprehensive Regional Authentic Food & Sweet Specialties for Indian States

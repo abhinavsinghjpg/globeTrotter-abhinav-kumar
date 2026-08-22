@@ -648,12 +648,41 @@ const EXHAUSTIVE_JAIPUR_DATA: DynamicLocationData = {
       image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80",
     },
   ],
+  upcomingEvents: [
+    {
+      name: "Jaipur Literature Festival (JLF 2026)",
+      dates: "January 22 – 26, 2026",
+      venue: "Hotel Clarks Amer, JLN Marg, Jaipur",
+      description: "The world's greatest celebration of literature and ideas, hosting international Nobel laureates, novelists, poets, and thinkers across 5 vibrant days.",
+      tag: "Global Literary Festival",
+      ticketType: "Free Delegate Registration",
+      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      name: "Royal Teej Festival & Palace Processions",
+      dates: "Monsoon Season (August)",
+      venue: "City Palace to Tripolia Gate, Pink City",
+      description: "Centuries-old royal procession featuring Goddess Teej palanquin, decorated elephants, Kalbelia dancers, and traditional Ghevar feasts.",
+      tag: "Royal Cultural Procession",
+      ticketType: "Free Public Viewing",
+      image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      name: "SkyWaltz Sunrise Hot Air Balloon Safari",
+      dates: "Daily Morning Flights (October – March)",
+      venue: "Amer Fort & Kukas Ridge Launch Pad",
+      description: "Float 2,000 feet above the rugged Aravalli ridges and hilltop forts as golden morning light illuminates the desert landscape.",
+      tag: "Adventure & Aerial Safari",
+      ticketType: "₹12,500 / person",
+      image: "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?auto=format&fit=crop&w=800&q=80",
+    },
+  ],
 };
 
 export default function HomePage() {
   const { user, role, isLoggedIn, openAuthModal, logout } = useAuth();
   const [currentLocationData, setCurrentLocationData] = useState<DynamicLocationData>(EXHAUSTIVE_JAIPUR_DATA);
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops">("all");
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<"all" | "attractions" | "food" | "shops" | "events">("all");
   const [activePlaceId, setActivePlaceId] = useState<string | null>(null);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
@@ -1033,6 +1062,7 @@ export default function HomePage() {
                   { id: "attractions", label: `Forts & Sites (${currentLocationData.attractions.length})`, icon: MapPin, color: "text-amber-500" },
                   { id: "food", label: `Famous Food (${currentLocationData.famousFoods.length})`, icon: Utensils, color: "text-rose-500" },
                   { id: "shops", label: `Bazaars (${currentLocationData.culturalShops.length})`, icon: ShoppingBag, color: "text-purple-500" },
+                  { id: "events", label: `Festivals & Events (${currentLocationData.upcomingEvents?.length || 0})`, icon: Calendar, color: "text-blue-500" },
                 ].map((cat) => {
                   const Icon = cat.icon;
                   const isActive = activeCategoryFilter === cat.id;
@@ -1549,7 +1579,86 @@ export default function HomePage() {
               </section>
             )}
 
-            {/* 6. WhatsApp Local Concierge Banner */}
+            {/* 6. UPCOMING FESTIVALS, MAJOR EVENTS & SAFARIS (§10 PRD, Req 1 & 15) */}
+            {(activeCategoryFilter === "all" || activeCategoryFilter === "events") &&
+              currentLocationData.upcomingEvents &&
+              currentLocationData.upcomingEvents.length > 0 && (
+                <section className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-heading text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                      <Calendar className="h-5 w-5 text-blue-600" />
+                      Upcoming Festivals, Events & Safaris in {currentLocationData.name}
+                    </h3>
+                    <span className="text-xs font-bold text-slate-500">
+                      {currentLocationData.upcomingEvents.length} Major Happenings
+                    </span>
+                  </div>
+
+                  <div className="space-y-4">
+                    {currentLocationData.upcomingEvents.map((event, eIdx) => (
+                      <div
+                        key={eIdx}
+                        className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+                      >
+                        {event.image && (
+                          <div className="relative h-48 sm:h-52 w-full overflow-hidden">
+                            <Image
+                              src={event.image}
+                              alt={event.name}
+                              fill
+                              unoptimized
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
+
+                            <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                              <span className="rounded-full bg-blue-600/90 backdrop-blur-md px-3 py-1 text-[11px] font-extrabold text-white uppercase tracking-wider shadow">
+                                {event.tag}
+                              </span>
+                              <span className="rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-extrabold text-slate-900 shadow">
+                                🎟️ {event.ticketType}
+                              </span>
+                            </div>
+
+                            <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-bold">
+                              <span>🗓️ {event.dates}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="p-5 space-y-3">
+                          <div>
+                            <div className="flex items-baseline justify-between gap-2">
+                              <h4 className="font-heading text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                {event.name}
+                              </h4>
+                            </div>
+
+                            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                              {event.description}
+                            </p>
+                          </div>
+
+                          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                            <span className="text-slate-500 font-medium">📍 Venue: {event.venue}</span>
+                            <a
+                              href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20information%20and%20passes%20for%20${event.name}%20in%20${currentLocationData.name}.`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 font-bold text-white bg-blue-600 hover:bg-blue-700 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors"
+                            >
+                              <Calendar className="h-3.5 w-3.5" />
+                              <span>Event Passes & Info</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+            {/* 7. WhatsApp Local Concierge Banner */}
             <div className="rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 p-7 sm:p-8 text-white shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-500/30">
               <div className="space-y-2 text-center sm:text-left">
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/30 px-3.5 py-1 text-xs font-extrabold text-emerald-300">
