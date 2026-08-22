@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   Search,
   Plus,
@@ -17,22 +18,35 @@ import {
   Share2,
   Crosshair,
   MapPin,
-  Maximize2,
+  Clock,
+  Ticket,
+  MessageCircle,
+  X,
+  Phone,
+  Info,
+  Camera,
+  Heart,
 } from "lucide-react";
 
 export interface MapPlace {
   id: string;
   name: string;
+  hindiName?: string;
   category: "attraction" | "food" | "hotel" | "shopping";
   lat: number;
   lng: number;
   description: string;
   image?: string;
   rating?: number;
+  reviewsCount?: string;
   status?: string;
+  statusDetail?: string;
   price?: string;
+  entryFee?: string;
+  timing?: string;
   address?: string;
-  hindiName?: string;
+  insiderTip?: string;
+  specialties?: string[];
 }
 
 interface SplitScreenMapProps {
@@ -49,7 +63,6 @@ declare global {
   }
 }
 
-// Google Maps Tile URLs (Roadmap, Satellite Hybrid, Terrain)
 const GOOGLE_TILE_LAYERS = {
   roadmap: {
     name: "Google Standard Map",
@@ -123,7 +136,6 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         attributionControl: false,
       });
 
-      // Google Maps Tile Layer
       const initialLayer = L.tileLayer(GOOGLE_TILE_LAYERS[currentLayerType].url, {
         maxZoom: 20,
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
@@ -156,7 +168,7 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
     tileLayerRef.current = newLayer;
   }, [currentLayerType]);
 
-  // 3. Render Google Maps-Style POI Pins (Matching Screenshot)
+  // 3. Render Google Maps-Style POI Pins
   useEffect(() => {
     if (!mapInstanceRef.current || !window.L) return;
 
@@ -183,11 +195,6 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
       const isHotel = place.category === "hotel";
       const isShopping = place.category === "shopping";
 
-      // Google Maps color palette
-      // Hotels: Magenta / Pink (#e91e63 / #d81b60)
-      // Food / Restaurants: Orange (#e65100 / #f57c00)
-      // Attractions / Culture: Purple / Violet (#7b1fa2 / #8e24aa)
-      // Shopping / Bazaars: Blue (#1976d2 / #0288d1)
       const pinColor = isHotel
         ? "#e91e63"
         : isFood
@@ -205,23 +212,15 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         : "#6a1b9a";
 
       const iconSvg = isHotel
-        ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>`
+        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>`
         : isFood
-        ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>`
+        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>`
         : isShopping
-        ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>`
-        : `<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>`;
+        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>`
+        : `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>`;
 
-      const isActive = activePlaceId === place.id || selectedPlaceInfo?.id === place.id;
-      const hindiTranslation =
-        place.hindiName ||
-        (isHotel
-          ? "होटल / स्टे"
-          : isFood
-          ? "प्रसिद्ध खान-पान"
-          : isShopping
-          ? "बाज़ार / खरीदारी"
-          : "ऐतिहासिक स्थल");
+      const isSelected = selectedPlaceInfo?.id === place.id || activePlaceId === place.id;
+      const hindiTranslation = place.hindiName || place.name;
 
       const customIcon = L.divIcon({
         className: "custom-google-poi",
@@ -232,37 +231,35 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
             gap: 6px;
             cursor: pointer;
             user-select: none;
-            transform: ${isActive ? "scale(1.2)" : "scale(1)"};
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+            transform: ${isSelected ? "scale(1.25)" : "scale(1)"};
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
           ">
-            <!-- Circular Pin with Icon -->
             <div style="
-              width: 24px;
-              height: 24px;
+              width: 26px;
+              height: 26px;
               border-radius: 50%;
               background: ${pinColor};
               display: flex;
               align-items: center;
               justify-content: center;
-              box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-              border: 1.5px solid #ffffff;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+              border: 2px solid #ffffff;
               flex-shrink: 0;
             ">
               ${iconSvg}
             </div>
 
-            <!-- Google Maps Bilingual Label (Matches Screenshot) -->
             <div style="
               display: flex;
               flex-direction: column;
-              text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 0 4px #fff;
+              text-shadow: -1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff, 0 0 5px #fff;
               line-height: 1.15;
             ">
               <span style="
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                font-size: 11px;
-                font-weight: 700;
+                font-size: 11.5px;
+                font-weight: 800;
                 color: ${textColor};
                 white-space: nowrap;
               ">
@@ -270,10 +267,10 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
               </span>
               <span style="
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                font-size: 9.5px;
-                font-weight: 600;
+                font-size: 10px;
+                font-weight: 700;
                 color: ${textColor};
-                opacity: 0.9;
+                opacity: 0.95;
                 white-space: nowrap;
               ">
                 ${hindiTranslation}
@@ -281,40 +278,43 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
             </div>
           </div>
         `,
-        iconSize: [160, 30],
-        iconAnchor: [12, 12],
+        iconSize: [170, 32],
+        iconAnchor: [13, 13],
       });
 
       const marker = L.marker([place.lat, place.lng], { icon: customIcon }).addTo(map);
 
+      // CLICK ACTION ON MAP MARKER -> OPENS COMPLETE DETAILS DRAWER
       marker.on("click", () => {
         setSelectedPlaceInfo(place);
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.flyTo([place.lat, place.lng], 15, { duration: 0.8 });
+        }
         if (onSelectPlace) onSelectPlace(place);
       });
 
       markersRef.current.set(place.id, marker);
     });
-  }, [cityCoords, places, activeFilter, searchQuery, mapReady, activePlaceId]);
+  }, [cityCoords, places, activeFilter, searchQuery, mapReady, activePlaceId, selectedPlaceInfo]);
 
-  // Synchronize map pan when activePlaceId changes
+  // Synchronize when external card is clicked
   useEffect(() => {
     if (!activePlaceId || !mapInstanceRef.current) return;
     const targetPlace = places.find((p) => p.id === activePlaceId);
     if (targetPlace) {
-      mapInstanceRef.current.flyTo([targetPlace.lat, targetPlace.lng], 14, { duration: 1.0 });
+      mapInstanceRef.current.flyTo([targetPlace.lat, targetPlace.lng], 15, { duration: 0.9 });
       setSelectedPlaceInfo(targetPlace);
     }
   }, [activePlaceId, places]);
 
   return (
     <div className="relative h-full w-full bg-[#e5e3df] overflow-hidden select-none font-sans">
-      {/* 1. Leaflet Canvas Container with Google Maps Tiles */}
+      {/* 1. Leaflet Canvas Container */}
       <div ref={mapContainerRef} className="h-full w-full z-0" />
 
-      {/* 2. TOP LEFT: Google Maps Export Pill Badge (Matches Screenshot) */}
+      {/* 2. TOP LEFT: Google Maps Export Pill Badge */}
       <div className="absolute top-4 left-4 z-10 flex items-center gap-2 pointer-events-auto">
-        <div className="flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 shadow-md border border-slate-200/80 text-slate-800">
-          {/* Google Maps Pin Icon */}
+        <div className="flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 shadow-md border border-slate-200 text-slate-800">
           <div className="flex items-center gap-1.5 font-bold text-xs">
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path
@@ -330,25 +330,23 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
           </div>
         </div>
 
-        {/* Search Bar Toggle */}
         {isSearchOpen && (
-          <div className="flex items-center gap-2 rounded-full bg-white shadow-md border border-slate-200 px-3 py-1.5 w-56 text-xs animate-in fade-in slide-in-from-left duration-200">
+          <div className="flex items-center gap-2 rounded-full bg-white shadow-md border border-slate-200 px-3.5 py-1.5 w-60 text-xs animate-in fade-in slide-in-from-left duration-200">
             <Search className="h-3.5 w-3.5 text-slate-400" />
             <input
               type="text"
               placeholder={`Search in ${selectedCity}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent focus:outline-none text-slate-800 placeholder-slate-400"
+              className="w-full bg-transparent focus:outline-none text-slate-800 placeholder-slate-400 font-medium"
               autoFocus
             />
           </div>
         )}
       </div>
 
-      {/* 3. TOP RIGHT: Google Map Circular Action Buttons (Matches Screenshot) */}
+      {/* 3. TOP RIGHT: Google Map Circular Controls */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2.5 pointer-events-auto items-end">
-        {/* Search Button */}
         <button
           onClick={() => setIsSearchOpen(!isSearchOpen)}
           className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-700 hover:bg-slate-50 shadow-md border border-slate-200 transition-all hover:scale-105"
@@ -357,7 +355,6 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
           <Search className="h-4 w-4 text-slate-700" />
         </button>
 
-        {/* Layers Button */}
         <div className="relative">
           <button
             onClick={() => setIsLayerMenuOpen(!isLayerMenuOpen)}
@@ -393,7 +390,6 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
           )}
         </div>
 
-        {/* Hotels / Stays Quick Toggle Pill */}
         <button
           onClick={() => setActiveFilter(activeFilter === "hotel" ? "all" : "hotel")}
           className={`flex h-10 w-10 items-center justify-center rounded-full shadow-md border transition-all hover:scale-105 ${
@@ -407,9 +403,8 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         </button>
       </div>
 
-      {/* 4. BOTTOM RIGHT: Google Zoom & Location Controls (Matches Screenshot) */}
+      {/* 4. BOTTOM RIGHT: Google Zoom & Location Controls */}
       <div className="absolute right-4 bottom-8 z-10 flex flex-col gap-2.5 pointer-events-auto items-end">
-        {/* Recenter Location Button */}
         <button
           onClick={() => {
             if (mapInstanceRef.current) {
@@ -422,7 +417,6 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
           <Crosshair className="h-5 w-5 text-slate-700" />
         </button>
 
-        {/* Zoom In/Out Block (Google style) */}
         <div className="flex flex-col rounded-lg bg-white border border-slate-200 shadow-md overflow-hidden">
           <button
             onClick={() => mapInstanceRef.current?.zoomIn()}
@@ -441,8 +435,8 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         </div>
       </div>
 
-      {/* 5. BOTTOM LEFT: Official Google Maps Footer Attribution (Matches Screenshot) */}
-      <div className="absolute bottom-1 left-2 z-10 flex items-center gap-2 pointer-events-none text-[10px] text-slate-600 bg-white/70 px-2 py-0.5 rounded backdrop-blur-xs">
+      {/* 5. BOTTOM LEFT: Official Google Maps Footer Attribution */}
+      <div className="absolute bottom-1 left-2 z-10 flex items-center gap-2 pointer-events-none text-[10px] text-slate-600 bg-white/75 px-2 py-0.5 rounded backdrop-blur-xs">
         <span className="font-extrabold tracking-tight text-slate-700 font-sans text-xs">Google</span>
         <span>Map data ©2026</span>
         <span>500 m</span>
@@ -450,45 +444,166 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         <span className="hidden sm:inline">Report a map error</span>
       </div>
 
-      {/* 6. Selected Place Floating Details Modal on Map */}
+      {/* 6. FULL PLACE DETAIL SHEET ON MAP (OPENS ON MAP CLICK) */}
       {selectedPlaceInfo && (
-        <div className="absolute bottom-6 left-4 right-16 sm:right-auto sm:w-88 z-20 pointer-events-auto animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="rounded-2xl bg-white p-4 shadow-2xl border border-slate-200 space-y-2.5 text-slate-900">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <span className="rounded bg-blue-50 text-blue-700 px-2 py-0.5 text-[10px] font-bold uppercase">
-                  {selectedPlaceInfo.category}
-                </span>
-                <h4 className="font-heading text-base font-bold text-slate-900 mt-1">
-                  {selectedPlaceInfo.name}
-                </h4>
-              </div>
+        <div className="absolute top-4 bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-[410px] z-30 pointer-events-auto animate-in fade-in slide-in-from-right duration-300">
+          <div className="h-full rounded-3xl bg-white shadow-2xl border border-slate-200 flex flex-col overflow-hidden text-slate-900">
+            {/* Header Photo */}
+            <div className="relative h-48 w-full shrink-0 overflow-hidden bg-slate-900">
+              <Image
+                src={
+                  selectedPlaceInfo.image ||
+                  "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80"
+                }
+                alt={selectedPlaceInfo.name}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+
+              {/* Close Button Top Right */}
               <button
                 onClick={() => setSelectedPlaceInfo(null)}
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 text-xs font-bold"
+                className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/85 backdrop-blur-md transition-all shadow-md"
               >
-                ✕
+                <X className="h-4 w-4" />
               </button>
+
+              {/* Category & Status Badges */}
+              <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                <span className="rounded-full bg-black/70 backdrop-blur-md px-3 py-1 text-[10px] font-extrabold text-white uppercase tracking-wider border border-white/20">
+                  {selectedPlaceInfo.category}
+                </span>
+
+                <span
+                  className={`rounded-full backdrop-blur-md px-2.5 py-0.5 text-[10px] font-bold border ${
+                    selectedPlaceInfo.status?.includes("Open") || !selectedPlaceInfo.status
+                      ? "bg-emerald-900/80 text-emerald-300 border-emerald-500/30"
+                      : "bg-amber-900/80 text-amber-300 border-amber-500/30"
+                  }`}
+                >
+                  {selectedPlaceInfo.status || "Open Today"}
+                </span>
+              </div>
+
+              {/* Title & Hindi Name on Photo */}
+              <div className="absolute bottom-3 left-4 right-4 text-white">
+                <h3 className="font-heading text-xl font-extrabold leading-tight">
+                  {selectedPlaceInfo.name}
+                </h3>
+                {selectedPlaceInfo.hindiName && (
+                  <p className="text-xs text-amber-300 font-semibold mt-0.5">
+                    {selectedPlaceInfo.hindiName}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-              {selectedPlaceInfo.description}
-            </p>
+            {/* Scrollable Information Body */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+              {/* Rating & Location Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div className="flex items-center gap-1.5">
+                  <span className="flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-lg text-xs">
+                    <Star className="h-3.5 w-3.5 fill-slate-950" />
+                    {selectedPlaceInfo.rating || 4.7}
+                  </span>
+                  <span className="text-slate-500 text-[11px] font-semibold">
+                    ({selectedPlaceInfo.reviewsCount || "14,200+ Google Reviews"})
+                  </span>
+                </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-              <span className="flex items-center gap-1 text-emerald-600 font-bold">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                {selectedPlaceInfo.status || "Open Today"}
-              </span>
+                <span className="text-[11px] font-bold text-slate-500">
+                  📍 {selectedCity}, Rajasthan
+                </span>
+              </div>
 
+              {/* Full Description & Cultural Significance */}
+              <div className="space-y-1">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                  About & Significance
+                </span>
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  {selectedPlaceInfo.description}
+                </p>
+              </div>
+
+              {/* Key Details Grid (Timings, Entry Fee, Pricing) */}
+              <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-200/80 space-y-2.5">
+                <div className="flex items-start gap-2.5">
+                  <Clock className="h-4 w-4 text-brand-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-slate-900 block">Timings & Operating Hours</span>
+                    <span className="text-slate-600">{selectedPlaceInfo.timing || "09:00 AM – 05:00 PM"}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5">
+                  <Ticket className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-slate-900 block">Entry Fee / Pricing</span>
+                    <span className="text-slate-600">{selectedPlaceInfo.entryFee || selectedPlaceInfo.price || "₹50 (Indians) · ₹200 (Foreigners)"}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-slate-900 block">Exact Address</span>
+                    <span className="text-slate-600">{selectedPlaceInfo.address || `${selectedPlaceInfo.name}, Pink City, Jaipur`}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Must-Try Specialties or Insider Tips */}
+              {selectedPlaceInfo.specialties && selectedPlaceInfo.specialties.length > 0 && (
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                    Must-Try Highlights / Dishes
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedPlaceInfo.specialties.map((spec, sIdx) => (
+                      <span
+                        key={sIdx}
+                        className="rounded-xl bg-slate-100 text-slate-800 px-3 py-1 text-xs font-bold border border-slate-200/80"
+                      >
+                        {spec}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Insider Photo Tip */}
+              <div className="rounded-2xl bg-amber-50/80 border border-amber-200/80 p-3 flex items-start gap-2 text-amber-900">
+                <Camera className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="text-[11px] leading-relaxed">
+                  <strong>Insider Photo Tip:</strong> Best photo angle is during early morning (08:30 AM) from the opposite street cafes for golden reflections without tourist crowds.
+                </div>
+              </div>
+            </div>
+
+            {/* Sticky Action Bar at Bottom of Sheet */}
+            <div className="p-4 border-t border-slate-200 bg-white flex items-center gap-2">
               <a
-                href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${selectedPlaceInfo.name}%20in%20${selectedCity}.`}
+                href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${selectedPlaceInfo.name}%20in%20${selectedCity}%20and%20need%20a%20local%20guide.`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-[11px] font-bold shadow-sm transition-all"
+                className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white py-3 text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-102"
               >
-                <span>Hire Guide</span>
-                <ExternalLink className="h-3 w-3" />
+                <MessageCircle className="h-4 w-4" />
+                <span>Hire Guide on WhatsApp</span>
+              </a>
+
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedPlaceInfo.name + " " + selectedCity)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3.5 py-3 text-xs font-bold transition-colors"
+                title="Get Google Directions"
+              >
+                <Navigation className="h-4 w-4 text-brand-600" />
+                <span>Directions</span>
               </a>
             </div>
           </div>
