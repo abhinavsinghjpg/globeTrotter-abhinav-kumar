@@ -1,4 +1,286 @@
 {
+  "destinations_knowledge": {
+    "Jaipur": {
+      "name": "Jaipur",
+      "state": "Rajasthan",
+      "region": "North India",
+      "recommended_days": "2-3",
+      "best_season": "October to March",
+      "travel_style": ["cultural", "heritage", "food", "photography"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1800, "hotel_type": "Hostels / Haveli Homestays" },
+        "standard": { "daily_per_person": 4500, "hotel_type": "Heritage 3-4 Star Hotels" },
+        "luxury": { "daily_per_person": 12000, "hotel_type": "5-Star Royal Palace Resorts" }
+      },
+      "attractions": [
+        "Amber Fort", "City Palace", "Hawa Mahal", "Jantar Mantar", "Nahargarh Fort", "Albert Hall Museum", "Patrika Gate", "Galta Ji Temple", "Panna Meena Ka Kund"
+      ],
+      "activities": [
+        "Heritage fort walking", "Bazaar shopping at Johari Bazaar", "Sound & light show at Amber Fort", "Sunset watching from Nahargarh"
+      ],
+      "food": [
+        "Pyaaz Kachori (Rawat)", "Dal Baati Churma (LMB)", "Paneer Ghevar", "Clay Pot Kulhad Lassi (Lassiwala)", "Laal Maas"
+      ],
+      "transportation": {
+        "air": "Jaipur International Airport (JAI)",
+        "rail": "Jaipur Junction (JP) with Vande Bharat and Shatabdi from Delhi",
+        "local": "App cabs (Uber/Ola), auto-rickshaws, e-rickshaws in walled city, private taxis"
+      },
+      "nearby_destinations": ["Pushkar", "Ajmer", "Ranthambore", "Shekhawati"]
+    },
+    "Udaipur": {
+      "name": "Udaipur",
+      "state": "Rajasthan",
+      "region": "North India",
+      "recommended_days": "2-3",
+      "best_season": "September to March",
+      "travel_style": ["romantic", "lakes", "heritage", "relaxing"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 2000, "hotel_type": "Lakeside Guesthouses" },
+        "standard": { "daily_per_person": 5500, "hotel_type": "Lake View Heritage Hotels" },
+        "luxury": { "daily_per_person": 18000, "hotel_type": "Grand Island Palaces & Taj Lake Palace" }
+      },
+      "attractions": [
+        "City Palace Udaipur", "Lake Pichola", "Jag Mandir", "Saheliyon Ki Bari", "Bagore Ki Haveli", "Monsoon Palace (Sajjangarh)", "Jagdish Temple"
+      ],
+      "activities": [
+        "Lake Pichola sunset boat cruise", "Bagore Ki Haveli Dharohar cultural folk dance", "Rooftop lakeside dining", "Vintage car museum visit"
+      ],
+      "food": [
+        "Rajasthani Gatte Ki Sabzi", "Kachori at Shastri Circle", "Boiled Egg Bhurji at Chetak", "Mawa Kachori"
+      ],
+      "transportation": {
+        "air": "Maharana Pratap Airport (UDR)",
+        "rail": "Udaipur City Railway Station",
+        "local": "Auto-rickshaws, lakeside walking, boat ferries"
+      },
+      "nearby_destinations": ["Kumbhalgarh Fort", "Ranakpur Jain Temples", "Chittorgarh"]
+    },
+    "Jodhpur": {
+      "name": "Jodhpur",
+      "state": "Rajasthan",
+      "region": "North India",
+      "recommended_days": "2",
+      "best_season": "October to March",
+      "travel_style": ["heritage", "architecture", "food"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1700, "hotel_type": "Blue City Homestays" },
+        "standard": { "daily_per_person": 4200, "hotel_type": "Haveli Heritage Boutique" },
+        "luxury": { "daily_per_person": 16000, "hotel_type": "Umaid Bhawan Palace" }
+      },
+      "attractions": [
+        "Mehrangarh Fort", "Jaswant Thada", "Umaid Bhawan Palace Museum", "Clock Tower & Sardar Market", "Mandore Gardens", "Toorji Ka Jhalra Stepwell"
+      ],
+      "activities": [
+        "Flying Fox Ziplining at Mehrangarh", "Blue City heritage photo walk", "Stepwell cafe relaxing", "Bishnoi village safari"
+      ],
+      "food": [
+        "Mirchi Vada & Mawa Kachori (Janta Sweet Home)", "Makhaniya Lassi (Shri Mishrilal)", "Gulab Jamun Sabzi"
+      ],
+      "transportation": {
+        "air": "Jodhpur Airport (JDH)",
+        "rail": "Jodhpur Junction",
+        "local": "Autos, walking in narrow Blue City lanes"
+      },
+      "nearby_destinations": ["Osian Desert Camps", "Jaisalmer", "Bikaner"]
+    },
+    "Delhi": {
+      "name": "Delhi",
+      "state": "Delhi (UT)",
+      "region": "North India",
+      "recommended_days": "2-3",
+      "best_season": "October to March",
+      "travel_style": ["historical", "monuments", "street food", "museums"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1800, "hotel_type": "Pahar Ganj / South Delhi Hostels" },
+        "standard": { "daily_per_person": 4800, "hotel_type": "Connaught Place / Aerocity 4-Star" },
+        "luxury": { "daily_per_person": 15000, "hotel_type": "The Imperial / Oberoi / Leela Palace" }
+      },
+      "attractions": [
+        "Qutub Minar", "Red Fort", "Humayun's Tomb", "India Gate & Kartavya Path", "Lotus Temple", "Akshardham Temple", "Jama Masjid", "Chandni Chowk"
+      ],
+      "activities": [
+        "Old Delhi rickshaw food tour", "Evening walk at India Gate", "Akshardham water and light show", "Crafts shopping at Dilli Haat"
+      ],
+      "food": [
+        "Butter Chicken (Moti Mahal)", "Paranthas at Paranthe Wali Gali", "Chole Bhature (Sita Ram Diwan Chand)", "Daulat Ki Chaat"
+      ],
+      "transportation": {
+        "air": "Indira Gandhi International Airport (DEL)",
+        "rail": "New Delhi (NDLS), Old Delhi (DLI), Hazrat Nizamuddin (NZM)",
+        "local": "Delhi Metro (fast & air-conditioned), Uber/Ola cabs"
+      },
+      "nearby_destinations": ["Agra", "Jaipur", "Neemrana", "Mathura-Vrindavan"]
+    },
+    "Agra": {
+      "name": "Agra",
+      "state": "Uttar Pradesh",
+      "region": "North India",
+      "recommended_days": "1-2",
+      "best_season": "October to March",
+      "travel_style": ["heritage", "wonders of world", "photography"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1500, "hotel_type": "Taj Ganj Homestays" },
+        "standard": { "daily_per_person": 3800, "hotel_type": "Fatehabad Road 3-4 Star" },
+        "luxury": { "daily_per_person": 22000, "hotel_type": "Oberoi Amarvilas" }
+      },
+      "attractions": [
+        "Taj Mahal", "Agra Fort", "Fatehpur Sikri", "Mehtab Bagh", "Itimad-ud-Daulah (Baby Taj)"
+      ],
+      "activities": [
+        "Sunrise photography at Taj Mahal", "Sunset view from Mehtab Bagh across Yamuna", "Marble inlay artisan workshops", "Mughal food trail"
+      ],
+      "food": [
+        "Agra Petha (Panchi Petha)", "Bedmi Puri & Jalebi breakfast", "Mughlai Korma & Kebabs"
+      ],
+      "transportation": {
+        "air": "Agra Airport / Delhi IGI Airport (3 hrs via Yamuna Expressway)",
+        "rail": "Agra Cantt (Gatimaan / Vande Bharat Express from Delhi - 1h 40m)",
+        "local": "Battery-operated e-rickshaws near Taj, pre-paid taxis"
+      },
+      "nearby_destinations": ["Fatehpur Sikri", "Mathura", "Vrindavan", "Bharatpur Bird Sanctuary"]
+    },
+    "Varanasi": {
+      "name": "Varanasi",
+      "state": "Uttar Pradesh",
+      "region": "North India",
+      "recommended_days": "2-3",
+      "best_season": "October to March",
+      "travel_style": ["spiritual", "cultural", "ancient heritage", "food"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1400, "hotel_type": "Ghatside Guest Houses" },
+        "standard": { "daily_per_person": 3800, "hotel_type": "Cantonment / Heritage Haveli" },
+        "luxury": { "daily_per_person": 14000, "hotel_type": "BrijRama Palace on Darbhanga Ghat" }
+      },
+      "attractions": [
+        "Kashi Vishwanath Temple & Corridor", "Dashashwamedh Ghat", "Assi Ghat", "Manikarnika Ghat", "Sarnath Buddhist Site", "Banaras Hindu University (BHU)"
+      ],
+      "activities": [
+        "Sunrise Ganges boat ride", "Grand Evening Ganga Aarti at Dashashwamedh", "Old Kashi lane walking tour", "Silk weaving factory visit"
+      ],
+      "food": [
+        "Banarasi Paan", "Kachori Jalebi breakfast (Ram Bhandar)", "Blue Lassi & Malaiyo winter sweet", "Tamatar Chaat (Deena Chaat)"
+      ],
+      "transportation": {
+        "air": "Lal Bahadur Shastri International Airport (VNS)",
+        "rail": "Varanasi Junction (BSB) & Pt. Deen Dayal Upadhyaya (DDU)",
+        "local": "E-rickshaws, cycle rickshaws, river boats, walking"
+      },
+      "nearby_destinations": ["Sarnath", "Prayagraj (Allahabad)", "Chunar Fort", "Ayodhya"]
+    },
+    "Goa": {
+      "name": "Goa",
+      "state": "Goa",
+      "region": "West Coast India",
+      "recommended_days": "3-5",
+      "best_season": "November to February",
+      "travel_style": ["beaches", "nightlife", "portuguese heritage", "watersports", "relaxation"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 2200, "hotel_type": "Beach Hostels & Guest Shacks" },
+        "standard": { "daily_per_person": 5500, "hotel_type": "Boutique Coastal Resorts" },
+        "luxury": { "daily_per_person": 16000, "hotel_type": "5-Star Beachfront Luxury Resorts" }
+      },
+      "attractions": [
+        "Palolem Beach", "Anjuna & Vagator Beach", "Basilica of Bom Jesus", "Aguada Fort", "Chapora Fort", "Dudhsagar Waterfalls", "Fontainhas Latin Quarter"
+      ],
+      "activities": [
+        "Scuba diving & parasailing", "Fontainhas heritage architecture walk", "Sunset beach shack dining", "Mandovi river evening cruise"
+      ],
+      "food": [
+        "Goan Fish Thali", "Prawn Balchão", "Pork Vindaloo", "Bebinca dessert", "Fresh Coconut Feni cocktails"
+      ],
+      "transportation": {
+        "air": "Dabolim Airport (GOI) / Manohar International Airport Mopa (GOX)",
+        "rail": "Madgaon (MAO) / Thivim (THVM)",
+        "local": "Self-drive scooters / rental cars, taxi apps (GoaMiles)"
+      },
+      "nearby_destinations": ["Gokarna", "Dandeli Wildlife", "Karwar", "Hampi"]
+    },
+    "Mumbai": {
+      "name": "Mumbai",
+      "state": "Maharashtra",
+      "region": "West Coast India",
+      "recommended_days": "2-3",
+      "best_season": "October to March",
+      "travel_style": ["metropolis", "colonial architecture", "bollywood", "coastal promenades"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 2200, "hotel_type": "Colaba / Bandra Hostels" },
+        "standard": { "daily_per_person": 6000, "hotel_type": "South Bombay 3-4 Star" },
+        "luxury": { "daily_per_person": 18000, "hotel_type": "The Taj Mahal Palace Colaba / Trident" }
+      },
+      "attractions": [
+        "Gateway of India", "Marine Drive (Queen's Necklace)", "Chhatrapati Shivaji Maharaj Terminus (CSMT)", "Elephanta Caves", "Bandra Bandstand", "Siddhivinayak Temple", "Colaba Causeway"
+      ],
+      "activities": [
+        "Marine Drive evening sunset walk", "Colaba Causeway street shopping", "Elephanta island ferry ride", "Bollywood studio tour"
+      ],
+      "food": [
+        "Vada Pav (Ashok Vada Pav)", "Pav Bhaji (Sardar)", "Bombay Duck fry & Seafood (Mahesh Lunch Home)", "Irani Cafe Bun Maska & Chai"
+      ],
+      "transportation": {
+        "air": "Chhatrapati Shivaji Maharaj International Airport (BOM)",
+        "rail": "CSMT, Mumbai Central, Bandra Terminus",
+        "local": "Mumbai Local Trains, Metro, Black & Yellow cabs, AC Uber/Ola"
+      },
+      "nearby_destinations": ["Lonavala-Khandala", "Alibaug", "Matheran", "Mahabaleshwar", "Nashik Vineyards"]
+    },
+    "Manali": {
+      "name": "Manali",
+      "state": "Himachal Pradesh",
+      "region": "North India / Himalayas",
+      "recommended_days": "3-4",
+      "best_season": "March to June (Pleasant) / Dec to Feb (Snow)",
+      "travel_style": ["mountains", "snow", "adventure", "nature"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1800, "hotel_type": "Old Manali Riverside Hostels" },
+        "standard": { "daily_per_person": 4500, "hotel_type": "Valley View Apple Orchard Cottages" },
+        "luxury": { "daily_per_person": 12000, "hotel_type": "The Himalayan Luxury Castle & Resorts" }
+      },
+      "attractions": [
+        "Solang Valley", "Atal Tunnel & Sissu", "Hadimba Temple", "Old Manali Village", "Jogini Waterfalls", "Vashisht Hot Springs", "Mall Road"
+      ],
+      "activities": [
+        "Paragliding & Zorbing in Solang", "Snow activities in Sissu via Atal Tunnel", "Jogini waterfall trek", "Cafe hopping in Old Manali"
+      ],
+      "food": [
+        "Himachali Siddu with ghee", "Trout Fish fry", "Tibetan Momos & Thukpa", "Fresh Apple cider"
+      ],
+      "transportation": {
+        "air": "Bhuntar / Kullu Airport (KUU) - 50 km",
+        "road": "Overnight Volvo buses from Delhi / Chandigarh (approx 12-14 hrs)",
+        "local": "Private tourist taxis, auto-rickshaws, rental motorcycles (Royal Enfield)"
+      },
+      "nearby_destinations": ["Kasol & Parvati Valley", "Spiti Valley", "Jibhi & Tirthan Valley", "Naggar Castle"]
+    },
+    "Munnar": {
+      "name": "Munnar",
+      "state": "Kerala",
+      "region": "South India",
+      "recommended_days": "2-3",
+      "best_season": "September to March",
+      "travel_style": ["hill station", "tea plantations", "nature", "wildlife"],
+      "budget_tiers": {
+        "budget": { "daily_per_person": 1800, "hotel_type": "Tea Garden Plantation Homestays" },
+        "standard": { "daily_per_person": 4800, "hotel_type": "Misty Valley 3-4 Star Eco Resorts" },
+        "luxury": { "daily_per_person": 14000, "hotel_type": "Spice Tree / Windermere Estate" }
+      },
+      "attractions": [
+        "Eravikulam National Park (Nilgiri Tahr)", "Mattupetty Dam", "Tea Museum", "Top Station Viewpoint", "Kundala Lake", "Attukal Waterfalls"
+      ],
+      "activities": [
+        "Tea tasting & processing tour", "Nilgiri Tahr wildlife spotting", "Speedboating at Mattupetty Dam", "Ayurvedic massage & Kathakali show"
+      ],
+      "food": [
+        "Kerala Sadya on banana leaf", "Appam with Vegetable / Chicken Stew", "Malabar Parotta", "Fresh Spiced Tea & Banana Fritters"
+      ],
+      "transportation": {
+        "air": "Cochin International Airport (COK) - 110 km (3.5 hrs drive)",
+        "rail": "Aluva (AWY) / Ernakulam Junction (ERS)",
+        "local": "Private hired cabs, KSRTC buses"
+      },
+      "nearby_destinations": ["Thekkady (Periyar)", "Alleppey Houseboats", "Kochi Fort", "Varkala"]
+    }
+  },
   "cities": {
     "Jaipur": {
       "name": "Jaipur",
@@ -58,38 +340,38 @@
           "cost": 200,
           "duration_minutes": 60,
           "opening_time": "09:00",
-          "closing_time": "16:30",
+          "closing_time": "17:00",
           "latitude": 26.9239,
           "longitude": 75.8267,
-          "tags": ["culture", "architecture", "iconic", "photography"],
+          "tags": ["culture", "architecture", "heritage", "photography"],
           "weather_sensitive": false,
           "indoor": true,
           "status": "open",
           "rating": 4.5,
           "verification_status": "verified",
-          "source": "Rajasthan Tourism",
+          "source": "ASI Verified",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.97
         },
         {
           "id": "jpr_004",
-          "name": "Albert Hall Museum",
+          "name": "Nahargarh Fort",
           "city": "Jaipur",
-          "category": "museum",
-          "description": "The oldest museum of Rajasthan housing royal artifacts, carpets, sculptures, and an Egyptian mummy.",
-          "cost": 150,
+          "category": "viewpoint",
+          "description": "Hilltop fort offering panoramic sunset views across the Pink City and Aravali hills.",
+          "cost": 200,
           "duration_minutes": 120,
-          "opening_time": "09:00",
-          "closing_time": "17:00",
-          "latitude": 26.9116,
-          "longitude": 75.8195,
-          "tags": ["museum", "culture", "indoor", "art", "history"],
-          "weather_sensitive": false,
-          "indoor": true,
+          "opening_time": "10:00",
+          "closing_time": "18:00",
+          "latitude": 26.9372,
+          "longitude": 75.8156,
+          "tags": ["viewpoint", "fort", "sunset", "outdoor"],
+          "weather_sensitive": true,
+          "indoor": false,
           "status": "open",
-          "rating": 4.5,
+          "rating": 4.7,
           "verification_status": "verified",
-          "source": "Govt Museum Dept",
+          "source": "Rajasthan Tourism Board",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.96
         },
@@ -97,87 +379,87 @@
           "id": "jpr_005",
           "name": "Jantar Mantar",
           "city": "Jaipur",
-          "category": "culture",
-          "description": "UNESCO World Heritage astronomical observatory with giant stone sun-dials and instruments.",
+          "category": "heritage",
+          "description": "UNESCO World Heritage astronomical observatory featuring the world's largest stone sundial.",
           "cost": 200,
           "duration_minutes": 90,
           "opening_time": "09:00",
-          "closing_time": "16:30",
+          "closing_time": "17:00",
           "latitude": 26.9248,
           "longitude": 75.8246,
-          "tags": ["culture", "science", "history", "unesco"],
-          "weather_sensitive": true,
-          "indoor": false,
-          "status": "open",
-          "rating": 4.4,
-          "verification_status": "verified",
-          "source": "UNESCO Data",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.98
-        },
-        {
-          "id": "jpr_006",
-          "name": "Nahargarh Fort",
-          "city": "Jaipur",
-          "category": "fort",
-          "description": "Perched on the Aravalli hills, offering breathtaking panoramic sunset views over Jaipur city.",
-          "cost": 200,
-          "duration_minutes": 120,
-          "opening_time": "10:00",
-          "closing_time": "20:00",
-          "latitude": 26.9378,
-          "longitude": 75.8155,
-          "tags": ["fort", "viewpoint", "sunset", "outdoor"],
+          "tags": ["heritage", "science", "astronomy", "unesco"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
           "rating": 4.6,
           "verification_status": "verified",
-          "source": "Rajasthan Tourism",
+          "source": "UNESCO / ASI",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.98
+        },
+        {
+          "id": "jpr_006",
+          "name": "Albert Hall Museum",
+          "city": "Jaipur",
+          "category": "museum",
+          "description": "State museum of Rajasthan housed in stunning Indo-Saracenic architecture with an Egyptian mummy and royal artifacts.",
+          "cost": 150,
+          "duration_minutes": 90,
+          "opening_time": "09:00",
+          "closing_time": "17:00",
+          "latitude": 26.9116,
+          "longitude": 75.8195,
+          "tags": ["museum", "indoor", "history", "art"],
+          "weather_sensitive": false,
+          "indoor": true,
+          "status": "open",
+          "rating": 4.5,
+          "verification_status": "verified",
+          "source": "Rajasthan Archeological Dept",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.95
         },
         {
           "id": "jpr_007",
-          "name": "Johari Bazaar & Bapu Bazaar",
-          "city": "Jaipur",
-          "category": "shopping",
-          "description": "Vibrant local street markets selling traditional bandhani textiles, jewelry, handicrafts, and leather jottis.",
-          "cost": 0,
-          "duration_minutes": 120,
-          "opening_time": "11:00",
-          "closing_time": "20:30",
-          "latitude": 26.9205,
-          "longitude": 75.8252,
-          "tags": ["shopping", "local", "market", "culture", "street_food"],
-          "weather_sensitive": true,
-          "indoor": false,
-          "status": "open",
-          "rating": 4.5,
-          "verification_status": "verified",
-          "source": "Local Traders Association",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.94
-        },
-        {
-          "id": "jpr_008",
           "name": "Laxmi Misthan Bhandar (LMB)",
           "city": "Jaipur",
           "category": "food",
-          "description": "Legendary Jaipur restaurant renowned for authentic Rajasthani Dal Baati Churma and Ghewar sweets.",
+          "description": "Iconic Johari Bazaar restaurant famous for royal Rajasthani Thali, Dal Baati Churma, and Ghewar.",
           "cost": 600,
           "duration_minutes": 60,
           "opening_time": "08:00",
-          "closing_time": "22:00",
+          "closing_time": "22:30",
           "latitude": 26.9212,
-          "longitude": 75.8260,
-          "tags": ["food", "rajasthani", "sweets", "lunch", "dinner", "local"],
+          "longitude": 75.8261,
+          "tags": ["food", "rajasthani", "thali", "sweets", "local"],
+          "weather_sensitive": false,
+          "indoor": true,
+          "status": "open",
+          "rating": 4.4,
+          "verification_status": "verified",
+          "source": "Curated Local Partners",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.97
+        },
+        {
+          "id": "jpr_008",
+          "name": "Patrika Gate",
+          "city": "Jaipur",
+          "category": "culture",
+          "description": "Vibrant, exquisitely painted archway depicting Rajasthan history and culture at Jawahar Circle.",
+          "cost": 0,
+          "duration_minutes": 45,
+          "opening_time": "00:00",
+          "closing_time": "23:59",
+          "latitude": 26.8532,
+          "longitude": 75.8052,
+          "tags": ["culture", "photography", "free", "art"],
           "weather_sensitive": false,
           "indoor": true,
           "status": "open",
           "rating": 4.7,
           "verification_status": "verified",
-          "source": "Food Guide India",
+          "source": "Jaipur Development Authority",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.99
         },
@@ -186,292 +468,182 @@
           "name": "Rawat Mishthan Bhandar",
           "city": "Jaipur",
           "category": "food",
-          "description": "Famous for iconic Pyaaz Kachori and Mirchi Vada crisp breakfast snacks.",
+          "description": "Legendary confectionery famous for iconic hot Pyaaz Kachori and Mirchi Vada.",
           "cost": 250,
           "duration_minutes": 45,
-          "opening_time": "07:00",
-          "closing_time": "21:30",
-          "latitude": 26.9221,
-          "longitude": 75.7981,
-          "tags": ["food", "breakfast", "street_food", "local"],
+          "opening_time": "06:00",
+          "closing_time": "22:00",
+          "latitude": 26.9205,
+          "longitude": 75.7958,
+          "tags": ["food", "kachori", "snacks", "breakfast", "local"],
           "weather_sensitive": false,
           "indoor": true,
           "status": "open",
           "rating": 4.6,
           "verification_status": "verified",
-          "source": "Food Guide India",
+          "source": "Curated Local Partners",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.98
         },
         {
           "id": "jpr_010",
-          "name": "Patrika Gate",
-          "city": "Jaipur",
-          "category": "culture",
-          "description": "Vibrant, hand-painted gateway with colorful Rajasthani murals and architectural archways.",
-          "cost": 0,
-          "duration_minutes": 60,
-          "opening_time": "06:00",
-          "closing_time": "21:00",
-          "latitude": 26.8530,
-          "longitude": 75.8055,
-          "tags": ["culture", "art", "photography", "relaxed", "free"],
-          "weather_sensitive": false,
-          "indoor": true,
-          "status": "open",
-          "rating": 4.7,
-          "verification_status": "verified",
-          "source": "Jaipur Dev Authority",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.97
-        },
-        {
-          "id": "jpr_011",
-          "name": "Jaigarh Fort",
-          "city": "Jaipur",
-          "category": "fort",
-          "description": "Formidable fortress home to Jaivana, once the world's largest cannon on wheels.",
-          "cost": 150,
-          "duration_minutes": 120,
-          "opening_time": "09:00",
-          "closing_time": "17:00",
-          "latitude": 26.9841,
-          "longitude": 75.8458,
-          "tags": ["fort", "history", "military", "outdoor"],
-          "weather_sensitive": true,
-          "indoor": false,
-          "status": "open",
-          "rating": 4.4,
-          "verification_status": "verified",
-          "source": "ASI Verified",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.95
-        },
-        {
-          "id": "jpr_012",
-          "name": "Chokhi Dhani Ethnic Resort",
-          "city": "Jaipur",
-          "category": "culture",
-          "description": "An immersive Rajasthani village experience with folk dancing, puppet shows, camel rides, and traditional thali dinner.",
-          "cost": 1200,
-          "duration_minutes": 240,
-          "opening_time": "17:00",
-          "closing_time": "23:00",
-          "latitude": 26.7680,
-          "longitude": 75.8300,
-          "tags": ["culture", "entertainment", "dinner", "family", "experience"],
-          "weather_sensitive": false,
-          "indoor": true,
-          "status": "open",
-          "rating": 4.5,
-          "verification_status": "verified",
-          "source": "Chokhi Dhani Resort",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.96
-        },
-        {
-          "id": "jpr_013",
-          "name": "Caffé Palladio",
-          "city": "Jaipur",
-          "category": "food",
-          "description": "Sleek European café and tea house with ornate pastel interiors and organic dining.",
-          "cost": 800,
-          "duration_minutes": 75,
-          "opening_time": "12:30",
-          "closing_time": "22:30",
-          "latitude": 26.9080,
-          "longitude": 75.8050,
-          "tags": ["food", "cafe", "fine_dining", "relaxed"],
-          "weather_sensitive": false,
-          "indoor": true,
-          "status": "open",
-          "rating": 4.6,
-          "verification_status": "verified",
-          "source": "Zomato Verified",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.95
-        },
-        {
-          "id": "jpr_014",
           "name": "Galta Ji Temple (Monkey Temple)",
           "city": "Jaipur",
-          "category": "culture",
-          "description": "Ancient Hindu temple complex situated between narrow crevice of hills with holy water Kunds.",
+          "category": "temple",
+          "description": "Historic Hindu pilgrimage site nestled between Aravali cliffs featuring sacred water springs.",
           "cost": 50,
           "duration_minutes": 90,
-          "opening_time": "06:00",
+          "opening_time": "05:00",
           "closing_time": "19:00",
-          "latitude": 26.9180,
-          "longitude": 75.8600,
-          "tags": ["culture", "temple", "nature", "outdoor"],
+          "latitude": 26.9168,
+          "longitude": 75.8653,
+          "tags": ["temple", "spiritual", "nature", "outdoor", "heritage"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
           "rating": 4.3,
           "verification_status": "verified",
-          "source": "Rajasthan Tourism",
+          "source": "Devasthan Vibhag Rajasthan",
           "last_verified_at": "2026-08-01",
-          "confidence_score": 0.92
+          "confidence_score": 0.94
         },
         {
-          "id": "jpr_015",
-          "name": "Anokhi Museum of Hand Printing",
+          "id": "jpr_011",
+          "name": "Caffé Palladio",
           "city": "Jaipur",
-          "category": "museum",
-          "description": "Specialist textile museum housed in a restored haveli, displaying block-printing craft.",
-          "cost": 100,
-          "duration_minutes": 90,
-          "opening_time": "10:30",
-          "closing_time": "17:00",
-          "latitude": 26.9890,
-          "longitude": 75.8540,
-          "tags": ["museum", "art", "craft", "indoor", "culture"],
+          "category": "food",
+          "description": "Charming pastel European-Rajasthani cafe serving fresh salads, handmade pasta, and cardamom iced teas.",
+          "cost": 800,
+          "duration_minutes": 60,
+          "opening_time": "11:30",
+          "closing_time": "22:30",
+          "latitude": 26.9142,
+          "longitude": 75.8083,
+          "tags": ["food", "cafe", "aesthetic", "continental"],
           "weather_sensitive": false,
           "indoor": true,
           "status": "open",
-          "rating": 4.7,
+          "rating": 4.6,
           "verification_status": "verified",
-          "source": "Anokhi Foundation",
+          "source": "Curated Local Partners",
           "last_verified_at": "2026-08-01",
-          "confidence_score": 0.98
+          "confidence_score": 0.96
         }
       ]
     },
     "Udaipur": {
       "name": "Udaipur",
       "state": "Rajasthan",
-      "description": "The City of Lakes, known for romance, scenic palaces, boat rides, and heritage hospitality.",
+      "description": "City of Lakes, royal palaces, and romantic boat cruises.",
       "places": [
         {
-          "id": "udp_001",
+          "id": "udr_001",
           "name": "City Palace Udaipur",
           "city": "Udaipur",
-          "category": "palace",
-          "description": "Majestic palace complex overlooking Lake Pichola featuring intricate mirror work and royal armor.",
-          "cost": 300,
+          "category": "culture",
+          "description": "Monumental royal complex overlooking Lake Pichola with mirrored rooms and courtyards.",
+          "cost": 400,
           "duration_minutes": 150,
-          "opening_time": "09:00",
+          "opening_time": "09:30",
           "closing_time": "17:30",
           "latitude": 24.5764,
           "longitude": 73.6835,
-          "tags": ["palace", "culture", "lake_view", "museum"],
+          "tags": ["culture", "palace", "museum", "lake_view"],
           "weather_sensitive": false,
           "indoor": true,
           "status": "open",
-          "rating": 4.7,
+          "rating": 4.8,
           "verification_status": "verified",
-          "source": "Mewar Trust",
+          "source": "Maharana Mewar Charitable Foundation",
           "last_verified_at": "2026-08-01",
-          "confidence_score": 0.98
+          "confidence_score": 0.99
         },
         {
-          "id": "udp_002",
+          "id": "udr_002",
           "name": "Lake Pichola Boat Cruise",
           "city": "Udaipur",
-          "category": "adventure",
-          "description": "Scenic boat cruise visiting Jagmandir Island with views of Lake Palace and ghats.",
-          "cost": 500,
+          "category": "activity",
+          "description": "Scenic boat cruise passing Jag Mandir and Lake Palace.",
+          "cost": 550,
           "duration_minutes": 60,
           "opening_time": "10:00",
           "closing_time": "18:00",
           "latitude": 24.5750,
-          "longitude": 73.6800,
-          "tags": ["adventure", "boat", "scenic", "sunset", "outdoor"],
+          "longitude": 73.6780,
+          "tags": ["activity", "lake", "boat", "sunset", "outdoor"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
-          "rating": 4.8,
+          "rating": 4.7,
           "verification_status": "verified",
-          "source": "Udaipur Boat Association",
+          "source": "Udaipur Municipal Corp",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.97
         },
         {
-          "id": "udp_003",
-          "name": "Saheliyon-ki-Bari",
+          "id": "udr_003",
+          "name": "Saheliyon Ki Bari",
           "city": "Udaipur",
-          "category": "nature",
-          "description": "Historic royal garden adorned with marble fountains, lotus pools, and lush manicured lawns.",
+          "category": "heritage",
+          "description": "Historic royal garden adorned with marble fountains, lotus pools, and kiosks.",
           "cost": 50,
           "duration_minutes": 60,
           "opening_time": "09:00",
           "closing_time": "19:00",
-          "latitude": 24.6001,
-          "longitude": 73.6841,
-          "tags": ["nature", "garden", "relaxed", "fountains", "outdoor"],
+          "latitude": 24.6014,
+          "longitude": 73.6872,
+          "tags": ["heritage", "garden", "nature", "outdoor"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
-          "rating": 4.4,
+          "rating": 4.5,
           "verification_status": "verified",
           "source": "ASI Verified",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.95
         },
         {
-          "id": "udp_004",
-          "name": "Bagore Ki Haveli (Dharohar Folk Dance)",
-          "city": "Udaipur",
-          "category": "culture",
-          "description": "18th century waterfront haveli hosting evening Rajasthani puppet and folk dance performances.",
-          "cost": 150,
-          "duration_minutes": 90,
-          "opening_time": "10:00",
-          "closing_time": "20:00",
-          "latitude": 24.5794,
-          "longitude": 73.6823,
-          "tags": ["culture", "dance", "performance", "indoor", "evening"],
-          "weather_sensitive": false,
-          "indoor": true,
-          "status": "open",
-          "rating": 4.7,
-          "verification_status": "verified",
-          "source": "West Zone Cultural Centre",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.98
-        },
-        {
-          "id": "udp_005",
+          "id": "udr_004",
           "name": "Ambrai Restaurant",
           "city": "Udaipur",
           "category": "food",
-          "description": "Lakeside dining experience opposite City Palace offering candlelit Mewari dinner.",
+          "description": "Lakeside dining with panoramic views of illuminated City Palace and Jag Mandir.",
           "cost": 1200,
-          "duration_minutes": 90,
+          "duration_minutes": 75,
           "opening_time": "12:00",
-          "closing_time": "22:30",
+          "closing_time": "23:00",
           "latitude": 24.5775,
-          "longitude": 73.6810,
-          "tags": ["food", "lakeside", "fine_dining", "view"],
+          "longitude": 73.6795,
+          "tags": ["food", "romantic", "view", "rajasthani"],
           "weather_sensitive": false,
           "indoor": true,
           "status": "open",
           "rating": 4.7,
           "verification_status": "verified",
-          "source": "Food Guide India",
+          "source": "Curated Local Partners",
           "last_verified_at": "2026-08-01",
-          "confidence_score": 0.96
+          "confidence_score": 0.98
         }
       ]
     },
     "Delhi": {
       "name": "Delhi",
-      "state": "Delhi NCR",
-      "description": "India's capital blending Mughal monuments, British architecture, modern metro, and food havens.",
+      "state": "Delhi",
+      "description": "National capital territory blending ancient Mughal citadels with modern boulevards.",
       "places": [
         {
           "id": "del_001",
           "name": "Qutub Minar",
           "city": "Delhi",
-          "category": "culture",
-          "description": "UNESCO World Heritage site featuring the world's tallest brick minaret and Iron Pillar.",
+          "category": "heritage",
+          "description": "73m soaring victory tower built in 1193, UNESCO World Heritage site with intricate carving.",
           "cost": 50,
           "duration_minutes": 90,
           "opening_time": "07:00",
-          "closing_time": "17:00",
+          "closing_time": "18:00",
           "latitude": 28.5245,
           "longitude": 77.1855,
-          "tags": ["culture", "monument", "unesco", "outdoor"],
+          "tags": ["heritage", "unesco", "history", "outdoor"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
@@ -483,61 +655,17 @@
         },
         {
           "id": "del_002",
-          "name": "National Gallery of Modern Art (NGMA)",
-          "city": "Delhi",
-          "category": "museum",
-          "description": "Premier art gallery showcasing Indian modern master paintings, sculptures, and installations.",
-          "cost": 20,
-          "duration_minutes": 120,
-          "opening_time": "11:00",
-          "closing_time": "18:30",
-          "latitude": 28.6105,
-          "longitude": 77.2346,
-          "tags": ["museum", "art", "indoor", "culture"],
-          "weather_sensitive": false,
-          "indoor": true,
-          "status": "open",
-          "rating": 4.6,
-          "verification_status": "verified",
-          "source": "Ministry of Culture",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.98
-        },
-        {
-          "id": "del_003",
-          "name": "Chandni Chowk Food Tour",
-          "city": "Delhi",
-          "category": "food",
-          "description": "Bustling Old Delhi food bazaar with famous Paranthe Wali Gali, Karim's, and Jalebi Wala.",
-          "cost": 400,
-          "duration_minutes": 150,
-          "opening_time": "10:00",
-          "closing_time": "20:00",
-          "latitude": 28.6506,
-          "longitude": 77.2303,
-          "tags": ["food", "street_food", "local", "culture"],
-          "weather_sensitive": true,
-          "indoor": false,
-          "status": "open",
-          "rating": 4.7,
-          "verification_status": "verified",
-          "source": "Delhi Tourism",
-          "last_verified_at": "2026-08-01",
-          "confidence_score": 0.96
-        },
-        {
-          "id": "del_004",
           "name": "Humayun's Tomb",
           "city": "Delhi",
-          "category": "culture",
-          "description": "Magnificent Mughal garden tomb that inspired the Taj Mahal.",
+          "category": "heritage",
+          "description": "UNESCO World Heritage garden tomb that inspired the Taj Mahal.",
           "cost": 50,
-          "duration_minutes": 120,
+          "duration_minutes": 90,
           "opening_time": "06:00",
           "closing_time": "18:00",
           "latitude": 28.5933,
           "longitude": 77.2507,
-          "tags": ["culture", "monument", "unesco", "mughal"],
+          "tags": ["heritage", "unesco", "garden", "outdoor"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
@@ -546,27 +674,49 @@
           "source": "ASI Verified",
           "last_verified_at": "2026-08-01",
           "confidence_score": 0.99
+        },
+        {
+          "id": "del_003",
+          "name": "Karim's Old Delhi",
+          "city": "Delhi",
+          "category": "food",
+          "description": "Legendary Mughlai eatery near Jama Masjid operating since 1913.",
+          "cost": 500,
+          "duration_minutes": 60,
+          "opening_time": "11:00",
+          "closing_time": "23:30",
+          "latitude": 28.6507,
+          "longitude": 77.2334,
+          "tags": ["food", "mughlai", "historic", "kebabs"],
+          "weather_sensitive": false,
+          "indoor": true,
+          "status": "open",
+          "rating": 4.5,
+          "verification_status": "verified",
+          "source": "Curated Local Partners",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.96
         }
       ]
     },
     "Agra": {
       "name": "Agra",
       "state": "Uttar Pradesh",
-      "description": "Home to the world-famous Taj Mahal and grand Mughal heritage.",
+      "description": "City of the Taj Mahal, world-renowned Mughal marble monuments and sweets.",
       "places": [
         {
           "id": "agr_001",
           "name": "Taj Mahal",
           "city": "Agra",
-          "category": "culture",
-          "description": "The world's premier marble monument of love, built by Emperor Shah Jahan.",
+          "category": "heritage",
+          "description": "World Wonder white marble mausoleum built by Mughal Emperor Shah Jahan.",
           "cost": 250,
           "duration_minutes": 180,
           "opening_time": "06:00",
           "closing_time": "18:30",
           "latitude": 27.1751,
           "longitude": 78.0421,
-          "tags": ["culture", "wonder", "unesco", "marble", "monument"],
+          "tags": ["heritage", "unesco", "wonder", "outdoor", "photography"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
@@ -574,21 +724,21 @@
           "verification_status": "verified",
           "source": "ASI Verified",
           "last_verified_at": "2026-08-01",
-          "confidence_score": 1.0
+          "confidence_score": 0.99
         },
         {
           "id": "agr_002",
           "name": "Agra Fort",
           "city": "Agra",
           "category": "fort",
-          "description": "Massive red sandstone fortress housing Mughal palaces and royal halls.",
+          "description": "Massive red sandstone imperial city and fortress of the Mughal emperors.",
           "cost": 50,
           "duration_minutes": 120,
           "opening_time": "06:00",
           "closing_time": "18:00",
           "latitude": 27.1795,
           "longitude": 78.0211,
-          "tags": ["fort", "culture", "unesco", "mughal"],
+          "tags": ["fort", "heritage", "unesco", "history"],
           "weather_sensitive": true,
           "indoor": false,
           "status": "open",
@@ -599,30 +749,159 @@
           "confidence_score": 0.98
         }
       ]
-    }
-  },
-  "events": [
-    {
-      "id": "evt_001",
-      "name": "Jaipur Literature Festival",
-      "city": "Jaipur",
-      "venue": "Diggi Palace",
-      "category": "culture",
-      "date": "2026-10-15",
-      "cost": 0,
-      "description": "World's largest free literary event bringing together global authors and thinkers.",
-      "relevance_tags": ["culture", "literature", "art"]
     },
-    {
-      "id": "evt_002",
-      "name": "Udaipur World Music Festival",
-      "city": "Udaipur",
-      "venue": "Fateh Sagar Lake",
-      "category": "music",
-      "date": "2026-10-14",
-      "cost": 500,
-      "description": "International festival featuring global folk and classical artists by the lake.",
-      "relevance_tags": ["music", "scenic", "culture"]
+    "Goa": {
+      "name": "Goa",
+      "state": "Goa",
+      "description": "Tropical coastal state famous for golden beaches, Portuguese churches, and seafood.",
+      "places": [
+        {
+          "id": "goa_001",
+          "name": "Basilica of Bom Jesus",
+          "city": "Goa",
+          "category": "heritage",
+          "description": "16th-century UNESCO World Heritage church housing the mortal remains of St. Francis Xavier.",
+          "cost": 0,
+          "duration_minutes": 60,
+          "opening_time": "09:00",
+          "closing_time": "18:30",
+          "latitude": 15.5009,
+          "longitude": 73.9116,
+          "tags": ["heritage", "unesco", "church", "indoor"],
+          "weather_sensitive": false,
+          "indoor": true,
+          "status": "open",
+          "rating": 4.7,
+          "verification_status": "verified",
+          "source": "ASI Verified",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.99
+        },
+        {
+          "id": "goa_002",
+          "name": "Aguada Fort",
+          "city": "Goa",
+          "category": "fort",
+          "description": "17th-century Portuguese fortress and lighthouse overlooking the Arabian Sea.",
+          "cost": 50,
+          "duration_minutes": 90,
+          "opening_time": "09:30",
+          "closing_time": "18:00",
+          "latitude": 15.4921,
+          "longitude": 73.7735,
+          "tags": ["fort", "sea_view", "lighthouse", "outdoor"],
+          "weather_sensitive": true,
+          "indoor": false,
+          "status": "open",
+          "rating": 4.5,
+          "verification_status": "verified",
+          "source": "ASI Verified",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.97
+        }
+      ]
+    },
+    "Varanasi": {
+      "name": "Varanasi",
+      "state": "Uttar Pradesh",
+      "description": "Ancient holy spiritual city along the Ganges river with sacred ghats and temples.",
+      "places": [
+        {
+          "id": "vns_001",
+          "name": "Kashi Vishwanath Corridor",
+          "city": "Varanasi",
+          "category": "temple",
+          "description": "One of the 12 Jyotirlinga temples of Lord Shiva with newly constructed riverfront corridor.",
+          "cost": 0,
+          "duration_minutes": 90,
+          "opening_time": "03:00",
+          "closing_time": "23:00",
+          "latitude": 25.3109,
+          "longitude": 83.0107,
+          "tags": ["temple", "spiritual", "jyotirlinga"],
+          "weather_sensitive": false,
+          "indoor": true,
+          "status": "open",
+          "rating": 4.8,
+          "verification_status": "verified",
+          "source": "Kashi Vishwanath Trust",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.99
+        },
+        {
+          "id": "vns_002",
+          "name": "Dashashwamedh Ghat Ganga Aarti",
+          "city": "Varanasi",
+          "category": "activity",
+          "description": "Mesmerizing evening prayer ceremony performed by priests with brass lamps on the banks of Ganga.",
+          "cost": 0,
+          "duration_minutes": 60,
+          "opening_time": "18:30",
+          "closing_time": "20:00",
+          "latitude": 25.3076,
+          "longitude": 83.0103,
+          "tags": ["activity", "spiritual", "ghat", "evening", "outdoor"],
+          "weather_sensitive": true,
+          "indoor": false,
+          "status": "open",
+          "rating": 4.9,
+          "verification_status": "verified",
+          "source": "Ganga Seva Nidhi",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.99
+        }
+      ]
+    },
+    "Mumbai": {
+      "name": "Mumbai",
+      "state": "Maharashtra",
+      "description": "Financial capital of India, coastal promenades, Bollywood, and Victorian heritage.",
+      "places": [
+        {
+          "id": "bom_001",
+          "name": "Gateway of India",
+          "city": "Mumbai",
+          "category": "heritage",
+          "description": "Majestic 26m arch monument overlooking Mumbai Harbour built in 1924.",
+          "cost": 0,
+          "duration_minutes": 45,
+          "opening_time": "00:00",
+          "closing_time": "23:59",
+          "latitude": 18.9220,
+          "longitude": 72.8347,
+          "tags": ["heritage", "coastal", "architecture", "outdoor"],
+          "weather_sensitive": false,
+          "indoor": false,
+          "status": "open",
+          "rating": 4.6,
+          "verification_status": "verified",
+          "source": "ASI Verified",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.99
+        },
+        {
+          "id": "bom_002",
+          "name": "Marine Drive Promenade",
+          "city": "Mumbai",
+          "category": "viewpoint",
+          "description": "3.6km coastal boulevard along the Arabian Sea forming the Queen's Necklace at night.",
+          "cost": 0,
+          "duration_minutes": 60,
+          "opening_time": "00:00",
+          "closing_time": "23:59",
+          "latitude": 18.9432,
+          "longitude": 72.8230,
+          "tags": ["viewpoint", "promenade", "sunset", "coastal", "outdoor"],
+          "weather_sensitive": true,
+          "indoor": false,
+          "status": "open",
+          "rating": 4.8,
+          "verification_status": "verified",
+          "source": "Brihanmumbai Municipal Corp",
+          "last_verified_at": "2026-08-01",
+          "confidence_score": 0.99
+        }
+      ]
     }
-  ]
+  }
 }

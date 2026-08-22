@@ -35,7 +35,9 @@ class Settings(BaseSettings):
     # WhatsApp Direct Assist Link
     WHATSAPP_ASSIST_PHONE: str = "+919876543210"
 
-    # External APIs
+    # External APIs & Local AI
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3"
     OPENWEATHER_API_KEY: Optional[str] = None
     MAPBOX_ACCESS_TOKEN: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None

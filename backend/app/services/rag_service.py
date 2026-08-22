@@ -16,10 +16,11 @@ class RAGService:
         self.data_path = data_path
         self.all_places: List[Place] = []
         self.city_places: Dict[str, List[Place]] = {}
+        self.destinations_knowledge: Dict[str, Any] = {}
         self.load_data()
 
     def load_data(self):
-        """Loads and parses travel data into Place objects."""
+        """Loads and parses travel data into Place objects and Destination knowledge."""
         if not os.path.exists(self.data_path):
             return
 
@@ -28,6 +29,7 @@ class RAGService:
 
         self.all_places.clear()
         self.city_places.clear()
+        self.destinations_knowledge = data.get("destinations_knowledge", {})
 
         cities_dict = data.get("cities", {})
         for city_name, city_info in cities_dict.items():
@@ -37,6 +39,30 @@ class RAGService:
                 self.all_places.append(place_obj)
                 places_list.append(place_obj)
             self.city_places[city_name] = places_list
+
+    def get_destination_knowledge(self, destination: str) -> Optional[Dict[str, Any]]:
+        """Returns structured travel knowledge for a destination or state."""
+        dest_lower = destination.lower()
+        for k, v in self.destinations_knowledge.items():
+            if k.lower() == dest_lower or v.get("name", "").lower() == dest_lower or v.get("state", "").lower() == dest_lower:
+                return v
+        return None
+
+    def search_destinations_knowledge(self, query: str) -> List[Dict[str, Any]]:
+        """Retrieves matching destination knowledge profiles for multi-city or state queries."""
+        q_lower = query.lower()
+        results = []
+        for k, v in self.destinations_knowledge.items():
+            corpus = f"{k} {v.get('state','')} {v.get('region','')} {' '.join(v.get('travel_style',[]))} {' '.join(v.get('attractions',[]))} {' '.join(v.get('food',[]))}".lower()
+            if any(term in corpus for term in q_lower.split() if len(term) > 2):
+                results.append(v)
+        return results if results else list(self.destinations_knowledge.values())[:3]
+
+    def get_place_by_id(self, place_id: str) -> Optional[Place]:
+        for p in self.all_places:
+            if p.id == place_id:
+                return p
+        return None
 
     def search_places(
         self,

@@ -159,3 +159,47 @@ class EvaluationReport(BaseModel):
     replanning_success: float
     hallucination_rate: float
     results: List[ScenarioResult]
+
+
+class BudgetBreakdown(BaseModel):
+    transportation: float = 0.0
+    accommodation: float = 0.0
+    food: float = 0.0
+    activities_tickets: float = 0.0
+    local_transportation: float = 0.0
+    miscellaneous: float = 0.0
+    estimated_total: float = 0.0
+    currency: str = "INR"
+    is_estimate: bool = True
+    tier: str = "standard"  # budget, standard, luxury
+
+
+class TripProfile(BaseModel):
+    destinations: List[str] = Field(default_factory=list)
+    duration_days: Optional[int] = None
+    travelers_count: Optional[int] = None
+    adults: Optional[int] = None
+    children: Optional[int] = None
+    budget_amount: Optional[float] = None
+    budget_type: str = "total"  # total, per_person, daily
+    food_preference: Optional[str] = None  # veg, non_veg, local, jain
+    accommodation_preference: Optional[str] = None  # hostel, standard_hotel, luxury_resort, heritage_haveli
+    travel_style: Optional[str] = None  # relaxed, moderate, fast_paced, cultural, adventure
+    transportation_preference: Optional[str] = None  # train, flight, cab, self_drive
+    interests: List[str] = Field(default_factory=list)
+    special_requirements: Optional[str] = None
+    missing_fields: List[str] = Field(default_factory=list)
+    is_complete: bool = False
+
+
+class ChatbotResponse(BaseModel):
+    reply: str
+    intent: str
+    city: str
+    profile: Optional[TripProfile] = None
+    itinerary: Optional[Itinerary] = None
+    budget_breakdown: Optional[BudgetBreakdown] = None
+    recommended_places: List[Dict[str, Any]] = Field(default_factory=list)
+    reasons: List[str] = Field(default_factory=list)
+    action: Optional[Dict[str, Any]] = None
+    quick_chips: List[str] = Field(default_factory=list)

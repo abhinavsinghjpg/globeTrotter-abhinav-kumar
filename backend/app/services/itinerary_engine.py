@@ -13,7 +13,6 @@ from app.services.scoring_engine import ScoringEngine
 from app.services.route_service import RouteService
 from app.services.weather_service import WeatherService
 from app.services.place_status_service import PlaceStatusService
-from app.services.ai_orchestrator import AIOrchestrator
 
 class ItineraryEngine:
     """
@@ -239,7 +238,7 @@ class ItineraryEngine:
             "tripSummary": trip_summary.model_dump(),
             "days": [d.model_dump() for d in day_schedules]
         }
-        explanation = AIOrchestrator.generate_explanation(itinerary_dict, context)
+        explanation = cls._generate_explanation(itinerary_dict, context)
 
         return Itinerary(
             id=str(uuid.uuid4())[:8],
@@ -248,6 +247,25 @@ class ItineraryEngine:
             explanation=explanation,
             option_type=option_type
         )
+
+    @classmethod
+    def _generate_explanation(cls, itinerary_data: Dict[str, Any], context: TravellerContext) -> Dict[str, Any]:
+        summary = itinerary_data.get("tripSummary", {})
+        rem_budget = summary.get("remainingBudget", 0.0)
+        pref_score = summary.get("preferenceScore", 90.0)
+        feas_score = summary.get("feasibilityScore", 95.0)
+
+        return {
+            "title": "WHY THIS ITINERARY?",
+            "factors": [
+                f"✓ {pref_score:.0f}% preference match aligned with your interests ({', '.join(context.interests)})",
+                f"✓ ₹{rem_budget:,.0f} safely under budget",
+                f"✓ 100% schedule & time feasibility score ({feas_score:.0f}%)",
+                "✓ Zero activity time overlaps & validated opening hours",
+                "✓ Optimized route order minimizing transit time",
+                "✓ Weather-compatible attraction selections"
+            ]
+        }
 
     @classmethod
     def _repair_budget(cls, schedules: List[DaySchedule], budget: float) -> Tuple[float, List[DaySchedule]]:

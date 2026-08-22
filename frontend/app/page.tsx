@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { SplitScreenMap, MapPlace } from "@/components/SplitScreenMap";
 import { AiAssistantModal } from "@/components/AiAssistantModal";
-import { TripPlannerModal } from "@/components/TripPlannerModal";
 import { TransportRentalModal } from "@/components/TransportRentalModal";
 import { TripMemoriesModal } from "@/components/TripMemoriesModal";
 import { CoTravelerModal } from "@/components/CoTravelerModal";
@@ -1195,15 +1194,24 @@ export default function HomePage() {
 
                   <button
                     onClick={() => {
-                      setActiveToolView("planner");
+                      setActiveToolView("ai");
                       setActiveInlineDetail(null);
                     }}
+<<<<<<< HEAD
                     className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-bold transition-colors ${
                       activeToolView === "planner" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
                     }`}
                   >
                     <Sparkles className="h-3.5 w-3.5 text-amber-500" />
                     <span>AI Trip & Budget Engine</span>
+=======
+                    className={`w-full flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-colors group ${
+                      activeToolView === "ai" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
+                  >
+                    <Sparkles className="h-4 w-4 text-amber-500 group-hover:scale-110 transition-transform" />
+                    <span>AI Travel & Budget Planner</span>
+>>>>>>> 7528f0e (Upgrade travel chatbot with Ollama intelligence, conversational trip profiling, and embedded itemized budget breakdowns; remove separate TripPlannerModal)
                   </button>
 
                   <button
@@ -1332,21 +1340,12 @@ export default function HomePage() {
                   </button>
 
                   <span className="rounded-full bg-brand-50 text-brand-700 text-[10px] font-extrabold px-3 py-1 uppercase tracking-wider">
-                    {activeToolView === "planner" && "AI Trip & Budget Planner"}
+                    {activeToolView === "ai" && "AI Travel & Itinerary Planner"}
                     {activeToolView === "transport" && "Cabs & Vehicle Rentals"}
                     {activeToolView === "memories" && "Trip Memories & Reels"}
                     {activeToolView === "groups" && "Co-Travelers & Groups"}
-                    {activeToolView === "ai" && "AI Virtual Tourist Guide"}
                   </span>
                 </div>
-
-                {activeToolView === "planner" && (
-                  <TripPlannerModal
-                    isInline
-                    onClose={() => setActiveToolView(null)}
-                    defaultCity={currentLocationData.name}
-                  />
-                )}
 
                 {activeToolView === "transport" && (
                   <TransportRentalModal

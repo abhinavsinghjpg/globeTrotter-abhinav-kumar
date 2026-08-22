@@ -1,6 +1,6 @@
 """
-GlobeTrotter AI Virtual Tourist Guide CLI Interface.
-Integrates the Adaptive AI Travel Decision Engine directly.
+GlobeTrotter AI Travel & Virtual Tourist Guide CLI Interface.
+Conversational trip planning powered by Ollama, Knowledge Base RAG, and Itemized Budgeting.
 """
 
 import os
@@ -11,23 +11,24 @@ if backend_path not in sys.path:
     sys.path.insert(0, backend_path)
 
 from app.services.ai_orchestrator import AIOrchestrator
-from app.services.itinerary_engine import ItineraryEngine
-from app.services.replanning_engine import ReplanningEngine
 from app.evaluation.evaluator import evaluator
+from app.services.ollama_service import ollama_service
 
 def main():
-    print("=" * 65)
-    print(" 🌟 GLOBETROTTER AI VIRTUAL TOURIST GUIDE & DECISION ENGINE 🌟")
-    print("=" * 65)
-    print("Commands:")
-    print(" - Type any travel question (e.g. 'Best food in Jaipur', 'Are forts open?')")
-    print(" - Type 'plan' for an interactive 3-day itinerary")
-    print(" - Type 'guide' to get WhatsApp contact for verified tourist guide")
-    print(" - Type 'eval' to run the 30-scenario quantitative AI evaluation suite")
-    print(" - Type 'exit' to quit\n")
+    is_ollama, ollama_msg = ollama_service.is_available()
+    print("=" * 68)
+    print(" 🌟 GLOBETROTTER AI TRAVEL PLANNER & TOURIST GUIDE (OLLAMA) 🌟")
+    print("=" * 68)
+    print(f" Status: {ollama_msg}")
+    print("\nCapabilities:")
+    print(" • Plan trips conversationally (e.g. '7 days in Rajasthan for 2, budget ₹60,000, veg food')")
+    print(" • Real-time Day-by-Day itineraries with Itemized Budget Breakdowns")
+    print(" • Local street food, sunset points, live monument status & WhatsApp guides")
+    print(" • Type 'eval' to run the 30-scenario quantitative AI evaluation suite")
+    print(" • Type 'reset' to start a new trip profile | 'exit' to quit\n")
 
     current_city = "Jaipur"
-    context = None
+    profile = None
 
     while True:
         try:
@@ -35,10 +36,14 @@ def main():
             if not user_input:
                 continue
             if user_input.lower() in ["exit", "quit", "q"]:
-                print("Safe travels! Namaste.")
+                print("\nSafe travels across India! Namaste 🙏")
                 break
+            if user_input.lower() in ["reset", "new trip"]:
+                profile = None
+                print("Trip profile reset. Where would you like to travel next?\n")
+                continue
             if user_input.lower() == "eval":
-                print("\nRunning 30 scenario benchmark suite...")
+                print("\nRunning 30 scenario quantitative AI benchmark suite...")
                 report = evaluator.run_all()
                 print(f"Passed: {report.passed_scenarios}/{report.total_scenarios} ({report.passed_scenarios/report.total_scenarios*100:.1f}%)")
                 print(f"Budget Compliance: {report.budget_compliance}% | No Conflict: {report.no_conflict_rate}% | Hallucination: {report.hallucination_rate}%\n")
@@ -47,22 +52,59 @@ def main():
             res = AIOrchestrator.chat_tourist_guide(
                 message=user_input,
                 city=current_city,
-                existing_context=context
+                existing_profile=profile
             )
-            print("\n🤖 AI Tourist Guide:")
+
+            profile = res.get("profile", profile)
+            if profile and profile.get("destinations"):
+                current_city = profile["destinations"][0]
+
+            print("\n🤖 AI Travel Assistant:")
             print(res["reply"])
 
+            # 1. Day-by-Day Itinerary Schedule
+            itin = res.get("itinerary")
+            if itin and itin.get("days"):
+                print("\n" + "=" * 55)
+                print(f" 📅 DAY-BY-DAY ITINERARY ({len(itin['days'])} DAYS)")
+                print("=" * 55)
+                for day in itin["days"]:
+                    print(f"\nDAY {day['day']} — {day['city'].upper()} (Est. Cost: ₹{day['dayCost']:,.0f})")
+                    for act in day.get("activities", []):
+                        print(f"  • [{act['startTime']} - {act['endTime']}] {act['name']} (₹{act['cost']:,.0f}) - {act['category'].title()}")
+
+            # 2. Itemized Budget Breakdown
+            budget = res.get("budget_breakdown")
+            if budget:
+                print("\n" + "=" * 55)
+                print(" 💰 ITEMIZED BUDGET BREAKDOWN (ESTIMATE)")
+                print("=" * 55)
+                print(f"  • Intercity Transportation : ₹{budget['transportation']:,.0f}")
+                print(f"  • Accommodation            : ₹{budget['accommodation']:,.0f}")
+                print(f"  • Meals & Food             : ₹{budget['food']:,.0f}")
+                print(f"  • Activities & Tickets     : ₹{budget['activities_tickets']:,.0f}")
+                print(f"  • Local Transit & Cabs     : ₹{budget['local_transportation']:,.0f}")
+                print(f"  • Miscellaneous Buffer (8%): ₹{budget['miscellaneous']:,.0f}")
+                print("  " + "-" * 51)
+                print(f"  TOTAL ESTIMATED COST       : ₹{budget['estimated_total']:,.0f}")
+
+            # 3. Decision Factors
             if res.get("reasons"):
-                print("\n  [Decision Factors]:")
+                print("\n  [Verified Factors]:")
                 for r in res["reasons"]:
                     print(f"  ✓ {r}")
 
+            # 4. Action (e.g. WhatsApp Guide)
             if res.get("action"):
                 act = res["action"]
-                print(f"\n  👉 Action: {act['label']}")
-                print(f"     Link: {act['url']}")
+                print(f"\n  👉 {act['label']}")
+                print(f"     URL: {act['url']}")
 
-            print("-" * 65 + "\n")
+            # 5. Quick Chips
+            if res.get("quick_chips"):
+                print(f"\n  [Quick Suggestions]: {' | '.join(res['quick_chips'])}")
+
+            print("-" * 68 + "\n")
 
         except (KeyboardInterrupt, EOFError):
             print("\nSession ended.")
