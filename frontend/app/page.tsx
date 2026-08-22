@@ -9,6 +9,8 @@ import { TripPlannerModal } from "@/components/TripPlannerModal";
 import { TransportRentalModal } from "@/components/TransportRentalModal";
 import { TripMemoriesModal } from "@/components/TripMemoriesModal";
 import { CoTravelerModal } from "@/components/CoTravelerModal";
+import { LiveAudioGuide } from "@/components/LiveAudioGuide";
+import { calculateDistanceInMeters, formatDistance } from "@/lib/geo-distance";
 import { useAuth } from "@/context/AuthContext";
 import {
   searchIndianLocations,
@@ -49,6 +51,8 @@ import {
   Car,
   Users,
   Info,
+  Radio,
+  Volume2,
 } from "lucide-react";
 
 // Exhaustive, Deeply Researched Jaipur Dataset (Every Iconic Place, Fort, Food Stall, and Bazaar)
@@ -715,6 +719,79 @@ export default function HomePage() {
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  // Live GPS Location Tracking & Audio Guide Proximity Engine
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [gpsStatus, setGpsStatus] = useState<"idle" | "prompt" | "tracking" | "denied">("idle");
+  const [proximityPlace, setProximityPlace] = useState<any | null>(null);
+  const [hasPromptedLocation, setHasPromptedLocation] = useState(false);
+
+  // Request GPS Location when user is logged in
+  useEffect(() => {
+    if (isLoggedIn && !hasPromptedLocation && gpsStatus === "idle") {
+      setGpsStatus("prompt");
+    }
+  }, [isLoggedIn, hasPromptedLocation, gpsStatus]);
+
+  const requestGpsPermission = () => {
+    setHasPromptedLocation(true);
+    if (typeof window === "undefined" || !navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      setGpsStatus("denied");
+      return;
+    }
+
+    setGpsStatus("tracking");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      },
+      (err) => {
+        console.warn("GPS Permission Error:", err);
+        setGpsStatus("denied");
+      }
+    );
+
+    // Watch position continuously as user moves
+    try {
+      const watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        },
+        (err) => console.warn("Watch position error:", err),
+        { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+      );
+      return () => navigator.geolocation.clearWatch(watchId);
+    } catch (e) {
+      console.warn("Geolocation watch error:", e);
+    }
+  };
+
+  // Check Proximity Arrival whenever userCoords or currentLocationData changes
+  useEffect(() => {
+    if (!userCoords) return;
+
+    const allPlaces = [
+      ...currentLocationData.attractions.map((a) => {
+        const poi = currentLocationData.mapPlaces.find((p) => p.id === a.id);
+        return { ...a, lat: poi?.lat || currentLocationData.coords.lat, lng: poi?.lng || currentLocationData.coords.lng };
+      }),
+      ...currentLocationData.famousFoods.map((f) => {
+        const poi = currentLocationData.mapPlaces.find((p) => p.id === f.id);
+        return { ...f, lat: poi?.lat || currentLocationData.coords.lat, lng: poi?.lng || currentLocationData.coords.lng };
+      }),
+    ];
+
+    for (const place of allPlaces) {
+      if (place.lat && place.lng) {
+        const dist = calculateDistanceInMeters(userCoords.lat, userCoords.lng, place.lat, place.lng);
+        if (dist <= 400) {
+          setProximityPlace(place);
+          return;
+        }
+      }
+    }
+  }, [userCoords, currentLocationData]);
 
   // Debounced Live Geocoding Search
   useEffect(() => {
@@ -1437,9 +1514,9 @@ export default function HomePage() {
               /* REGULAR KNOWLEDGE FEED */
               <>
                 {/* 1. Hero Destination Cover Banner */}
-                <div className="relative h-64 sm:h-72 w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 group">
+                <div className="relative h-64 sm:h-72 w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 group bg-slate-900">
                   <Image
-                    src={currentLocationData.coverImage}
+                    src={currentLocationData.coverImage || "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1600&q=80"}
                     alt={currentLocationData.name}
                     fill
                     priority
@@ -1489,7 +1566,95 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* 2. Live Operational Alert (§28 PRD) */}
+                {/* 2. GPS LIVE LOCATION PERMISSION PROMPT BANNER */}
+                {gpsStatus === "prompt" && (
+                  <div className="rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 p-5 text-white shadow-xl border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-3.5">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md">
+                        <Navigation className="h-6 w-6 text-amber-300 animate-pulse" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <h4 className="font-heading text-sm font-extrabold text-white">
+                          Allow Live Location & Audio Guide?
+                        </h4>
+                        <p className="text-xs text-indigo-200">
+                          Tracks your movement in {currentLocationData.name}, detects nearby monuments, and speaks aloud place details automatically!
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                      <button
+                        onClick={requestGpsPermission}
+                        className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 px-4 py-2.5 text-xs font-bold shadow-md transition-all hover:scale-105"
+                      >
+                        <Radio className="h-4 w-4" />
+                        <span>Allow GPS</span>
+                      </button>
+
+                      <button
+                        onClick={() => setGpsStatus("denied")}
+                        className="rounded-2xl bg-white/10 hover:bg-white/20 text-white px-3 py-2.5 text-xs font-bold transition-colors"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. GPS STATUS & SIMULATION TESTING BAR */}
+                <div className="rounded-2xl bg-white border border-slate-200 p-3.5 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-3 w-3">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${userCoords ? "bg-emerald-400 opacity-75" : "bg-amber-400 opacity-75"}`} />
+                      <span className={`relative inline-flex rounded-full h-3 w-3 ${userCoords ? "bg-emerald-500" : "bg-amber-500"}`} />
+                    </span>
+                    <span className="font-bold text-slate-900">
+                      {userCoords ? "Live GPS Active" : "GPS Inactive (Click to simulate walking):"}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      onClick={() => {
+                        setUserCoords({ lat: 26.9239, lng: 75.8267 });
+                        setGpsStatus("tracking");
+                      }}
+                      className="rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 font-semibold px-2.5 py-1 text-[11px] transition-colors border border-slate-200"
+                    >
+                      🚶 Walk to Hawa Mahal
+                    </button>
+                    <button
+                      onClick={() => {
+                        setUserCoords({ lat: 26.9855, lng: 75.8513 });
+                        setGpsStatus("tracking");
+                      }}
+                      className="rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 font-semibold px-2.5 py-1 text-[11px] transition-colors border border-slate-200"
+                    >
+                      🚶 Walk to Amer Fort
+                    </button>
+                    <button
+                      onClick={() => {
+                        setUserCoords({ lat: 26.9208, lng: 75.7972 });
+                        setGpsStatus("tracking");
+                      }}
+                      className="rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 font-semibold px-2.5 py-1 text-[11px] transition-colors border border-slate-200"
+                    >
+                      🚶 Walk to Rawat Mishtan
+                    </button>
+                  </div>
+                </div>
+
+                {/* 4. LIVE PROXIMITY ARRIVAL AUDIO GUIDE */}
+                {proximityPlace && (
+                  <LiveAudioGuide
+                    currentPlace={proximityPlace}
+                    userCoords={userCoords}
+                    onClose={() => setProximityPlace(null)}
+                  />
+                )}
+
+                {/* 5. Live Operational Alert (§28 PRD) */}
                 <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex items-start gap-3 text-xs text-amber-900 shadow-xs">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
                     <AlertTriangle className="h-4 w-4" />
@@ -1578,11 +1743,27 @@ export default function HomePage() {
                                   </span>
                                 </div>
 
-                                {attraction.reelsCount && (
-                                  <span className="rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-bold text-pink-300 border border-pink-500/30">
-                                    📸 {attraction.reelsCount}
-                                  </span>
-                                )}
+                                <div className="flex items-center gap-1.5">
+                                  {userCoords && (() => {
+                                    const poi = currentLocationData.mapPlaces.find((p) => p.id === attraction.id);
+                                    if (poi) {
+                                      const d = calculateDistanceInMeters(userCoords.lat, userCoords.lng, poi.lat, poi.lng);
+                                      return (
+                                        <span className="rounded-full bg-emerald-600/95 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-extrabold text-white shadow-sm flex items-center gap-1">
+                                          <Navigation className="h-3 w-3" />
+                                          {formatDistance(d)}
+                                        </span>
+                                      );
+                                    }
+                                    return null;
+                                  })()}
+
+                                  {attraction.reelsCount && (
+                                    <span className="rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-bold text-pink-300 border border-pink-500/30">
+                                      📸 {attraction.reelsCount}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
 
@@ -1699,7 +1880,22 @@ export default function HomePage() {
 
                               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
                                 <span>💰 {food.priceForTwo}</span>
-                                <span>⏰ {food.timing}</span>
+                                <div className="flex items-center gap-1.5">
+                                  {userCoords && (() => {
+                                    const poi = currentLocationData.mapPlaces.find((p) => p.id === food.id);
+                                    if (poi) {
+                                      const d = calculateDistanceInMeters(userCoords.lat, userCoords.lng, poi.lat, poi.lng);
+                                      return (
+                                        <span className="rounded-full bg-emerald-600/95 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-extrabold text-white shadow-sm flex items-center gap-1">
+                                          <Navigation className="h-3 w-3" />
+                                          {formatDistance(d)}
+                                        </span>
+                                      );
+                                    }
+                                    return null;
+                                  })()}
+                                  <span>⏰ {food.timing}</span>
+                                </div>
                               </div>
                             </div>
 
