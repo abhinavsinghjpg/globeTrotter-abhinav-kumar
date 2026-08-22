@@ -6,12 +6,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 
-# AI Decision Engine Routers
+# AI Decision Engine & Platform Routers
 from app.api.ai import router as ai_router
 from app.api.itinerary import router as itinerary_router
 from app.api.replan import router as replan_router
 from app.api.places import router as places_router
 from app.api.evaluation import router as evaluation_router
+from app.api.community import router as community_router
+from app.api.transport import router as transport_router
+from app.api.memories import router as memories_router
+from app.api.events import router as events_router
 from app.services.ollama_service import ollama_service
 
 # Optional Platform Routers (if available)
@@ -47,13 +51,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount AI Routers under both /api and /api/v1 for compatibility
+# Mount Routers under both /api and /api/v1 for seamless compatibility
 for prefix in ["/api", "/api/v1"]:
     app.include_router(ai_router, prefix=prefix)
     app.include_router(itinerary_router, prefix=prefix)
     app.include_router(replan_router, prefix=prefix)
     app.include_router(places_router, prefix=prefix)
     app.include_router(evaluation_router, prefix=prefix)
+    app.include_router(community_router, prefix=prefix)
+    app.include_router(transport_router, prefix=prefix)
+    app.include_router(memories_router, prefix=prefix)
+    app.include_router(events_router, prefix=prefix)
 
 # Mount Platform Routers if present
 if auth_router:
