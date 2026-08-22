@@ -45,6 +45,8 @@ import {
   Loader2,
   Camera,
   Layers,
+  Car,
+  Users,
 } from "lucide-react";
 
 // Exhaustive, Deeply Researched Jaipur Dataset (Every Iconic Place, Fort, Food Stall, and Bazaar)
