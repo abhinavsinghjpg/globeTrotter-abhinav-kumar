@@ -1,0 +1,228 @@
+{
+  "destination": {
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "tagline": "The Regal Pink City of Forts, Flavours & Timeless Culture",
+    "description": "Jaipur, the vibrant capital of Rajasthan, is world-famous for its majestic terracotta-pink architecture, UNESCO World Heritage hill forts, bustling heritage bazaars, rich culinary heritage of Pyaaz Kachoris and Dal Baati Churma, and centuries of royal craftsmanship.",
+    "latitude": 26.9124,
+    "longitude": 75.7873,
+    "hero_image": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1600&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1603204077673-83eb6d4d16fe?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "best_time_to_visit": "October to March",
+    "is_popular": true
+  },
+  "places": [
+    {
+      "name": "Hawa Mahal (Palace of Winds)",
+      "category": "palace",
+      "description": "Iconic five-story pink sandstone palace with 953 intricately carved jharokhas (small windows) built in 1799 by Maharaja Sawai Pratap Singh.",
+      "latitude": 26.9239,
+      "longitude": 75.8267,
+      "status": "Open",
+      "opening_hours": { "open": "09:00", "close": "17:00", "days": "All days" },
+      "price_range": "₹",
+      "entry_fee_inr": 50,
+      "rating": 4.7,
+      "reviews_count": 14200,
+      "is_hidden_spot": false,
+      "best_time_of_day": "Morning",
+      "suggested_duration_mins": 60,
+      "photos": ["https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80"],
+      "reels_urls": ["https://instagram.com/reel/example_hawamahal"]
+    },
+    {
+      "name": "Amer Fort & Palace",
+      "category": "fort",
+      "description": "Majestic hilltop fort overlooking Maota Lake, famous for the Sheesh Mahal (Mirror Palace), Diwan-e-Khas, and Rajput-Mughal architectural synthesis.",
+      "latitude": 26.9855,
+      "longitude": 75.8513,
+      "status": "Open",
+      "opening_hours": { "open": "08:00", "close": "17:30", "days": "All days" },
+      "price_range": "₹₹",
+      "entry_fee_inr": 100,
+      "rating": 4.8,
+      "reviews_count": 28500,
+      "is_hidden_spot": false,
+      "best_time_of_day": "Morning",
+      "suggested_duration_mins": 180,
+      "photos": ["https://images.unsplash.com/photo-1603204077673-83eb6d4d16fe?auto=format&fit=crop&w=800&q=80"]
+    },
+    {
+      "name": "Nahargarh Fort Sunset Viewpoint",
+      "category": "fort",
+      "description": "Perched on the edge of the Aravalli Hills, Nahargarh offers the most breathtaking panoramic sunset views over the entire Pink City.",
+      "latitude": 26.9378,
+      "longitude": 75.8156,
+      "status": "Open",
+      "opening_hours": { "open": "10:00", "close": "22:00", "days": "All days" },
+      "price_range": "₹",
+      "entry_fee_inr": 50,
+      "rating": 4.7,
+      "reviews_count": 18900,
+      "is_hidden_spot": false,
+      "best_time_of_day": "Sunset",
+      "suggested_duration_mins": 120,
+      "photos": ["https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80"]
+    },
+    {
+      "name": "Panna Meena Ka Kund (Hidden Stepwell)",
+      "category": "temple",
+      "description": "A stunning 16th-century geometric stepwell hidden near Amer Fort, famous for symmetrical zigzag stairs and serene photography.",
+      "latitude": 26.9897,
+      "longitude": 75.8569,
+      "status": "Open",
+      "opening_hours": { "open": "07:00", "close": "18:00", "days": "All days" },
+      "price_range": "Free",
+      "entry_fee_inr": 0,
+      "rating": 4.6,
+      "reviews_count": 3400,
+      "is_hidden_spot": true,
+      "safety_notes": "Stepping down past the upper railing is restricted for visitor safety.",
+      "best_time_of_day": "Morning",
+      "suggested_duration_mins": 45,
+      "photos": ["https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80"]
+    },
+    {
+      "name": "Galta Ji (Monkey Temple & Sun Temple Ridge)",
+      "category": "temple",
+      "description": "Historic Hindu pilgrimage complex set within a mountain pass, featuring natural holy water springs (kunds) and scenic hiking trails.",
+      "latitude": 26.9167,
+      "longitude": 75.8583,
+      "status": "Open",
+      "opening_hours": { "open": "05:00", "close": "21:00", "days": "All days" },
+      "price_range": "Free",
+      "entry_fee_inr": 0,
+      "rating": 4.5,
+      "reviews_count": 5200,
+      "is_hidden_spot": true,
+      "best_time_of_day": "Sunrise",
+      "suggested_duration_mins": 90,
+      "photos": ["https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=800&q=80"]
+    }
+  ],
+  "events": [
+    {
+      "name": "Jaipur Literature Festival (JLF)",
+      "category": "literature",
+      "description": "The world's greatest literary show bringing Nobel laureates, world-renowned authors, artists, and thinkers to Jaipur.",
+      "start_date": "2026-01-22T09:00:00Z",
+      "end_date": "2026-01-26T20:00:00Z",
+      "location_name": "Hotel Clarks Amer, Jaipur",
+      "ticket_price_inr": 0,
+      "expected_crowd": "Very High",
+      "suitable_age_groups": ["16-26", "26-45", "45-old age"],
+      "photos": ["https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80"]
+    },
+    {
+      "name": "Teej Festival of Jaipur",
+      "category": "festival",
+      "description": "Spectacular royal procession of Goddess Teej with caparisoned elephants, folk dancers, chariots, and vibrant Rajasthani music winding through the Old City.",
+      "start_date": "2026-08-16T15:00:00Z",
+      "end_date": "2026-08-18T21:00:00Z",
+      "location_name": "Tripolia Gate to Chaugan Stadium",
+      "ticket_price_inr": 0,
+      "expected_crowd": "High",
+      "suitable_age_groups": ["16-26", "26-45", "45-old age"]
+    }
+  ],
+  "activities": [
+    {
+      "name": "Hot Air Balloon Safari over Amer & Aravallis",
+      "category": "balloon_safari",
+      "description": "Soar 2,000 feet above the royal hill forts and desert ridges during sunrise for an unforgettable bird's-eye view of royal Jaipur.",
+      "cost_inr": 12500,
+      "cost_type": "verified",
+      "duration_mins": 180,
+      "difficulty": "easy",
+      "age_min": 5,
+      "age_max": 75,
+      "weather_dependency": "Calm wind and clear skies required",
+      "best_season": "September to April",
+      "provider_name": "SkyWaltz Balloon Safaris",
+      "booking_url": "https://skywaltz.com"
+    },
+    {
+      "name": "Nahargarh Sunrise Bicycle Expedition",
+      "category": "trekking",
+      "description": "Early morning uphill cycling tour through lush forest paths to Nahargarh Fort, culminating in hot chai at the fortress parapet.",
+      "cost_inr": 1800,
+      "cost_type": "verified",
+      "duration_mins": 150,
+      "difficulty": "moderate",
+      "age_min": 16,
+      "age_max": 50,
+      "provider_name": "Le Tour De India"
+    }
+  ],
+  "restaurants": [
+    {
+      "name": "Rawat Mishtan Bhandar",
+      "category": "street_food",
+      "cuisines": ["Rajasthani", "Street Food", "Snacks"],
+      "dietary_options": ["veg"],
+      "must_try_dishes": ["Famous Pyaaz Kachori", "Mawa Kachori", "Mirchi Vada", "Lassi"],
+      "price_for_two_inr": 350,
+      "rating": 4.7,
+      "latitude": 26.9208,
+      "longitude": 75.7972,
+      "address": "Station Road, Sindhi Camp, Jaipur",
+      "opening_hours": { "open": "06:00", "close": "22:30", "days": "All days" }
+    },
+    {
+      "name": "Laxmi Mishtan Bhandar (LMB)",
+      "category": "traditional_thali",
+      "cuisines": ["Rajasthani", "Royal Thali", "Mithai"],
+      "dietary_options": ["veg", "jain_available"],
+      "must_try_dishes": ["Paneer Ghevar", "Royal Rajasthani Thali", "Dal Baati Churma", "Kadhi"],
+      "price_for_two_inr": 1200,
+      "rating": 4.6,
+      "latitude": 26.9205,
+      "longitude": 75.8252,
+      "address": "Johari Bazaar, Pink City, Jaipur",
+      "opening_hours": { "open": "08:00", "close": "23:00", "days": "All days" }
+    },
+    {
+      "name": "Chokhi Dhani Cultural Village & Resort",
+      "category": "traditional_thali",
+      "cuisines": ["Authentic Rajasthani", "Village Experience"],
+      "dietary_options": ["veg", "jain_available"],
+      "must_try_dishes": ["Unlimited Rajasthani Royal Thali", "Bajre Ki Roti with Gur & Ghee", "Churma"],
+      "price_for_two_inr": 2200,
+      "rating": 4.7,
+      "latitude": 26.7673,
+      "longitude": 75.8285,
+      "address": "12 Miles Tonk Road, Via Vatika, Jaipur",
+      "opening_hours": { "open": "17:00", "close": "23:00", "days": "All days" }
+    }
+  ],
+  "shops": [
+    {
+      "name": "Johari Bazaar Heritage Jewelry Quarter",
+      "category": "jewellery",
+      "description": "World-famous jewelry bazaar specializing in authentic Kundan, Polki, Meenakari, and precious gemstones crafted by master artisans.",
+      "specialties": ["Kundan Jewelry", "Meenakari Work", "Precious Emeralds & Rubies", "Silver Ornaments"],
+      "price_range": "₹₹₹",
+      "rating": 4.8,
+      "latitude": 26.9212,
+      "longitude": 75.8256,
+      "address": "Johari Bazaar Road, Jaipur",
+      "photos": ["https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80"]
+    },
+    {
+      "name": "Bapu Bazaar Cultural Textiles & Mojaris",
+      "category": "clothing",
+      "description": "Bustling terracotta market renowned for traditional Rajasthani Bandhej, Leheriya sarees, bedspreads, camel leather jootis, and brass artifacts.",
+      "specialties": ["Bandhani & Leheriya Silk", "Camel Leather Mojari Shoes", "Jaipuri Quilts (Razai)", "Handicrafts"],
+      "price_range": "₹₹",
+      "rating": 4.6,
+      "latitude": 26.9189,
+      "longitude": 75.8214,
+      "address": "Bapu Bazaar, Biseswarji, Jaipur"
+    }
+  ]
+}
