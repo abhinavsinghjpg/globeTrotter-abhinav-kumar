@@ -11,10 +11,10 @@ const SplitScreenMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-full w-full flex items-center justify-center bg-slate-900 text-white">
+      <div className="h-full w-full flex items-center justify-center bg-jaipur-royal text-white">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-          <span className="text-xs font-bold text-slate-300">Loading Map...</span>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
+          <span className="text-xs font-bold text-sand-300">Loading Map...</span>
         </div>
       </div>
     ),
@@ -949,14 +949,14 @@ export default function HomePage() {
   const whatsappUrl = `https://wa.me/919876543210?text=Namaste!%20I%20am%20exploring%20${currentLocationData.name}%2C%20${currentLocationData.state}%20and%20need%20a%20verified%20local%20guide%20and%20cabs.`;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-slate-100 text-slate-900 overflow-hidden font-sans antialiased">
+    <div className="h-screen w-screen flex flex-col bg-sand-100 text-jaipur-royal overflow-hidden font-sans antialiased">
       {/* 1. TOP GLOBAL HEADER (WANDERLOG STYLE) */}
-      <header className="h-16 shrink-0 border-b border-slate-200 bg-white px-4 sm:px-6 flex items-center justify-between z-40 shadow-xs">
+      <header className="h-16 shrink-0 border-b border-sand-200 bg-white px-4 sm:px-6 flex items-center justify-between z-40 shadow-hairline">
         <div className="flex items-center gap-3 shrink-0">
           {/* Toggle Sidebar Button */}
           <button
             onClick={() => setIsSidebarHidden(!isSidebarHidden)}
-              className="flex h-9 w-9 items-center justify-center rounded-xl hover:bg-slate-100 text-slate-700 transition-colors"
+              className="flex h-9 w-9 items-center justify-center rounded-control hover:bg-sand-100 text-sand-600 transition-colors"
               title="Toggle Sidebar"
             >
               <Layers className="h-4 w-4" />
@@ -964,15 +964,15 @@ export default function HomePage() {
 
             {/* Wanderlog Breadcrumb / Trip Title */}
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-bold text-sm shadow-md">
+              <div className="flex h-8 w-8 items-center justify-center rounded-control bg-gradient-to-tr from-brand-500 to-jaipur-pink text-white font-bold text-sm shadow-md">
                 <Compass className="h-4 w-4" />
               </div>
               <div className="hidden sm:block leading-tight">
-                <span className="font-heading text-sm font-extrabold text-slate-900 block">
+                <span className="font-heading text-sm font-bold text-jaipur-royal block">
                   Trip to {currentLocationData.name}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium">
-                  {currentLocationData.state}, India · Wanderlog Plan
+                <span className="text-2xs text-sand-600 font-medium">
+                  {currentLocationData.state}, India · Trip plan
                 </span>
               </div>
             </div>
@@ -981,7 +981,7 @@ export default function HomePage() {
           {/* Center Search Bar */}
           <div ref={searchContainerRef} className="relative w-72 sm:w-80 md:w-96 mx-2">
             <div className="relative flex items-center">
-              <Search className="absolute left-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+              <Search className="absolute left-3.5 h-4 w-4 text-sand-600 pointer-events-none" />
               <input
                 type="text"
                 value={searchInputValue}
@@ -991,7 +991,7 @@ export default function HomePage() {
                 }}
                 onFocus={() => setIsDropdownOpen(true)}
                 placeholder={`Search destinations (e.g. Jaipur, Mathura, Agra)...`}
-                className="w-full rounded-2xl bg-slate-100 hover:bg-slate-200/80 focus:bg-white pl-10 pr-9 py-2 text-xs font-semibold text-slate-900 placeholder:text-slate-500 border border-transparent focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all outline-none"
+                className="w-full rounded-card bg-sand-100 hover:bg-sand-200/80 focus:bg-white pl-10 pr-9 py-2 text-xs font-semibold text-jaipur-royal placeholder:text-sand-600 border border-transparent focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all outline-none"
               />
               {isSearching && (
                 <Loader2 className="absolute right-3 h-3.5 w-3.5 animate-spin text-brand-600" />
@@ -1002,7 +1002,7 @@ export default function HomePage() {
                     setSearchInputValue("");
                     setSearchResults([]);
                   }}
-                  className="absolute right-3 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 text-sand-600 hover:text-sand-600"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -1011,7 +1011,7 @@ export default function HomePage() {
 
             {/* Autocomplete Dropdown */}
             {isDropdownOpen && (searchResults.length > 0 || searchInputValue.length === 0) && (
-              <div className="absolute left-0 right-0 top-11 z-50 rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden text-xs divide-y divide-slate-100 max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute left-0 right-0 top-11 z-50 rounded-card bg-white shadow-2xl border border-sand-200 overflow-hidden text-xs divide-y divide-sand-100 max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
                 {searchResults.length > 0 ? (
                   searchResults.map((item, idx) => (
                     <button
@@ -1021,24 +1021,24 @@ export default function HomePage() {
                     >
                       <MapPin className="h-4 w-4 text-brand-500 group-hover:scale-110 transition-transform shrink-0" />
                       <div>
-                        <span className="font-bold text-slate-900 block">{item.name}</span>
-                        <span className="text-[10px] text-slate-500">{item.state}, India</span>
+                        <span className="font-bold text-jaipur-royal block">{item.name}</span>
+                        <span className="text-2xs text-sand-600">{item.state}, India</span>
                       </div>
                     </button>
                   ))
                 ) : (
                   <div className="p-2 space-y-1">
-                    <span className="text-[10px] font-bold text-slate-400 px-3 py-1 uppercase tracking-wider block">
+                    <span className="text-2xs font-bold text-sand-600 px-3 py-1 uppercase tracking-wider block">
                       Popular Heritage Destinations
                     </span>
                     {POPULAR_CITIES.map((pop) => (
                       <button
                         key={pop.name}
                         onClick={() => handleSelectLocation(pop)}
-                        className="w-full flex items-center justify-between rounded-xl px-3 py-2 text-left text-xs hover:bg-slate-100 text-slate-700"
+                        className="w-full flex items-center justify-between rounded-control px-3 py-2 text-left text-xs hover:bg-sand-100 text-sand-600"
                       >
-                        <span className="font-bold text-slate-900">{pop.name}</span>
-                        <span className="text-[10px] text-slate-500 font-semibold">{pop.state}</span>
+                        <span className="font-bold text-jaipur-royal">{pop.name}</span>
+                        <span className="text-2xs text-sand-600 font-semibold">{pop.state}</span>
                       </button>
                     ))}
                   </div>
@@ -1052,9 +1052,9 @@ export default function HomePage() {
             {/* Add Dates Badge */}
             <button
               onClick={() => alert("Trip dates set to Oct 24 – Oct 28 (Peak Season)")}
-              className="hidden lg:flex items-center gap-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700 transition-colors"
+              className="hidden lg:flex items-center gap-1.5 rounded-control bg-sand-100 hover:bg-sand-200 px-3 py-1.5 text-xs font-bold text-sand-600 transition-colors"
             >
-              <Calendar className="h-3.5 w-3.5 text-slate-500" />
+              <Calendar className="h-3.5 w-3.5 text-sand-600" />
               <span>Oct 24 – Oct 28</span>
             </button>
 
@@ -1063,7 +1063,7 @@ export default function HomePage() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold shadow-xs transition-all"
+              className="hidden sm:flex items-center gap-1.5 rounded-control bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold shadow-hairline transition-all"
             >
               <MessageCircle className="h-3.5 w-3.5" />
               <span>Guide</span>
@@ -1073,7 +1073,7 @@ export default function HomePage() {
             {!isLoggedIn ? (
               <button
                 onClick={() => openAuthModal("traveler")}
-                className="flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 text-xs font-bold shadow-sm transition-all"
+                className="flex items-center gap-1.5 rounded-control bg-jaipur-royal hover:bg-sand-800 text-white px-3.5 py-1.5 text-xs font-bold shadow-sm transition-all"
               >
                 <Compass className="h-3.5 w-3.5" />
                 <span>Sign In</span>
@@ -1082,34 +1082,34 @@ export default function HomePage() {
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 p-1 pr-2.5 transition-colors border border-slate-200"
+                  className="flex items-center gap-2 rounded-control bg-sand-100 hover:bg-sand-200 p-1 pr-2.5 transition-colors border border-sand-200"
                 >
-                  <div className="relative h-6 w-6 rounded-lg overflow-hidden bg-brand-600 text-white flex items-center justify-center font-bold text-xs">
+                  <div className="relative h-6 w-6 rounded-control overflow-hidden bg-brand-600 text-white flex items-center justify-center font-bold text-xs">
                     {user?.avatar ? (
                       <Image src={user.avatar} alt={user.name} fill unoptimized className="object-cover" />
                     ) : (
                       user?.name?.charAt(0) || "U"
                     )}
                   </div>
-                  <span className="font-bold text-xs text-slate-900 hidden md:block max-w-[80px] truncate">{user?.name}</span>
-                  <ChevronDown className="h-3 w-3 text-slate-400" />
+                  <span className="font-bold text-xs text-jaipur-royal hidden md:block max-w-[80px] truncate">{user?.name}</span>
+                  <ChevronDown className="h-3 w-3 text-sand-600" />
                 </button>
 
                 {/* User Profile Dropdown */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 top-10 w-60 rounded-2xl bg-white shadow-2xl border border-slate-200 p-2 z-50 text-xs text-slate-700 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="p-2.5 border-b border-slate-100 bg-slate-50/80 rounded-xl mb-1">
-                      <span className="font-bold text-slate-900 block text-sm">{user?.name}</span>
-                      <span className="text-[11px] text-slate-500 block truncate">{user?.email}</span>
+                  <div className="absolute right-0 top-10 w-60 rounded-card bg-white shadow-2xl border border-sand-200 p-2 z-50 text-xs text-sand-600 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-2.5 border-b border-sand-100 bg-sand-50/80 rounded-control mb-1">
+                      <span className="font-bold text-jaipur-royal block text-sm">{user?.name}</span>
+                      <span className="text-2xs text-sand-600 block truncate">{user?.email}</span>
                     </div>
 
                     {role === "admin" && (
                       <Link
                         href="/admin"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-purple-50 text-purple-900 font-bold transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 rounded-control hover:bg-sand-100 text-jaipur-royal font-bold transition-colors"
                       >
-                        <Shield className="h-4 w-4 text-purple-600" />
+                        <Shield className="h-4 w-4 text-jaipur-royal" />
                         <span>Admin Dashboard</span>
                       </Link>
                     )}
@@ -1118,7 +1118,7 @@ export default function HomePage() {
                       <Link
                         href="/guide"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-emerald-50 text-emerald-900 font-bold transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 rounded-control hover:bg-emerald-50 text-emerald-900 font-bold transition-colors"
                       >
                         <MapPin className="h-4 w-4 text-emerald-600" />
                         <span>Guide Desk</span>
@@ -1130,7 +1130,7 @@ export default function HomePage() {
                         setIsUserMenuOpen(false);
                         logout();
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 font-bold transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-control hover:bg-red-50 text-red-600 font-bold transition-colors"
                     >
                       <X className="h-4 w-4" />
                       <span>Sign Out</span>
@@ -1146,7 +1146,7 @@ export default function HomePage() {
         <div className="flex-1 flex min-h-0 overflow-hidden relative">
           {/* A. LEFT SIDEBAR (EXACT WANDERLOG ACCORDION) */}
           {!isSidebarHidden && (
-            <aside className="w-64 shrink-0 border-r border-slate-200 bg-white flex flex-col justify-between p-3.5 overflow-y-auto select-none font-sans text-xs">
+            <aside className="w-64 shrink-0 border-r border-sand-200 bg-white flex flex-col justify-between p-3.5 overflow-y-auto select-none font-sans text-xs">
               <div className="space-y-4">
                 {/* AI Tourist Guide Launcher */}
                 <button
@@ -1154,26 +1154,26 @@ export default function HomePage() {
                     setActiveToolView("ai");
                     setActiveInlineDetail(null);
                   }}
-                  className="w-full flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-3 text-white font-bold shadow-md shadow-blue-500/20 hover:opacity-95 transition-all group"
+                  className="w-full flex items-center gap-2.5 rounded-card bg-gradient-to-r from-brand-500 to-jaipur-pink p-3 text-white font-bold shadow-md shadow-brand-500/25 hover:opacity-95 transition-all group"
                 >
-                  <Sparkles className="h-4 w-4 text-amber-300 animate-pulse" />
+                  <Sparkles className="h-4 w-4 text-jaipur-gold animate-pulse" />
                   <div className="text-left leading-tight">
                     <span className="block font-bold text-xs">AI Tourist Guide</span>
-                    <span className="text-[10px] text-white/80">Live {currentLocationData.name} Assistant</span>
+                    <span className="text-2xs text-white/80">Live {currentLocationData.name} Assistant</span>
                   </div>
                 </button>
 
                 {/* Wanderlog Section 1: Trip Overview & Itinerary */}
                 <div className="space-y-1">
-                  <span className="px-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
+                  <span className="px-2 text-2xs font-bold text-sand-600 uppercase tracking-wider block mb-1">
                     Itinerary & Places
                   </span>
 
                   {[
                     { id: "all", label: `Places to visit (${currentLocationData.attractions.length + currentLocationData.famousFoods.length})`, icon: MapPin, color: "text-blue-600" },
-                    { id: "day1", label: "Day 1: Forts & Palaces", icon: Compass, color: "text-amber-500" },
-                    { id: "day2", label: "Day 2: Bazaars & Foods", icon: Utensils, color: "text-rose-500" },
-                    { id: "day3", label: "Day 3: Sunsets & Crafts", icon: Camera, color: "text-purple-500" },
+                    { id: "day1", label: "Day 1: Forts & Palaces", icon: Compass, color: "text-jaipur-gold" },
+                    { id: "day2", label: "Day 2: Bazaars & Foods", icon: Utensils, color: "text-jaipur-pink" },
+                    { id: "day3", label: "Day 3: Sunsets & Crafts", icon: Camera, color: "text-jaipur-royal" },
                   ].map((tab) => {
                     const Icon = tab.icon;
                     const isActive = activeCategoryFilter === tab.id && !activeToolView && !activeInlineDetail;
@@ -1185,10 +1185,10 @@ export default function HomePage() {
                           setActiveInlineDetail(null);
                           setActiveToolView(null);
                         }}
-                        className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-bold transition-all ${
+                        className={`w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-bold transition-all ${
                           isActive
-                            ? "bg-slate-900 text-white shadow-xs"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                            ? "bg-jaipur-royal text-white shadow-hairline"
+                            : "text-sand-600 hover:text-jaipur-royal hover:bg-sand-100"
                         }`}
                       >
                         <Icon className={`h-3.5 w-3.5 ${isActive ? "text-white" : tab.color}`} />
@@ -1199,8 +1199,8 @@ export default function HomePage() {
                 </div>
 
                 {/* Wanderlog Section 2: Explore Guides */}
-                <div className="space-y-1 pt-2 border-t border-slate-100">
-                  <span className="px-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
+                <div className="space-y-1 pt-2 border-t border-sand-100">
+                  <span className="px-2 text-2xs font-bold text-sand-600 uppercase tracking-wider block mb-1">
                     Explore {currentLocationData.name}
                   </span>
 
@@ -1210,7 +1210,7 @@ export default function HomePage() {
                       setActiveInlineDetail(null);
                       setActiveToolView(null);
                     }}
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    className="w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-semibold text-sand-600 hover:bg-sand-100 hover:text-jaipur-royal"
                   >
                     <Compass className="h-3.5 w-3.5 text-blue-500" />
                     <span>Top Attractions ({currentLocationData.attractions.length})</span>
@@ -1222,9 +1222,9 @@ export default function HomePage() {
                       setActiveInlineDetail(null);
                       setActiveToolView(null);
                     }}
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    className="w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-semibold text-sand-600 hover:bg-sand-100 hover:text-jaipur-royal"
                   >
-                    <Utensils className="h-3.5 w-3.5 text-rose-500" />
+                    <Utensils className="h-3.5 w-3.5 text-jaipur-pink" />
                     <span>Famous Eateries ({currentLocationData.famousFoods.length})</span>
                   </button>
 
@@ -1234,16 +1234,16 @@ export default function HomePage() {
                       setActiveInlineDetail(null);
                       setActiveToolView(null);
                     }}
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    className="w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-semibold text-sand-600 hover:bg-sand-100 hover:text-jaipur-royal"
                   >
-                    <Calendar className="h-3.5 w-3.5 text-purple-500" />
+                    <Calendar className="h-3.5 w-3.5 text-jaipur-royal" />
                     <span>Festivals & Events ({currentLocationData.upcomingEvents?.length || 0})</span>
                   </button>
                 </div>
 
                 {/* Wanderlog Section 3: Travel Tools */}
-                <div className="space-y-1 pt-2 border-t border-slate-100">
-                  <span className="px-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
+                <div className="space-y-1 pt-2 border-t border-sand-100">
+                  <span className="px-2 text-2xs font-bold text-sand-600 uppercase tracking-wider block mb-1">
                     Trip Tools
                   </span>
 
@@ -1252,11 +1252,11 @@ export default function HomePage() {
                       setActiveToolView("ai");
                       setActiveInlineDetail(null);
                     }}
-                    className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-bold transition-colors ${
-                      activeToolView === "ai" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+                    className={`w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-bold transition-colors ${
+                      activeToolView === "ai" ? "bg-jaipur-royal text-white" : "text-sand-600 hover:bg-sand-100"
                     }`}
                   >
-                    <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                    <Sparkles className="h-3.5 w-3.5 text-jaipur-gold" />
                     <span>AI Travel & Budget Planner</span>
                   </button>
 
@@ -1265,8 +1265,8 @@ export default function HomePage() {
                       setActiveToolView("transport");
                       setActiveInlineDetail(null);
                     }}
-                    className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-bold transition-colors ${
-                      activeToolView === "transport" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+                    className={`w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-bold transition-colors ${
+                      activeToolView === "transport" ? "bg-jaipur-royal text-white" : "text-sand-600 hover:bg-sand-100"
                     }`}
                   >
                     <Car className="h-3.5 w-3.5 text-orange-500" />
@@ -1278,8 +1278,8 @@ export default function HomePage() {
                       setActiveToolView("memories");
                       setActiveInlineDetail(null);
                     }}
-                    className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-bold transition-colors ${
-                      activeToolView === "memories" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+                    className={`w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-bold transition-colors ${
+                      activeToolView === "memories" ? "bg-jaipur-royal text-white" : "text-sand-600 hover:bg-sand-100"
                     }`}
                   >
                     <Camera className="h-3.5 w-3.5 text-pink-500" />
@@ -1291,8 +1291,8 @@ export default function HomePage() {
                       setActiveToolView("groups");
                       setActiveInlineDetail(null);
                     }}
-                    className={`w-full flex items-center gap-2.5 rounded-xl px-3 py-2 font-bold transition-colors ${
-                      activeToolView === "groups" ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+                    className={`w-full flex items-center gap-2.5 rounded-control px-3 py-2 font-bold transition-colors ${
+                      activeToolView === "groups" ? "bg-jaipur-royal text-white" : "text-sand-600 hover:bg-sand-100"
                     }`}
                   >
                     <Users className="h-3.5 w-3.5 text-blue-500" />
@@ -1302,22 +1302,22 @@ export default function HomePage() {
 
                 {/* ROLE-RESTRICTED SIDEBAR LINKS (ONLY VISIBLE TO ADMIN OR GUIDE) */}
                 {role === "admin" && (
-                  <div className="pt-2 border-t border-slate-100 mt-2">
+                  <div className="pt-2 border-t border-sand-100 mt-2">
                     <Link
                       href="/admin"
-                      className="w-full flex items-center gap-2.5 rounded-2xl px-3 py-2 text-xs font-bold text-purple-900 bg-purple-50 hover:bg-purple-100 transition-colors"
+                      className="w-full flex items-center gap-2.5 rounded-card px-3 py-2 text-xs font-bold text-jaipur-royal bg-sand-100 hover:bg-sand-200 transition-colors"
                     >
-                      <Shield className="h-4 w-4 text-purple-600" />
+                      <Shield className="h-4 w-4 text-jaipur-royal" />
                       <span>Admin Operations</span>
                     </Link>
                   </div>
                 )}
 
                 {role === "guide" && (
-                  <div className="pt-2 border-t border-slate-100 mt-2">
+                  <div className="pt-2 border-t border-sand-100 mt-2">
                     <Link
                       href="/guide"
-                      className="w-full flex items-center gap-2.5 rounded-2xl px-3 py-2 text-xs font-bold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 transition-colors"
+                      className="w-full flex items-center gap-2.5 rounded-card px-3 py-2 text-xs font-bold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 transition-colors"
                     >
                       <MapPin className="h-4 w-4 text-emerald-600" />
                       <span>Guide Desk</span>
@@ -1326,12 +1326,12 @@ export default function HomePage() {
                 )}
               </div>
 
-            <div className="pt-4 border-t border-slate-100 space-y-1 text-xs text-slate-500 font-semibold">
+            <div className="pt-4 border-t border-sand-100 space-y-1 text-xs text-sand-600 font-semibold">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 py-2 px-3 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors"
+                className="flex items-center gap-2.5 py-2 px-3 hover:text-emerald-600 hover:bg-emerald-50 rounded-control transition-colors"
               >
                 <MessageCircle className="h-4 w-4 text-emerald-500" />
                 <span>WhatsApp Local Desk</span>
@@ -1339,7 +1339,7 @@ export default function HomePage() {
 
               <button
                 onClick={() => setIsSidebarHidden(true)}
-                className="w-full flex items-center gap-2.5 py-2 px-3 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors text-slate-400"
+                className="w-full flex items-center gap-2.5 py-2 px-3 hover:text-jaipur-royal hover:bg-sand-100 rounded-control transition-colors text-sand-600"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>Collapse Sidebar</span>
@@ -1351,7 +1351,7 @@ export default function HomePage() {
         {isSidebarHidden && (
           <button
             onClick={() => setIsSidebarHidden(false)}
-            className="absolute left-3 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-white shadow-xl border border-slate-200 text-slate-700 hover:bg-slate-50 hover:scale-105 transition-all"
+            className="absolute left-3 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-card bg-white shadow-xl border border-sand-200 text-sand-600 hover:bg-sand-50 hover:scale-105 transition-all"
             title="Expand Sidebar"
           >
             <ChevronRight className="h-5 w-5" />
@@ -1359,10 +1359,10 @@ export default function HomePage() {
         )}
 
         {/* B. CENTER SCROLLABLE CITY KNOWLEDGE FEED */}
-        <main className="flex-1 overflow-y-auto bg-slate-100 min-w-0">
+        <main className="flex-1 overflow-y-auto bg-sand-100 min-w-0">
           <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 lg:p-7 space-y-6 pb-32">
             {isLoadingLocation && (
-              <div className="rounded-2xl bg-brand-50 border border-brand-200 p-4 flex items-center gap-3 text-xs text-brand-900 shadow-sm animate-pulse">
+              <div className="rounded-card bg-brand-50 border border-brand-200 p-4 flex items-center gap-3 text-xs text-brand-900 shadow-sm animate-pulse">
                 <Loader2 className="h-5 w-5 animate-spin text-brand-600 shrink-0" />
                 <div>
                   <span className="font-bold block text-sm">Fetching Live Location Intelligence...</span>
@@ -1376,16 +1376,16 @@ export default function HomePage() {
             {/* INLINE TOOL SUITE VIEW (OPENS DIRECTLY IN THIS WINDOW) */}
             {activeToolView ? (
               <div className="space-y-4 animate-in fade-in slide-in-from-top-3 duration-300">
-                <div className="p-3.5 bg-white border border-slate-200 rounded-3xl flex items-center justify-between shadow-xs">
+                <div className="p-3.5 bg-white border border-sand-200 rounded-panel flex items-center justify-between shadow-hairline">
                   <button
                     onClick={() => setActiveToolView(null)}
-                    className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-2xl transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-sand-600 hover:text-jaipur-royal bg-sand-100 hover:bg-sand-200 px-4 py-2 rounded-card transition-colors"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     <span>Back to {currentLocationData.name} Places</span>
                   </button>
 
-                  <span className="rounded-full bg-brand-50 text-brand-700 text-[10px] font-extrabold px-3 py-1 uppercase tracking-wider">
+                  <span className="rounded-full bg-brand-50 text-brand-700 text-2xs font-bold px-3 py-1 uppercase tracking-wider">
                     {activeToolView === "ai" && "AI Travel & Itinerary Planner"}
                     {activeToolView === "transport" && "Cabs & Vehicle Rentals"}
                     {activeToolView === "memories" && "Trip Memories & Reels"}
@@ -1426,22 +1426,22 @@ export default function HomePage() {
                 )}
               </div>
             ) : activeInlineDetail ? (
-              <div className="rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-3 duration-300">
-                <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div className="rounded-panel bg-white border border-sand-200 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-3 duration-300">
+                <div className="p-4 border-b border-sand-100 flex items-center justify-between bg-sand-50">
                   <button
                     onClick={() => setActiveInlineDetail(null)}
-                    className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-sand-600 hover:text-jaipur-royal bg-white border border-sand-200 px-3.5 py-1.5 rounded-control shadow-hairline transition-colors"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     <span>Back to {currentLocationData.name} Feed</span>
                   </button>
 
-                  <span className="rounded-full bg-brand-50 text-brand-700 text-[10px] font-extrabold px-3 py-1 uppercase tracking-wider">
+                  <span className="rounded-full bg-brand-50 text-brand-700 text-2xs font-bold px-3 py-1 uppercase tracking-wider">
                     Full Place Details
                   </span>
                 </div>
 
-                <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-900">
+                <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-jaipur-royal">
                   <Image
                     src={activeInlineDetail.image || currentLocationData.coverImage}
                     alt={activeInlineDetail.name}
@@ -1453,75 +1453,75 @@ export default function HomePage() {
 
                   <div className="absolute bottom-4 left-5 right-5 text-white space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-white/25 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-extrabold uppercase">
+                      <span className="rounded-full bg-white/25 backdrop-blur-md px-2.5 py-0.5 text-2xs font-bold uppercase">
                         {activeInlineDetail.category || "Heritage Attraction"}
                       </span>
-                      <span className="rounded-full bg-emerald-900/80 text-emerald-300 text-[10px] font-bold px-2.5 py-0.5 border border-emerald-500/30">
+                      <span className="rounded-full bg-emerald-900/80 text-emerald-300 text-2xs font-bold px-2.5 py-0.5 border border-emerald-500/30">
                         {activeInlineDetail.status || "Open Today"}
                       </span>
                     </div>
 
-                    <h2 className="font-heading text-2xl sm:text-3xl font-extrabold leading-tight">
+                    <h2 className="font-heading text-2xl sm:text-3xl font-bold leading-tight">
                       {activeInlineDetail.name}
                     </h2>
                     {activeInlineDetail.subName && (
-                      <p className="text-xs text-amber-300 font-semibold">{activeInlineDetail.subName}</p>
+                      <p className="text-xs text-jaipur-gold font-semibold">{activeInlineDetail.subName}</p>
                     )}
                   </div>
                 </div>
 
                 <div className="p-6 space-y-5 text-xs">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <div className="flex items-center justify-between pb-3 border-b border-sand-100">
                     <div className="flex items-center gap-1.5">
-                      <span className="flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-lg text-xs">
+                      <span className="flex items-center gap-1 bg-jaipur-gold text-jaipur-royal font-bold px-2 py-0.5 rounded-control text-xs">
                         <Star className="h-3.5 w-3.5 fill-slate-950" />
                         {activeInlineDetail.rating || 4.7}
                       </span>
-                      <span className="text-slate-500 font-medium">
+                      <span className="text-sand-600 font-medium">
                         ({activeInlineDetail.reviewsCount || "14,000+ Reviews"})
                       </span>
                     </div>
 
-                    <span className="text-slate-500 font-bold">
+                    <span className="text-sand-600 font-bold">
                       📍 {currentLocationData.name}, {currentLocationData.state}
                     </span>
                   </div>
 
                   <div className="space-y-1.5">
-                    <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                    <span className="text-2xs font-bold text-sand-600 uppercase tracking-wider block">
                       History & Significance
                     </span>
-                    <p className="text-slate-700 leading-relaxed text-sm">
+                    <p className="text-sand-600 leading-relaxed text-sm">
                       {activeInlineDetail.description || activeInlineDetail.specialty}
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-2xl bg-slate-50 p-4 border border-slate-200">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-card bg-sand-50 p-4 border border-sand-200">
                     <div className="flex items-center gap-2.5">
                       <Clock className="h-4 w-4 text-brand-600 shrink-0" />
                       <div>
-                        <span className="font-bold text-slate-900 block">Timings</span>
-                        <span className="text-slate-600">{activeInlineDetail.timing || "08:00 AM – 06:00 PM"}</span>
+                        <span className="font-bold text-jaipur-royal block">Timings</span>
+                        <span className="text-sand-600">{activeInlineDetail.timing || "08:00 AM – 06:00 PM"}</span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2.5">
                       <Ticket className="h-4 w-4 text-emerald-600 shrink-0" />
                       <div>
-                        <span className="font-bold text-slate-900 block">Entry / Cost</span>
-                        <span className="text-slate-600">{activeInlineDetail.entryFee || activeInlineDetail.priceForTwo || "Free Entry / Nominal Fee"}</span>
+                        <span className="font-bold text-jaipur-royal block">Entry / Cost</span>
+                        <span className="text-sand-600">{activeInlineDetail.entryFee || activeInlineDetail.priceForTwo || "Free Entry / Nominal Fee"}</span>
                       </div>
                     </div>
                   </div>
 
                   {activeInlineDetail.mustTry && (
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                      <span className="text-2xs font-bold text-sand-600 uppercase tracking-wider block">
                         Must-Try Highlights:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {activeInlineDetail.mustTry.map((item: string, idx: number) => (
-                          <span key={idx} className="rounded-xl bg-slate-100 text-slate-900 px-3 py-1 font-bold border border-slate-200">
+                          <span key={idx} className="rounded-control bg-sand-100 text-jaipur-royal px-3 py-1 font-bold border border-sand-200">
                             {item}
                           </span>
                         ))}
@@ -1531,8 +1531,8 @@ export default function HomePage() {
 
                   {/* Swiggy & Zomato Quick Redirect for Eateries */}
                   {(activeInlineDetail.priceForTwo || activeInlineDetail.famousEatery || activeInlineDetail.category === "food") && (
-                    <div className="space-y-2 pt-2 border-t border-slate-100">
-                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                    <div className="space-y-2 pt-2 border-t border-sand-100">
+                      <span className="text-2xs font-bold text-sand-600 uppercase tracking-wider block">
                         Order Food Online & Book Tables:
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -1540,7 +1540,7 @@ export default function HomePage() {
                           href={`https://www.swiggy.com/search?query=${encodeURIComponent(activeInlineDetail.name + " " + (activeInlineDetail.famousEatery || "") + " " + currentLocationData.name)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-3 px-4 text-xs shadow-md shadow-orange-500/20 transition-all hover:scale-102"
+                          className="flex items-center justify-center gap-2 rounded-card bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 text-xs shadow-md shadow-orange-500/20 transition-all hover:scale-102"
                         >
                           <Utensils className="h-4 w-4" />
                           <span>Order on Swiggy</span>
@@ -1549,7 +1549,7 @@ export default function HomePage() {
                           href={`https://www.zomato.com/search?q=${encodeURIComponent(activeInlineDetail.name + " " + (activeInlineDetail.famousEatery || "") + " " + currentLocationData.name)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 px-4 text-xs shadow-md shadow-red-600/20 transition-all hover:scale-102"
+                          className="flex items-center justify-center gap-2 rounded-card bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 text-xs shadow-md shadow-red-600/20 transition-all hover:scale-102"
                         >
                           <Utensils className="h-4 w-4" />
                           <span>View on Zomato</span>
@@ -1558,12 +1558,12 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+                  <div className="flex items-center gap-3 pt-3 border-t border-sand-100">
                     <a
                       href={`https://wa.me/919876543210?text=Namaste!%20I%20want%20to%20visit%20${activeInlineDetail.name}%20in%20${currentLocationData.name}%20and%20need%20a%20local%20guide.`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-102"
+                      className="flex-1 flex items-center justify-center gap-2 rounded-card bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-102"
                     >
                       <MessageCircle className="h-4 w-4" />
                       <span>Hire Guide for this Place</span>
@@ -1573,7 +1573,7 @@ export default function HomePage() {
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeInlineDetail.name + " " + currentLocationData.name)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 px-4 py-3.5 font-bold transition-colors"
+                      className="flex items-center gap-1.5 rounded-card border border-sand-200 bg-sand-50 hover:bg-sand-100 text-sand-600 px-4 py-3.5 font-bold transition-colors"
                     >
                       <Navigation className="h-4 w-4 text-brand-600" />
                       <span>Directions</span>
@@ -1585,7 +1585,7 @@ export default function HomePage() {
               /* REGULAR KNOWLEDGE FEED */
               <>
                 {/* 1. WANDERLOG TRIP HERO COVER BANNER */}
-                <div className="relative rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 group">
+                <div className="relative rounded-panel overflow-hidden shadow-lg border border-sand-200/80 bg-jaipur-royal group">
                   <div className="relative h-60 sm:h-64 w-full overflow-hidden">
                     <Image
                       src={currentLocationData.coverImage || "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1600&q=80"}
@@ -1600,15 +1600,15 @@ export default function HomePage() {
                     <div className="absolute bottom-4 left-5 right-5 text-white flex items-end justify-between">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="rounded-full bg-white/20 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider">
+                          <span className="rounded-full bg-white/20 backdrop-blur-md px-2.5 py-0.5 text-2xs font-bold uppercase tracking-wider">
                             {currentLocationData.state}, India
                           </span>
-                          <span className="text-white/80 text-[11px] font-semibold flex items-center gap-1">
-                            <Sun className="h-3 w-3 text-amber-300" />
+                          <span className="text-white/80 text-2xs font-semibold flex items-center gap-1">
+                            <Sun className="h-3 w-3 text-jaipur-gold" />
                             {currentLocationData.weather}
                           </span>
                         </div>
-                        <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        <h1 className="font-heading text-2xl sm:text-3xl font-bold text-white tracking-tight">
                           Trip to {currentLocationData.name}
                         </h1>
                         <p className="text-xs text-white/90 font-medium">
@@ -1624,7 +1624,7 @@ export default function HomePage() {
                               alert("Plan link copied to clipboard!");
                             }
                           }}
-                          className="flex items-center gap-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-white transition-colors"
+                          className="flex items-center gap-1.5 rounded-control bg-white/20 hover:bg-white/30 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-white transition-colors"
                         >
                           <Share2 className="h-3.5 w-3.5" />
                           <span>Share</span>
@@ -1633,7 +1633,7 @@ export default function HomePage() {
                           href={whatsappUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition-colors shadow-md"
+                          className="flex items-center gap-1.5 rounded-control bg-emerald-500 hover:bg-emerald-400 px-3 py-1.5 text-xs font-bold text-jaipur-royal transition-colors shadow-md"
                         >
                           <MessageCircle className="h-3.5 w-3.5 fill-slate-950" />
                           <span>Hire Guide</span>
@@ -1643,7 +1643,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Wanderlog Section Tabs */}
-                  <div className="bg-white border-t border-slate-100 px-4 py-2.5 flex items-center gap-2 overflow-x-auto text-xs font-bold text-slate-600">
+                  <div className="bg-white border-t border-sand-100 px-4 py-2.5 flex items-center gap-2 overflow-x-auto text-xs font-bold text-sand-600">
                     {[
                       { id: "all", label: "Overview" },
                       { id: "all", label: `Places (${currentLocationData.attractions.length + customPlaces.length})` },
@@ -1659,10 +1659,10 @@ export default function HomePage() {
                           setActiveInlineDetail(null);
                           setActiveToolView(null);
                         }}
-                        className={`rounded-xl px-3 py-1.5 transition-colors whitespace-nowrap ${
+                        className={`rounded-control px-3 py-1.5 transition-colors whitespace-nowrap ${
                           activeCategoryFilter === tab.id
-                            ? "bg-slate-900 text-white"
-                            : "hover:bg-slate-100 text-slate-700"
+                            ? "bg-jaipur-royal text-white"
+                            : "hover:bg-sand-100 text-sand-600"
                         }`}
                       >
                         {tab.label}
@@ -1672,23 +1672,23 @@ export default function HomePage() {
                 </div>
 
                 {/* 2. DYNAMIC LIVE ITINERARY BUDGET SUMMARY & ADD PLACE CTA */}
-                <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 p-5 sm:p-6 text-white shadow-xl border border-indigo-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="rounded-panel bg-gradient-to-r from-jaipur-royal to-sand-900 p-5 sm:p-6 text-white shadow-xl border border-brand-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-blue-500/30 px-3 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-blue-300 border border-blue-400/30">
+                      <span className="rounded-full bg-brand-500/25 px-3 py-0.5 text-2xs font-bold uppercase tracking-wider text-brand-200 border border-brand-400/30">
                         💰 Live Trip Budget Engine
                       </span>
-                      <span className="text-slate-400 text-xs">•</span>
-                      <span className="text-xs text-slate-300 font-bold">
+                      <span className="text-sand-600 text-xs">•</span>
+                      <span className="text-xs text-sand-300 font-bold">
                         {itineraryPlaceIds.length} Places Selected
                       </span>
                     </div>
 
-                    <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white">
+                    <h3 className="font-heading text-2xl sm:text-3xl font-bold text-white">
                       Estimated Budget: ₹{itineraryPlaceIds.length * 280 + 800}
                     </h3>
 
-                    <div className="flex flex-wrap items-center gap-2.5 text-xs text-indigo-200 font-semibold pt-1">
+                    <div className="flex flex-wrap items-center gap-2.5 text-xs text-sand-300 font-semibold pt-1">
                       <span>🎟️ Entry Fees: ₹{itineraryPlaceIds.length * 80}</span>
                       <span>•</span>
                       <span>🚗 Cabs & Rentals: ₹{itineraryPlaceIds.length * 150}</span>
@@ -1699,7 +1699,7 @@ export default function HomePage() {
 
                   <button
                     onClick={() => setIsAddPlaceModalOpen(true)}
-                    className="flex items-center gap-2 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 px-5 py-3 text-xs font-extrabold shadow-lg shadow-amber-400/25 transition-all hover:scale-105 shrink-0"
+                    className="flex items-center gap-2 rounded-card bg-jaipur-gold hover:bg-jaipur-gold text-jaipur-royal px-5 py-3 text-xs font-bold shadow-lg shadow-jaipur-gold/25 transition-all hover:scale-105 shrink-0"
                   >
                     <MapPin className="h-4 w-4" />
                     <span>+ Add Place to Itinerary</span>
@@ -1708,15 +1708,15 @@ export default function HomePage() {
 
                 {/* CUSTOM PLACE ADD INLINE MODAL */}
                 {isAddPlaceModalOpen && (
-                  <div className="rounded-3xl bg-white border-2 border-amber-400 p-5 shadow-2xl space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <h4 className="font-heading text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-amber-500" />
+                  <div className="rounded-panel bg-white border-2 border-jaipur-gold p-5 shadow-2xl space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex items-center justify-between border-b border-sand-100 pb-2">
+                      <h4 className="font-heading text-sm font-bold text-jaipur-royal flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-jaipur-gold" />
                         <span>Add Custom Place to Itinerary</span>
                       </h4>
                       <button
                         onClick={() => setIsAddPlaceModalOpen(false)}
-                        className="text-slate-400 hover:text-slate-600"
+                        className="text-sand-600 hover:text-sand-600"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -1724,36 +1724,36 @@ export default function HomePage() {
 
                     <form onSubmit={handleAddCustomPlace} className="space-y-3 text-xs">
                       <div>
-                        <label className="font-bold text-slate-700 block mb-1">Place / Attraction Name:</label>
+                        <label className="font-bold text-sand-600 block mb-1">Place / Attraction Name:</label>
                         <input
                           type="text"
                           required
                           value={newPlaceName}
                           onChange={(e) => setNewPlaceName(e.target.value)}
                           placeholder="e.g. Chokhi Dhani, Galta Ji, Sisodia Rani Garden..."
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
+                          className="w-full rounded-control border border-sand-300 px-3.5 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="font-bold text-slate-700 block mb-1">Entry Ticket Fee:</label>
+                          <label className="font-bold text-sand-600 block mb-1">Entry Ticket Fee:</label>
                           <input
                             type="text"
                             value={newPlaceFee}
                             onChange={(e) => setNewPlaceFee(e.target.value)}
                             placeholder="e.g. ₹50 / Free Entry"
-                            className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
+                            className="w-full rounded-control border border-sand-300 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
                           />
                         </div>
                         <div>
-                          <label className="font-bold text-slate-700 block mb-1">Visiting Hours:</label>
+                          <label className="font-bold text-sand-600 block mb-1">Visiting Hours:</label>
                           <input
                             type="text"
                             value={newPlaceTiming}
                             onChange={(e) => setNewPlaceTiming(e.target.value)}
                             placeholder="e.g. 09:00 AM – 06:00 PM"
-                            className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
+                            className="w-full rounded-control border border-sand-300 px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500"
                           />
                         </div>
                       </div>
@@ -1762,13 +1762,13 @@ export default function HomePage() {
                         <button
                           type="button"
                           onClick={() => setIsAddPlaceModalOpen(false)}
-                          className="rounded-xl px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100"
+                          className="rounded-control px-4 py-2 text-xs font-bold text-sand-600 hover:bg-sand-100"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 text-xs font-extrabold shadow-md transition-colors"
+                          className="rounded-control bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 text-xs font-bold shadow-md transition-colors"
                         >
                           Add to Itinerary
                         </button>
@@ -1779,14 +1779,14 @@ export default function HomePage() {
 
                 {/* 3. GPS LIVE LOCATION PERMISSION PROMPT BANNER */}
                 {gpsStatus === "prompt" && (
-                  <div className="rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 p-4 text-white shadow-md border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="rounded-card bg-gradient-to-r from-jaipur-royal to-sand-800 p-4 text-white shadow-md border border-brand-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md">
-                        <Navigation className="h-5 w-5 text-amber-300 animate-pulse" />
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-control bg-white/20 backdrop-blur-md">
+                        <Navigation className="h-5 w-5 text-jaipur-gold animate-pulse" />
                       </div>
                       <div>
                         <h4 className="font-bold text-xs text-white">Enable GPS Audio Guide & Walking Radar?</h4>
-                        <p className="text-[11px] text-indigo-200">
+                        <p className="text-2xs text-sand-300">
                           Detects nearby monuments and speaks aloud history as you walk through {currentLocationData.name}.
                         </p>
                       </div>
@@ -1795,13 +1795,13 @@ export default function HomePage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={requestGpsPermission}
-                        className="rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 px-3.5 py-1.5 text-xs font-bold shadow-sm transition-all"
+                        className="rounded-control bg-jaipur-gold hover:bg-jaipur-gold text-jaipur-royal px-3.5 py-1.5 text-xs font-bold shadow-sm transition-all"
                       >
                         Allow GPS
                       </button>
                       <button
                         onClick={() => setGpsStatus("denied")}
-                        className="rounded-xl bg-white/10 hover:bg-white/20 text-white px-2.5 py-1.5 text-xs font-bold transition-colors"
+                        className="rounded-control bg-white/10 hover:bg-white/20 text-white px-2.5 py-1.5 text-xs font-bold transition-colors"
                       >
                         Dismiss
                       </button>
@@ -1812,13 +1812,13 @@ export default function HomePage() {
                 {/* 4. WANDERLOG SECTION: PLACES TO VISIT (CLEAN NUMBERED CARDS WITHOUT BULKY DESCRIPTIONS) */}
                 <section className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-heading text-lg sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-extrabold shadow-sm">
+                    <h3 className="font-heading text-lg sm:text-xl font-bold text-jaipur-royal flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold shadow-sm">
                         {currentLocationData.attractions.length + customPlaces.length}
                       </span>
                       <span>Places to visit in {currentLocationData.name}</span>
                     </h3>
-                    <span className="text-xs font-bold text-slate-500">
+                    <span className="text-xs font-bold text-sand-600">
                       {itineraryPlaceIds.length} in Active Plan
                     </span>
                   </div>
@@ -1835,15 +1835,15 @@ export default function HomePage() {
                           {/* Clean Wanderlog Numbered Place Card (No Heavy Descriptions) */}
                           <div
                             onClick={() => handleOpenPlaceDetail(attraction)}
-                            className={`rounded-2xl bg-white border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md group p-3.5 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 ${
+                            className={`rounded-card bg-white border transition-all duration-200 cursor-pointer shadow-hairline hover:shadow-md group p-3.5 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 ${
                               isInItinerary
-                                ? "border-blue-500 ring-2 ring-blue-500/15 bg-blue-50/20"
-                                : "border-slate-200 hover:border-blue-300"
+                                ? "border-brand-500 ring-2 ring-brand-500/15 bg-brand-50/20"
+                                : "border-sand-200 hover:border-blue-300"
                             }`}
                           >
                             <div className="flex items-center gap-3.5 min-w-0">
                               {/* Number Badge & Thumbnail */}
-                              <div className="relative h-20 w-24 sm:h-20 sm:w-28 shrink-0 rounded-xl overflow-hidden bg-slate-900">
+                              <div className="relative h-20 w-24 sm:h-20 sm:w-28 shrink-0 rounded-control overflow-hidden bg-jaipur-royal">
                                 <Image
                                   src={attraction.image}
                                   alt={attraction.name}
@@ -1851,7 +1851,7 @@ export default function HomePage() {
                                   unoptimized
                                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
-                                <div className="absolute top-1.5 left-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-white font-extrabold text-[10px] shadow border border-white">
+                                <div className="absolute top-1.5 left-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-white font-bold text-2xs shadow border border-white">
                                   {idx + 1}
                                 </div>
                               </div>
@@ -1859,23 +1859,23 @@ export default function HomePage() {
                               {/* Title & Metadata (Spacious & Clean) */}
                               <div className="space-y-1 min-w-0">
                                 <div className="flex items-center gap-2">
-                                  <h4 className="font-heading text-sm sm:text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors truncate">
+                                  <h4 className="font-heading text-sm sm:text-base font-bold text-jaipur-royal group-hover:text-blue-600 transition-colors truncate">
                                     {idx + 1}. {attraction.name}
                                   </h4>
                                 </div>
 
-                                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-semibold">
-                                  <span className="flex items-center gap-1 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-lg text-[11px] font-extrabold text-amber-900">
-                                    <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                                <div className="flex flex-wrap items-center gap-2 text-xs text-sand-600 font-semibold">
+                                  <span className="flex items-center gap-1 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-control text-2xs font-bold text-brand-900">
+                                    <Star className="h-3 w-3 fill-amber-500 text-jaipur-gold" />
                                     <span>{attraction.rating}</span>
-                                    <span className="text-[10px] text-amber-700 font-normal">({attraction.reviewsCount})</span>
+                                    <span className="text-2xs text-brand-700 font-normal">({attraction.reviewsCount})</span>
                                   </span>
                                   <span>⏰ {attraction.timing}</span>
                                   <span>🎟️ {attraction.entryFee}</span>
                                 </div>
 
                                 {distMeters !== null && (
-                                  <span className="inline-block text-[11px] font-bold text-emerald-700">
+                                  <span className="inline-block text-2xs font-bold text-emerald-700">
                                     📍 {formatDistance(distMeters)} away
                                   </span>
                                 )}
@@ -1883,16 +1883,16 @@ export default function HomePage() {
                             </div>
 
                             {/* Action Buttons: Add to Itinerary & Guide */}
-                            <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end">
+                            <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-sand-100 justify-end">
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   togglePlaceInItinerary(attraction.id);
                                 }}
-                                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
+                                className={`flex items-center gap-1.5 rounded-control px-3.5 py-2 text-xs font-bold transition-all ${
                                   isInItinerary
                                     ? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-                                    : "bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200"
+                                    : "bg-sand-100 hover:bg-blue-50 text-sand-600 hover:text-blue-700 border border-sand-200"
                                 }`}
                               >
                                 {isInItinerary ? (
@@ -1912,7 +1912,7 @@ export default function HomePage() {
                                   e.stopPropagation();
                                   handleOpenPlaceDetail(attraction);
                                 }}
-                                className="rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 text-xs font-bold transition-colors"
+                                className="rounded-control bg-sand-100 hover:bg-sand-200 text-sand-600 px-3 py-2 text-xs font-bold transition-colors"
                               >
                                 Details
                               </button>
@@ -1922,7 +1922,7 @@ export default function HomePage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 text-xs font-bold shadow-xs transition-colors"
+                                className="flex items-center gap-1 rounded-control bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 text-xs font-bold shadow-hairline transition-colors"
                               >
                                 <MessageCircle className="h-3.5 w-3.5" />
                                 <span>Guide</span>
@@ -1932,10 +1932,10 @@ export default function HomePage() {
 
                           {/* Transit Driving Connector Between Consecutive Stops */}
                           {idx < currentLocationData.attractions.length + customPlaces.length - 1 && (
-                            <div className="flex items-center gap-3 px-6 py-0.5 text-[11px] font-bold text-slate-500">
-                              <div className="h-3 w-0.5 bg-slate-300 mx-2" />
-                              <div className="flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-0.5 text-slate-700">
-                                <Car className="h-3 w-3 text-slate-600" />
+                            <div className="flex items-center gap-3 px-6 py-0.5 text-2xs font-bold text-sand-600">
+                              <div className="h-3 w-0.5 bg-sand-300 mx-2" />
+                              <div className="flex items-center gap-1.5 rounded-full bg-sand-200/80 px-2.5 py-0.5 text-sand-600">
+                                <Car className="h-3 w-3 text-sand-600" />
                                 <span>🚗 8-12 min drive ({((idx + 1) * 2.3).toFixed(1)} km)</span>
                               </div>
                             </div>
@@ -1950,11 +1950,11 @@ export default function HomePage() {
                 {currentLocationData.famousFoods.length > 0 && (
                   <section className="space-y-4 pt-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-heading text-lg sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                        <Utensils className="h-5 w-5 text-rose-500" />
+                      <h3 className="font-heading text-lg sm:text-xl font-bold text-jaipur-royal flex items-center gap-2">
+                        <Utensils className="h-5 w-5 text-jaipur-pink" />
                         <span>Iconic Food & Legendary Eateries</span>
                       </h3>
-                      <span className="text-xs font-bold text-slate-500">
+                      <span className="text-xs font-bold text-sand-600">
                         {currentLocationData.famousFoods.length} Places
                       </span>
                     </div>
@@ -1964,9 +1964,9 @@ export default function HomePage() {
                         <div
                           key={food.id}
                           onClick={() => handleOpenPlaceDetail(food)}
-                          className="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                          className="rounded-card bg-white border border-sand-200 overflow-hidden shadow-hairline hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                         >
-                          <div className="relative h-36 w-full overflow-hidden bg-slate-900">
+                          <div className="relative h-36 w-full overflow-hidden bg-jaipur-royal">
                             <Image
                               src={food.image}
                               alt={food.name}
@@ -1975,12 +1975,12 @@ export default function HomePage() {
                               className="object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
-                            <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-lg">
+                            <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/60 backdrop-blur-xs text-white text-2xs font-bold px-2 py-0.5 rounded-control">
                               <span>📍 {food.famousEatery}</span>
                             </div>
                             <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-bold">
                               <span>💰 {food.priceForTwo}</span>
-                              <span className="flex items-center gap-1 bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded font-extrabold text-[10px]">
+                              <span className="flex items-center gap-1 bg-jaipur-gold text-jaipur-royal px-1.5 py-0.5 rounded font-bold text-2xs">
                                 <Star className="h-2.5 w-2.5 fill-slate-950" />
                                 {food.rating}
                               </span>
@@ -1989,22 +1989,22 @@ export default function HomePage() {
 
                           <div className="p-3.5 space-y-2.5">
                             <div>
-                              <h4 className="font-heading text-sm font-extrabold text-slate-900 group-hover:text-rose-600 transition-colors">
+                              <h4 className="font-heading text-sm font-bold text-jaipur-royal group-hover:text-danger-600 transition-colors">
                                 {food.name}
                               </h4>
-                              <p className="text-xs text-slate-600 mt-0.5 line-clamp-1">
+                              <p className="text-xs text-sand-600 mt-0.5 line-clamp-1">
                                 {food.specialty}
                               </p>
                             </div>
 
                             {/* Direct Swiggy & Zomato Ordering Buttons */}
-                            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-sand-100">
                               <a
                                 href={`https://www.swiggy.com/search?query=${encodeURIComponent(food.name + " " + food.famousEatery + " " + currentLocationData.name)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="flex items-center justify-center gap-1 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2 text-[11px] shadow-xs transition-colors"
+                                className="flex items-center justify-center gap-1 rounded-control bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 text-2xs shadow-hairline transition-colors"
                               >
                                 <Utensils className="h-3 w-3" />
                                 <span>Swiggy</span>
@@ -2014,7 +2014,7 @@ export default function HomePage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="flex items-center justify-center gap-1 rounded-xl bg-red-600 hover:bg-red-700 text-white font-extrabold py-2 text-[11px] shadow-xs transition-colors"
+                                className="flex items-center justify-center gap-1 rounded-control bg-red-600 hover:bg-red-700 text-white font-bold py-2 text-2xs shadow-hairline transition-colors"
                               >
                                 <Utensils className="h-3 w-3" />
                                 <span>Zomato</span>
@@ -2030,11 +2030,11 @@ export default function HomePage() {
                 {/* 6. WANDERLOG EXPLORE GUIDES & CAROUSEL LISTS */}
                 <section className="space-y-3 pt-2">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-heading text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                    <h3 className="font-heading text-lg font-bold text-jaipur-royal flex items-center gap-2">
                       <Compass className="h-4 w-4 text-blue-600" />
                       <span>Explore Guides for {currentLocationData.name}</span>
                     </h3>
-                    <span className="text-xs font-bold text-slate-500">Wanderlog Curated</span>
+                    <span className="text-xs font-bold text-sand-600">Curated guides</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -2042,7 +2042,7 @@ export default function HomePage() {
                       {
                         title: `Best attractions in ${currentLocationData.name}`,
                         placeCount: "49 places",
-                        author: "Wanderlog Guides",
+                        author: "GlobeTrotter Guides",
                         image: "https://images.unsplash.com/photo-1603204077673-83eb6d4d16fe?auto=format&fit=crop&w=600&q=80",
                       },
                       {
@@ -2067,9 +2067,9 @@ export default function HomePage() {
                       <div
                         key={gIdx}
                         onClick={() => setActiveToolView("planner")}
-                        className="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                        className="rounded-card bg-white border border-sand-200 overflow-hidden shadow-hairline hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                       >
-                        <div className="relative h-28 w-full overflow-hidden bg-slate-900">
+                        <div className="relative h-28 w-full overflow-hidden bg-jaipur-royal">
                           <Image
                             src={guide.image}
                             alt={guide.title}
@@ -2079,17 +2079,17 @@ export default function HomePage() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
                           <div className="absolute bottom-2 left-3 right-3 text-white">
-                            <span className="rounded bg-black/50 px-2 py-0.5 text-[10px] font-bold">
+                            <span className="rounded bg-black/50 px-2 py-0.5 text-2xs font-bold">
                               {guide.placeCount}
                             </span>
                           </div>
                         </div>
 
                         <div className="p-3">
-                          <h4 className="font-heading text-xs font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                          <h4 className="font-heading text-xs font-bold text-jaipur-royal group-hover:text-blue-600 transition-colors line-clamp-1">
                             {guide.title}
                           </h4>
-                          <span className="text-[10px] text-slate-500 font-semibold block mt-0.5">
+                          <span className="text-2xs text-sand-600 font-semibold block mt-0.5">
                             By {guide.author}
                           </span>
                         </div>
@@ -2099,24 +2099,24 @@ export default function HomePage() {
                 </section>
 
                 {/* 8. WhatsApp Local Concierge Banner */}
-                <div className="relative rounded-3xl bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 p-6 text-white shadow-xl border border-emerald-500/30 overflow-hidden space-y-4">
+                <div className="relative rounded-panel bg-gradient-to-br from-emerald-950 via-jaipur-royal to-teal-950 p-6 text-white shadow-xl border border-emerald-500/30 overflow-hidden space-y-4">
                   <div className="flex flex-col gap-2 relative z-10">
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-[11px] font-extrabold text-emerald-300 border border-emerald-500/30 w-fit">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-2xs font-bold text-emerald-300 border border-emerald-500/30 w-fit">
                       <MessageCircle className="h-3.5 w-3.5" />
                       <span>Live Concierge Desk</span>
                     </div>
 
-                    <h4 className="font-heading text-lg sm:text-xl font-extrabold text-white">
+                    <h4 className="font-heading text-lg sm:text-xl font-bold text-white">
                       Hire a Verified Local Guide in {currentLocationData.name}
                     </h4>
 
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-sand-300 leading-relaxed">
                       Connect directly on WhatsApp with government-licensed local guides for private haveli walks, fort excursions, and cab rentals.
                     </p>
                   </div>
 
                   <div className="pt-2 border-t border-emerald-900/60 flex items-center justify-between gap-3 relative z-10">
-                    <span className="text-[11px] font-bold text-emerald-300">
+                    <span className="text-2xs font-bold text-emerald-300">
                       ★ 4.9 (380+ tours in {currentLocationData.name})
                     </span>
 
@@ -2124,7 +2124,7 @@ export default function HomePage() {
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-3 text-xs font-extrabold shadow-lg shadow-emerald-500/25 transition-all hover:scale-102 shrink-0"
+                      className="flex items-center justify-center gap-2 rounded-card bg-emerald-500 hover:bg-emerald-400 text-jaipur-royal px-5 py-3 text-xs font-bold shadow-lg shadow-emerald-500/25 transition-all hover:scale-102 shrink-0"
                     >
                       <MessageCircle className="h-4 w-4 fill-slate-950 text-emerald-500" />
                       <span>Chat on WhatsApp</span>
@@ -2137,7 +2137,7 @@ export default function HomePage() {
         </main>
 
         {/* C. RIGHT COLUMN: FULL-HEIGHT SPLIT-SCREEN MAP VIEW */}
-        <div className="hidden md:block w-1/2 shrink-0 h-full border-l border-slate-200/80 relative">
+        <div className="hidden md:block w-1/2 shrink-0 h-full border-l border-sand-200/80 relative">
           <SplitScreenMap
             selectedCity={currentLocationData.name}
             cityCoords={currentLocationData.coords}
@@ -2158,10 +2158,10 @@ export default function HomePage() {
           setActiveToolView("ai");
           setActiveInlineDetail(null);
         }}
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-brand-600 via-jaipur-pink to-purple-600 text-white shadow-2xl shadow-brand-500/40 hover:scale-110 transition-transform"
+        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-brand-500 to-jaipur-pink text-white shadow-2xl shadow-brand-500/40 hover:scale-110 transition-transform"
         title="Open AI Virtual Tourist Guide"
       >
-        <Sparkles className="h-6 w-6 text-amber-300 animate-spin-slow" />
+        <Sparkles className="h-6 w-6 text-jaipur-gold animate-spin-slow" />
       </button>
     </div>
   );
