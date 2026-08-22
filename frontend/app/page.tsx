@@ -2101,29 +2101,66 @@ export default function HomePage() {
                   )}
 
                 {/* 7. WhatsApp Local Concierge Banner */}
-                <div className="rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 p-7 sm:p-8 text-white shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-500/30">
-                  <div className="space-y-2 text-center sm:text-left">
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/30 px-3.5 py-1 text-xs font-extrabold text-emerald-300">
-                      <MessageCircle className="h-4 w-4" />
-                      Live Local Concierge Desk
+                <div className="relative rounded-3xl bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 p-6 sm:p-7 text-white shadow-2xl border border-emerald-500/30 overflow-hidden space-y-5">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                  <div className="flex flex-col gap-3 relative z-10">
+                    <div className="flex items-center gap-2">
+                      <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-[11px] font-extrabold text-emerald-300 border border-emerald-500/30">
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        <span>Live Concierge Desk</span>
+                      </div>
+                      <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-bold text-slate-300">
+                        ⚡ Instant Reply
+                      </span>
                     </div>
-                    <h4 className="font-heading text-2xl sm:text-3xl font-extrabold text-white">
-                      Want to hire a verified local guide in {currentLocationData.name}?
+
+                    <h4 className="font-heading text-xl sm:text-2xl font-extrabold text-white leading-snug">
+                      Hire a Verified Local Guide in {currentLocationData.name}
                     </h4>
-                    <p className="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed">
-                      Connect with verified coordinators on WhatsApp for private driver cabs, haveli bookings, and heritage walk schedules.
+
+                    <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
+                      Connect directly on WhatsApp with government-licensed local guides for private haveli walks, sunset fort excursions, and verified cab rentals.
                     </p>
+
+                    {/* Trust badges */}
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-emerald-200/90 pt-1">
+                      <span className="flex items-center gap-1">✓ Licensed Guides</span>
+                      <span className="text-emerald-500">•</span>
+                      <span className="flex items-center gap-1">✓ Fixed Govt. Rates</span>
+                      <span className="text-emerald-500">•</span>
+                      <span className="flex items-center gap-1">✓ Custom Fort Itineraries</span>
+                    </div>
                   </div>
 
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0 flex items-center gap-2 rounded-2xl bg-white text-emerald-950 hover:bg-slate-100 px-6 py-4 text-sm font-extrabold shadow-xl transition-all hover:scale-105"
-                  >
-                    <MessageCircle className="h-5 w-5 text-emerald-600" />
-                    Chat on WhatsApp
-                  </a>
+                  <div className="pt-2 border-t border-emerald-900/60 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 relative z-10">
+                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                      <div className="flex -space-x-2 overflow-hidden">
+                        <div className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-900 bg-emerald-700 text-white text-[10px] font-bold flex items-center justify-center">
+                          KM
+                        </div>
+                        <div className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-900 bg-teal-700 text-white text-[10px] font-bold flex items-center justify-center">
+                          RS
+                        </div>
+                        <div className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-900 bg-amber-600 text-white text-[10px] font-bold flex items-center justify-center">
+                          AP
+                        </div>
+                      </div>
+                      <span className="text-[11px] font-medium text-slate-300">
+                        <strong>4.9 ★</strong> (380+ tours in {currentLocationData.name})
+                      </span>
+                    </div>
+
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-3 text-xs font-extrabold shadow-lg shadow-emerald-500/25 transition-all hover:scale-102 shrink-0"
+                    >
+                      <MessageCircle className="h-4 w-4 fill-slate-950 text-emerald-500" />
+                      <span>Chat on WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
               </>
             )}
