@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/context/AuthContext";
 import { PasswordInput } from "@/components/PasswordInput";
 import { Compass, Sparkles, AlertCircle, ArrowRight } from "lucide-react";
 
@@ -21,8 +21,14 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      router.push("/destinations/jaipur");
+      login({
+        id: "usr-" + Date.now(),
+        name: email.split("@")[0] || "Traveler",
+        email: email,
+        role: "traveler",
+        badge: "Explorer",
+      });
+      router.push("/");
     } catch (err: any) {
       setError(err?.response?.data?.detail || "Failed to sign in. Please check your credentials.");
     } finally {

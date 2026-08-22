@@ -205,35 +205,27 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
         (searchQuery === "" || p.name.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    visiblePlaces.forEach((place) => {
+    visiblePlaces.forEach((place, index) => {
       const isAttraction = place.category === "attraction";
       const isFood = place.category === "food";
       const isHotel = place.category === "hotel";
       const isShopping = place.category === "shopping";
 
       const pinColor = isHotel
-        ? "#e91e63"
+        ? "#e11d48"
         : isFood
-        ? "#e65100"
+        ? "#f97316"
         : isShopping
-        ? "#1976d2"
-        : "#7b1fa2";
+        ? "#8b5cf6"
+        : "#3b82f6"; // Wanderlog blue
 
       const textColor = isHotel
-        ? "#c2185b"
+        ? "#be123c"
         : isFood
-        ? "#d84315"
+        ? "#c2410c"
         : isShopping
-        ? "#1565c0"
-        : "#6a1b9a";
-
-      const iconSvg = isHotel
-        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>`
-        : isFood
-        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>`
-        : isShopping
-        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>`
-        : `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>`;
+        ? "#6d28d9"
+        : "#1d4ed8";
 
       const isSelected = selectedPlaceInfo?.id === place.id || activePlaceId === place.id;
       const hindiTranslation = place.hindiName || place.name;
@@ -247,9 +239,9 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
             gap: 6px;
             cursor: pointer;
             user-select: none;
-            transform: ${isSelected ? "scale(1.25)" : "scale(1)"};
+            transform: ${isSelected ? "scale(1.3)" : "scale(1)"};
             transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
           ">
             <div style="
               width: 26px;
@@ -259,11 +251,15 @@ export const SplitScreenMap: React.FC<SplitScreenMapProps> = ({
               display: flex;
               align-items: center;
               justify-content: center;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-              border: 2px solid #ffffff;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+              border: 2.5px solid #ffffff;
+              color: #ffffff;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              font-size: 11.5px;
+              font-weight: 800;
               flex-shrink: 0;
             ">
-              ${iconSvg}
+              ${index + 1}
             </div>
 
             <div style="

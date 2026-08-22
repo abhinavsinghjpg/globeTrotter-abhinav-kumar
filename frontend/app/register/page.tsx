@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/context/AuthContext";
 import { PasswordInput } from "@/components/PasswordInput";
 import { Compass, Sparkles, AlertCircle, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { login } = useAuth();
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
@@ -28,8 +28,15 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(name, email, password, phone);
-      router.push("/destinations/jaipur");
+      login({
+        id: "usr-" + Date.now(),
+        name: name || email.split("@")[0] || "Traveler",
+        email: email,
+        phone: phone,
+        role: "traveler",
+        badge: "Explorer",
+      });
+      router.push("/");
     } catch (err: any) {
       setError(err?.response?.data?.detail || "Failed to create account. Please try again.");
     } finally {
